@@ -1,6 +1,7 @@
-package com.tos_bot;
+package puzzleslove;
 
 import java.util.ArrayList;
+
 
 public class puzzleSolver {
 
@@ -17,4 +18,6 @@ public class puzzleSolver {
 		
 		return ret;
 	}
+	
+	public int 
 }

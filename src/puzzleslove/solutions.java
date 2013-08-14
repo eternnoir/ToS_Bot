@@ -1,4 +1,4 @@
-package com.tos_bot;
+package puzzleslove;
 
 public class solutions {
 
