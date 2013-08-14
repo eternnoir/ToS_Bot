@@ -50,7 +50,7 @@ public class imageProcesser {
 
 	}
 
-	public static int[][] getBallArray() {
+	public static int[][] getBallArray() throws NotInTosException {
 		int[][] ret = new int[5][6];
 		Bitmap sourceBitmap = BitmapFactory.decodeFile("/sdcard/tmp/img3.png");
 		for (int h = 0; h < 5; h++)
@@ -124,7 +124,7 @@ public class imageProcesser {
 
 	}
 
-	public static int checkBallColor(Bitmap bm) {
+	public static int checkBallColor(Bitmap bm) throws NotInTosException {
 		int color[] = new int[6]; // RGBDLH
 		int picw = bm.getWidth();
 		int pich = bm.getHeight();
@@ -143,10 +143,12 @@ public class imageProcesser {
 				color[1]++;	//green
 			} else if (r < 150 && g < 150 && b > 150) {
 				color[2]++;	//blue
-			} else if (r > 150 && g > 50 && b > 50) {
+			} else if (r > 150 && g > 50 && b > 50 && g<150) {
 				color[5]++;	//Hert
 			}else if (r > 50 && g > 100 && b < 150) {
 				color[4]++;	//lght
+			} else{
+				//throw new NotInTosException();
 			}
 			
 		}
@@ -157,6 +159,9 @@ public class imageProcesser {
 				tmp = color[i];
 				ret = i;
 			}
+		}
+		if(ret == -1){
+			throw new NotInTosException();
 		}
 		return ret;  //RGBDLH
 	}

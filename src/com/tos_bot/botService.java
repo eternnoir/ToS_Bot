@@ -37,8 +37,14 @@ public class botService extends Service {
 			Log.i("time:", new Date().toString());
 			handler.postDelayed(this, 5000);
 			getScreenshot();
-			//imageProcesser.cutBallReg("/sdcard/tmp/img.png");
-			//imageProcesser.getBallArray();
+			imageProcesser.cutBallReg("/sdcard/tmp/img.png");
+			try {
+				imageProcesser.getBallArray();
+			} catch (NotInTosException e) {
+				// Not In ToS
+				e.printStackTrace();
+				return;
+			}
 			touchService.myClickEvent(11, 11);
 			
 		}
