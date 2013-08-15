@@ -55,8 +55,8 @@ public class MainActivity extends Activity {
 									{3,2,1,3,3,0},
 									{4,2,1,3,0,0},
 									{5,2,1,3,3,4}};*/
-				//puzzleSolver ps = new puzzleSolver(3, 8, 2,4);
-				//ArrayList<solution> re = ps.solve_board(board);
+				puzzleSolver ps = new puzzleSolver(3, 25, 2,4,3);
+				solution re = ps.solve_board(board);
 			}
 		});
 		

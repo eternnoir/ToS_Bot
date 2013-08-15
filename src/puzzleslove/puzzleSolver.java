@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Random;
 import java.util.Stack;
 
 import android.R.integer;
@@ -18,6 +19,8 @@ public class puzzleSolver {
 	private int _ComboNumber;
 	private boolean _maxFind;
 	private int _perferOrb;
+	private solution _bestS;
+	private int _move;
 
 	public puzzleSolver(int min, int maxMove, int eightDSupport, int cm, int po) {
 		_minMove = min;
@@ -26,6 +29,7 @@ public class puzzleSolver {
 		_ComboNumber = cm;
 		_maxFind = false;
 		_perferOrb = po;
+		_bestS = null;
 	}
 
 	public ArrayList<solution> solveBoard() {
@@ -34,7 +38,7 @@ public class puzzleSolver {
 		return ret;
 	}
 
-	public ArrayList<solution> solve_board(int[][] board) {
+	public solution solve_board(int[][] board) {
 		_board = board;
 		ArrayList<solution> solutions = new ArrayList<solution>();
 		solution seed_solution = null;
@@ -42,6 +46,7 @@ public class puzzleSolver {
 			for (int j = 0; j < 6; ++j, ++s) {
 				if (board[i][j] == _perferOrb) {
 					seed_solution = make_solution(board, i, j);
+					//solutions.add(copySolutionCursor(seed_solution, i, j));
 				}
 			}
 		}
@@ -52,12 +57,12 @@ public class puzzleSolver {
 		for (int i = 0, s = 0; i < 5; ++i) {
 			for (int j = 0; j < 6; ++j, ++s) {
 
-				//if (i == 0 || i == 4 || j == 0 || j == 5) {
-					//solutions.add(copySolutionCursor(seed_solution, i, j));
-					 solutions.add(copySolutionCursor(seed_solution, 0, 0));
-					 solutions.add(copySolutionCursor(seed_solution, 4, 0));
-					 solutions.add(copySolutionCursor(seed_solution, 0, 5));
-					 solutions.add(copySolutionCursor(seed_solution, 4, 5));
+			//	if (i == 0 || i == 4 || j == 0 || j == 5) {
+				solutions.add(copySolutionCursor(seed_solution, i, j));
+			//	solutions.add(copySolutionCursor(seed_solution, 0, 0));
+				// solutions.add(copySolutionCursor(seed_solution, 4, 0));
+				// solutions.add(copySolutionCursor(seed_solution, 0, 5));
+				// solutions.add(copySolutionCursor(seed_solution, 4, 5));
 				//}
 
 			}
@@ -67,12 +72,17 @@ public class puzzleSolver {
 				solutions);
 
 		solve_board_step(solve_state);
-		Collections.sort(solve_state.solutions, new Comparator<solution>() {
-			public int compare(solution a, solution b) {
-				return (b.matches.size() - a.matches.size());
+		int bs=0;
+		if(_bestS != null){
+			return _bestS;
+		}
+		for(int i =0;i<solve_state.solutions.size();i++){
+			if(solve_state.solutions.get(i).matches.size()>bs){
+				bs = solve_state.solutions.get(i).matches.size();
+				_bestS = solve_state.solutions.get(i);
 			}
-		});
-		return solve_state.solutions;
+		}
+		return _bestS;
 	}
 
 	public ArrayList<matchPair> findComboMatch(int[][] board, solution s) {
@@ -187,46 +197,56 @@ public class puzzleSolver {
 			return;
 		}
 		++s.p;
-		s.solutions = evolve_solutions(s.solutions, s.dir_step);
-		solve_board_step(s);
+		s.solutions = evolve_solutions(s.solutions, s.dir_step,0);
+		// solve_board_step(s);
 	}
 
 	public ArrayList<solution> evolve_solutions(ArrayList<solution> solutions,
-			int dir_step) {
+			int dir_step,int deep) {
 		ArrayList<solution> new_solutions = new ArrayList<solution>();
+		if(deep>= _maxMove){
+			int i =0;
+			i=i;
+			return new_solutions;
+		}
+		if (_maxFind && deep > _minMove) {
+			int i =0;
+			i=i;
+			return new_solutions;
+		}
+		if(_move > 5000){
+			return new_solutions;
+		}
+		deep ++;
+		
 		for (solution s : solutions) {
 			if (s.is_done) {
+				continue;
+			}
+			if(s.path.size()>3 && s.matches.size()<1){
+				s.is_done = true;
+				continue;
+			}
+			if(s.path.size()>6 && s.matches.size()<2){
+				s.is_done = true;
 				continue;
 			}
 			for (int dir = 0; dir < 8; dir += dir_step) {
 				if (!can_move_orb_in_solution(s, dir)) {
 					continue;
 				}
-				if (dir == 0 && s.initcursor.w > 3) {
-					continue;
-				}
-				if (dir == 4 && s.initcursor.w < 3) {
-					continue;
-				}
-				if (dir == 2 && s.initcursor.h > 2) {
-					continue;
-				}
-				if (dir == 6 && s.initcursor.h < 2) {
-					continue;
-				}
 				solution _solution = new solution(s.board, new pos(s.cursor.h,
 						s.cursor.w), new pos(s.initcursor.h, s.initcursor.w),
 						s.path, s.is_done, s.matches);
-				
-					in_place_swap_orb_in_solution(_solution, dir);
-				if (_solution.path.size() > 4) {
-					in_place_evaluate_solution(_solution);
-				}
+
+				in_place_swap_orb_in_solution(_solution, dir);
+				_move++;
+				in_place_evaluate_solution(_solution);
 				new_solutions.add(_solution);
 			}
 			s.is_done = true;
 		}
-		solutions.addAll(new_solutions);
+		solutions.addAll(evolve_solutions(new_solutions, dir_step,deep));
 		return solutions;
 	}
 
@@ -338,6 +358,7 @@ public class puzzleSolver {
 			break;
 		}
 		if (all_matches.size() >= _ComboNumber) {
+			_bestS = s;
 			_maxFind = true;
 		}
 		s.matches = all_matches;

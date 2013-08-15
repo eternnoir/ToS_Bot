@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 public class botService extends Service {
 	private Handler handler = new Handler();
-
 	@Override
 	public IBinder onBind(Intent arg0) {
 		// TODO Auto-generated method stub
@@ -39,18 +38,18 @@ public class botService extends Service {
 
 	private Runnable BotGo = new Runnable() {
 		public void run() {
-			//Toast.makeText(getApplicationContext(), "Bot Start", Toast.LENGTH_SHORT).show();
+			Log.i("Bot:", "Take Pic");
 			getScreenshot();
 			int[][] orbArray;
-			imageProcesser.cutBallReg("/sdcard/tmp/img.png");
 			try {
 				//Toast.makeText(getApplicationContext(), "Solving..", Toast.LENGTH_SHORT).show();
-				orbArray = imageProcesser.getBallArray();
+				orbArray = imageProcesser.getBallArray(imageProcesser.cutBallReg("/sdcard/tmp/img.png"));
 			} catch (NotInTosException e) {
 				// Not In ToS
 				//Toast.makeText(getApplicationContext(), "Not in Tos?", 1).show();
-				handler.postDelayed(this, 100);
-				e.printStackTrace();
+				//e.printStackTrace();
+				Log.i("Bot:", "Pic Error");
+				handler.postDelayed(this, 3000);
 				return;
 			}
 			int[] pre =new int[6];
@@ -67,22 +66,19 @@ public class botService extends Service {
 					ppre = i;
 				}
 			}
-			puzzleSolver ps = new puzzleSolver(3,6,2,3,ppre);
-			ArrayList<solution> re = ps.solve_board(orbArray);
-			if(re.size()==0){
-				Toast.makeText(getApplicationContext(), "No Result", Toast.LENGTH_SHORT).show();
-				return;
-			}
+			puzzleSolver ps = new puzzleSolver(3,30,2,3,ppre);
+			solution re = ps.solve_board(orbArray);
+			
 			//Toast.makeText(getApplicationContext(), "Send path", Toast.LENGTH_SHORT).show();
 			touchService.set(270, 135, 1380);
-			Vector<String> cmd = touchService.getCommandBySol(re.get(0));
+			Vector<String> cmd = touchService.getCommandBySol(re);
 			touchService.SendCommand(cmd);
-			handler.postDelayed(this, 100);
-			
+			handler.postDelayed(this, 3000);
 		}
 	};
 	
 	private boolean getScreenshot(){
+		
 		Process sh;
 		try {
 			sh = Runtime.getRuntime().exec("su", null, null);
@@ -93,15 +89,12 @@ public class botService extends Service {
 
 			os.close();
 			sh.waitFor();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
+		} 
+		Toast.makeText(getApplicationContext(), "Capture Screen Done", Toast.LENGTH_SHORT).show();
 		return true;
 	}
 

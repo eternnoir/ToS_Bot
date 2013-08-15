@@ -19,7 +19,7 @@ public class imageProcesser {
 	public static int ballRegionX;
 	public static int ballsize;
 
-	public static void cutBallReg(String FilePath) {
+	public static Bitmap cutBallReg(String FilePath) {
 
 		Bitmap sourceBitmap;
 		sourceBitmap = BitmapFactory.decodeFile("/sdcard/tmp/img.png");
@@ -31,28 +31,14 @@ public class imageProcesser {
 		Bitmap cropped = Bitmap.createBitmap(sourceBitmap, 0, ballAreaHigh
 				+ (oneball / 5), sourceBitmap.getWidth(),
 				sourceBitmap.getHeight() - ballAreaHigh - oneball);
-		try {
-			File file = new File("/sdcard/tmp/img3.png");
-			file.createNewFile();
-			BufferedOutputStream out = new BufferedOutputStream(
-					new FileOutputStream(file));
-			cropped.compress(CompressFormat.PNG, 100, out);
-
-			out.flush();
-			out.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		return cropped;
 
 	}
 
-	public static int[][] getBallArray() throws NotInTosException {
+	public static int[][] getBallArray(Bitmap c) throws NotInTosException {
 		int[][] ret = new int[5][6];
-		Bitmap sourceBitmap = BitmapFactory.decodeFile("/sdcard/tmp/img3.png");
+		//BitmapFactory.decodeFile("/sdcard/tmp/img3.png");
+		Bitmap sourceBitmap = c;
 		for (int h = 0; h < 5; h++)
 			for (int w = 0; w < 6; w++) {
 				Bitmap cropped = Bitmap.createBitmap(sourceBitmap, w * ballsize
@@ -61,6 +47,16 @@ public class imageProcesser {
 				//savePng("tmp" + h + w, cropped);
 				ret[h][w] = checkBallColor(cropped);
 			}
+		int error=0;
+		for (int h = 0; h < 5; h++)
+			for (int w = 0; w < 6; w++) {
+				if(ret[h][w] == -1){
+					error++;
+				}
+			}
+		if(error>5){
+			throw new NotInTosException();
+		}
 		return ret;
 	}
 
@@ -143,7 +139,7 @@ public class imageProcesser {
 				color[1]++;	//green
 			} else if (r < 150 && g < 150 && b > 150) {
 				color[2]++;	//blue
-			} else if (r > 150 && g > 50 && b > 50 && g<150) {
+			} else if (r > 150 && g > 70 && b > 70 && g<150) {
 				color[5]++;	//Hert
 			}else if (r > 50 && g > 100 && b < 150) {
 				color[4]++;	//lght
@@ -159,9 +155,6 @@ public class imageProcesser {
 				tmp = color[i];
 				ret = i;
 			}
-		}
-		if(ret == -1){
-			throw new NotInTosException();
 		}
 		return ret;  //RGBDLH
 	}
