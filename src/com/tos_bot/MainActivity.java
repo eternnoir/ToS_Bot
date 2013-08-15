@@ -1,5 +1,9 @@
 package com.tos_bot;
 
+import java.util.ArrayList;
+
+import puzzleslove.puzzleSolver;
+import puzzleslove.solution;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -17,6 +21,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		_startServiceButton = (Button) findViewById(R.id.start_button);
 		_stopServiceButton = (Button) findViewById(R.id.stop_button);
+		Button testb = (Button) findViewById(R.id.test);
 
 		_startServiceButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
@@ -34,6 +39,27 @@ public class MainActivity extends Activity {
 				
 			}
 		});
+		testb.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				int[][] board = {{1,1,1,3,0,3},
+									{0,1,0,1,0,1},
+									{3,4,2,3,3,0},
+									{4,2,1,3,0,0},
+									{5,2,1,3,3,4}};
+				/*int[][] board = {{1,1,1,3,0,3},
+									{0,4,0,1,0,1},
+									{3,2,1,3,3,0},
+									{4,2,1,3,0,0},
+									{5,2,1,3,3,4}};*/
+				puzzleSolver ps = new puzzleSolver( 3, 2);
+				ps.findComboMatch(board, new solution());
+				ArrayList<solution> re = ps.solve_board(board);
+			}
+		});
+		
 	}
 
 	@Override

@@ -1,9 +1,13 @@
 package puzzleslove;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Stack;
 
 import android.R.integer;
+import android.annotation.SuppressLint;
 
 public class puzzleSolver {
 
@@ -11,10 +15,9 @@ public class puzzleSolver {
 	private int _eightDSupport;
 	private int[][] _board;
 
-	public puzzleSolver(int[][] board, int maxMove, int eightDSupport) {
+	public puzzleSolver(int maxMove, int eightDSupport) {
 		_maxMove = maxMove;
 		_eightDSupport = eightDSupport;
-		_board = board;
 	}
 
 	public ArrayList<solution> solveBoard() {
@@ -23,8 +26,8 @@ public class puzzleSolver {
 		return ret;
 	}
 
-	public String solve_board(int[][] board) {
-
+	public ArrayList<solution> solve_board(int[][] board) {
+		_board = board;
 		ArrayList<solution> solutions = new ArrayList<solution>();
 
 		solution seed_solution = make_solution(board);
@@ -32,24 +35,36 @@ public class puzzleSolver {
 
 		for (int i = 0, s = 0; i < 5; ++i) {
 			for (int j = 0; j < 6; ++j, ++s) {
-				solutions.add(copySolutionCursor(seed_solution, i, j));
+				if (i == 0 || i == 4 || j == 0 || j == 5) {
+					solutions.add(copySolutionCursor(seed_solution, i, j));
+				}
 			}
 		}
 
-		solveState solve_state = new solveState(20, 1, 0, solutions);
+		solveState solve_state = new solveState(_maxMove, _eightDSupport, 0,
+				solutions);
 
 		solve_board_step(solve_state);
-		return null;
+		Collections.sort(solve_state.solutions, new Comparator<solution>() {
+			public int compare(solution a, solution b) {
+				return (b.matches.size() - a.matches.size());
+			}
+		});
+		return solve_state.solutions;
 	}
 
-	public ArrayList<matchPair> findComboMatch(int[][] board) {
+	@SuppressLint("NewApi")
+	public ArrayList<matchPair> findComboMatch(int[][] board, solution s) {
 		int[][] matchBoard = new int[5][6];
-		java.util.Arrays.fill(matchBoard, -1);
+		for (int i = 0; i < 5; i++) {
+			for (int k = 0; k < 6; k++)
+				matchBoard[i][k] = -1;
+		}
 
 		// find horizontals for 3x
 		for (int i = 0; i < 5; ++i) { // ROW
-			int prev_1_orb = -1;
-			int prev_2_orb = -1;
+			int prev_1_orb = -5;
+			int prev_2_orb = -5;
 			for (int j = 0; j < 6; ++j) { // COLS
 				int cur_orb = board[i][j];
 				if (prev_1_orb == prev_2_orb && prev_2_orb == cur_orb
@@ -64,8 +79,8 @@ public class puzzleSolver {
 		}
 		// find verticals for 3x
 		for (int j = 0; j < 6; ++j) { // cols
-			int prev_1_orb = -1;
-			int prev_2_orb = -1;
+			int prev_1_orb = -5;
+			int prev_2_orb = -5;
 			for (int i = 0; i < 5; ++i) { // rows
 				int cur_orb = board[i][j];
 				if (prev_1_orb == prev_2_orb && prev_2_orb == cur_orb
@@ -79,7 +94,10 @@ public class puzzleSolver {
 			}
 		}
 		int[][] scratchBoard = new int[5][6];
-		System.arraycopy(matchBoard, 0, scratchBoard, 0, matchBoard.length);
+		for (int i = 0; i < 5; i++)
+			for (int j = 0; j < 6; j++)
+				scratchBoard[i][j] = matchBoard[i][j];
+		s.setCB(matchBoard);
 		ArrayList<matchPair> ret = new ArrayList<matchPair>();
 		int ROWS = 5;
 		int COLS = 6;
@@ -146,7 +164,7 @@ public class puzzleSolver {
 		}
 		++s.p;
 		s.solutions = evolve_solutions(s.solutions, s.dir_step);
-
+		solve_board_step(s);
 	}
 
 	public ArrayList<solution> evolve_solutions(ArrayList<solution> solutions,
@@ -156,24 +174,32 @@ public class puzzleSolver {
 			if (s.is_done) {
 				continue;
 			}
+			if (s.path.size() > 50) {
+				s.is_done = true;
+				continue;
+			}
 			for (int dir = 0; dir < 8; dir += dir_step) {
 				if (!can_move_orb_in_solution(s, dir)) {
 					continue;
 				}
-				solution _solution = new solution(s.board, s.cursor,
-						s.initcursor, s.path, s.is_done, s.matches);
+				solution _solution = new solution(s.board, new pos(s.cursor.h,
+						s.cursor.w), new pos(s.initcursor.h, s.initcursor.w),
+						s.path, s.is_done, s.matches);
 				in_place_swap_orb_in_solution(_solution, dir);
 				in_place_evaluate_solution(_solution);
 				new_solutions.add(_solution);
 			}
 			s.is_done = true;
 		}
-
+		solutions.addAll(new_solutions);
 		return solutions;
 	}
 
 	public boolean can_move_orb_in_solution(solution s, int dir) {
-		if (s.path.get(s.path.size() - 1).equals((dir + 4) % 8)) {
+		if (s.path.size() == 0) {
+			return can_move_orb(s.cursor, dir);
+
+		} else if (s.path.get(s.path.size() - 1).intValue() == ((dir + 4) % 8)) {
 			return false;
 		}
 		return can_move_orb(s.cursor, dir);
@@ -182,63 +208,100 @@ public class puzzleSolver {
 	public boolean can_move_orb(pos rc, int d) {
 		int COLS = 6;
 		int ROWS = 5;
+		Boolean flag = false;
 		switch (d) {
 		case 0:
-			return rc.w < COLS - 1;
+			flag = rc.w < (COLS - 1);
+			break;
 		case 1:
-			return rc.h < ROWS - 1 && rc.w < COLS - 1;
+			flag = (rc.h < (ROWS - 1)) && (rc.w < (COLS - 1));
+			break;
 		case 2:
-			return rc.h < ROWS - 1;
+			flag = rc.h < (ROWS - 1);
+			break;
 		case 3:
-			return rc.h < ROWS - 1 && rc.w > 0;
+			flag = (rc.h < (ROWS - 1)) && (rc.w > 0);
+			break;
 		case 4:
-			return rc.w > 0;
+			flag = rc.w > 0;
+			break;
 		case 5:
-			return rc.h > 0 && rc.w > 0;
+			flag = (rc.h > 0) && (rc.w > 0);
+			break;
 		case 6:
-			return rc.h > 0;
+			flag = rc.h > 0;
+			break;
 		case 7:
-			return rc.h > 0 && rc.w < COLS - 1;
+			flag = (rc.h > 0) && (rc.w < (COLS - 1));
+			break;
 		}
-		return false;
+		return flag;
 	}
+
 	public void in_place_swap_orb_in_solution(solution s, Integer dir) {
-	    in_place_swap_orb(s.board, s.cursor, dir);
-	    s.path.add(dir);
+		in_place_swap_orb(s.board, s.cursor, dir);
+		s.path.add(dir);
 	}
-	public void in_place_swap_orb(int[][] board,pos rc,Integer dir) {
-	    pos old_rc = new pos(rc.h,rc.w);
-	    in_place_move_rc(rc, dir);
-	    int orig_type = board[old_rc.h][old_rc.w];
-	    board[old_rc.h][old_rc.w] = board[rc.h][rc.w];
-	    board[rc.h][rc.w] = orig_type;
+
+	public void in_place_swap_orb(int[][] board, pos rc, Integer dir) {
+		pos old_rc = new pos(rc.h, rc.w);
+		in_place_move_rc(rc, dir);
+		int orig_type = board[old_rc.h][old_rc.w];
+		board[old_rc.h][old_rc.w] = board[rc.h][rc.w];
+		board[rc.h][rc.w] = orig_type;
 	}
+
 	public void in_place_move_rc(pos rc, Integer dir) {
-	    switch (dir.intValue()) {
-	        case 0:              rc.w += 1; break;
-	        case 1: rc.h += 1; rc.w += 1; break;
-	        case 2: rc.h += 1;              break;
-	        case 3: rc.h += 1; rc.w -= 1; break;
-	        case 4:              rc.w -= 1; break;
-	        case 5: rc.h-= 1; rc.w -= 1; break;
-	        case 6: rc.h -= 1;              break;
-	        case 7: rc.h -= 1; rc.w += 1; break;
-	    }
+		switch (dir.intValue()) {
+		case 0:
+			rc.w += 1;
+			break;
+		case 1:
+			rc.h += 1;
+			rc.w += 1;
+			break;
+		case 2:
+			rc.h += 1;
+			break;
+		case 3:
+			rc.h += 1;
+			rc.w -= 1;
+			break;
+		case 4:
+			rc.w -= 1;
+			break;
+		case 5:
+			rc.h -= 1;
+			rc.w -= 1;
+			break;
+		case 6:
+			rc.h -= 1;
+			break;
+		case 7:
+			rc.h -= 1;
+			rc.w += 1;
+			break;
+		}
 	}
-	public void in_place_evaluate_solution(solution s){
+
+	@SuppressLint("NewApi")
+	public void in_place_evaluate_solution(solution s) {
 		int[][] current_board = new int[5][6];
-		System.arraycopy(s.board, 0, current_board, 0, s.board.length);
-		
-	    ArrayList<matchPair> all_matches = new ArrayList<matchPair>();
-	    while (true) {
-	    	ArrayList<matchPair> matches = findComboMatch(current_board);
-	        if (matches.size() == 0) {
-	            break;
-	        }
-	        //in_place_remove_matches(current_board, matches.board);
-	        //in_place_drop_empty_spaces(current_board);
-	        all_matches.addAll(matches);
-	    }
-	    s.matches = all_matches;
+		for (int i = 0; i < 5; i++)
+			for (int j = 0; j < 6; j++)
+				current_board[i][j] = s.board[i][j];
+
+		ArrayList<matchPair> all_matches = new ArrayList<matchPair>();
+		while (true) {
+			ArrayList<matchPair> matches = findComboMatch(current_board, s);
+			if (matches.size() == 0) {
+				break;
+			}
+			// in_place_remove_matches(current_board, matches.board);
+			// in_place_drop_empty_spaces(current_board);
+			all_matches.addAll(matches);
+			break;
+		}
+		s.matches = all_matches;
 	}
 }
