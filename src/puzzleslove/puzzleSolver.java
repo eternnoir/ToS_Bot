@@ -22,13 +22,12 @@ public class puzzleSolver {
 	private solution _bestS;
 	private int _move;
 
-	public puzzleSolver(int min, int maxMove, int eightDSupport, int cm, int po) {
+	public puzzleSolver(int min, int maxMove, int eightDSupport, int cm) {
 		_minMove = min;
 		_maxMove = maxMove;
 		_eightDSupport = eightDSupport;
 		_ComboNumber = cm;
 		_maxFind = false;
-		_perferOrb = po;
 		_bestS = null;
 	}
 
@@ -42,28 +41,19 @@ public class puzzleSolver {
 		_board = board;
 		ArrayList<solution> solutions = new ArrayList<solution>();
 		solution seed_solution = null;
-		for (int i = 0, s = 0; i < 5; ++i) {
-			for (int j = 0; j < 6; ++j, ++s) {
-				if (board[i][j] == _perferOrb) {
-					seed_solution = make_solution(board, i, j);
-					//solutions.add(copySolutionCursor(seed_solution, i, j));
-				}
-			}
-		}
-		// solution seed_solution = make_solution(board);
+		seed_solution = make_solution(board, 0, 0);
 		inPlaceSolution(seed_solution);
-		// solutions.add(copySolutionCursor(seed_solution, 0, 0));
 
 		for (int i = 0, s = 0; i < 5; ++i) {
 			for (int j = 0; j < 6; ++j, ++s) {
 
-			//	if (i == 0 || i == 4 || j == 0 || j == 5) {
+				if (i == 0 || i == 4 || j == 0 || j == 5) {
 				solutions.add(copySolutionCursor(seed_solution, i, j));
 			//	solutions.add(copySolutionCursor(seed_solution, 0, 0));
 				// solutions.add(copySolutionCursor(seed_solution, 4, 0));
 				// solutions.add(copySolutionCursor(seed_solution, 0, 5));
 				// solutions.add(copySolutionCursor(seed_solution, 4, 5));
-				//}
+				}
 
 			}
 		}
@@ -214,20 +204,20 @@ public class puzzleSolver {
 			i=i;
 			return new_solutions;
 		}
-		if(_move > 5000){
-			return new_solutions;
-		}
+		//if(_move > 2000){
+		//	return new_solutions;
+		//}
 		deep ++;
 		
 		for (solution s : solutions) {
 			if (s.is_done) {
 				continue;
 			}
-			if(s.path.size()>3 && s.matches.size()<1){
+			if(s.path.size()>4 && s.matches.size()<2){
 				s.is_done = true;
 				continue;
 			}
-			if(s.path.size()>6 && s.matches.size()<2){
+			if(s.path.size()>8 && s.matches.size()<3){
 				s.is_done = true;
 				continue;
 			}

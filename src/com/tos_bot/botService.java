@@ -52,28 +52,14 @@ public class botService extends Service {
 				handler.postDelayed(this, 3000);
 				return;
 			}
-			int[] pre =new int[6];
-			for(int i=0;i<5;i++){
-				for(int j=0;j<6;j++){
-					pre[orbArray[i][j]]++;
-				}
-			}
-			int ppre = 0;
-			int tmp=0;
-			for(int i=0;i<6;i++){
-				if(pre[i]>tmp){
-					tmp = pre[i];
-					ppre = i;
-				}
-			}
-			puzzleSolver ps = new puzzleSolver(3,30,2,3,ppre);
+			puzzleSolver ps = new puzzleSolver(2,30,2,4);
 			solution re = ps.solve_board(orbArray);
 			
 			//Toast.makeText(getApplicationContext(), "Send path", Toast.LENGTH_SHORT).show();
-			touchService.set(270, 135, 1380);
+ 			touchService.set(270, 135, 1380);
 			Vector<String> cmd = touchService.getCommandBySol(re);
 			touchService.SendCommand(cmd);
-			handler.postDelayed(this, 3000);
+			handler.postDelayed(this, 10000);
 		}
 	};
 	
