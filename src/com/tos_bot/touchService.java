@@ -4,25 +4,28 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Vector;
 
+import puzzleslove.solution;
+
 import android.os.SystemClock;
 import android.view.MotionEvent;
 
 public class touchService {
+	
+	static int _ballgap;
+	static int _inix;
+	static int _iniy;
+	public static void set(int bg,int inix,int iniy){
+		_ballgap = bg;
+		_inix = inix;
+		_iniy = iniy;
+	}
 
-	public static void myClickEvent(float x, float y) {
+	public static void SendCommand(Vector<String> str) {
 		Process sh;
-		Vector<String> cl = new Vector<String>();
-		cl.addAll(touchDown(100, 1700));
-		cl.addAll(touchDown(100, 1700));
-		cl.addAll(touchMove(100, 1700, 900, 1700, 3));
-		cl.addAll(touchMove(900, 1700, 900, 2300, 3));
-		cl.addAll(touchMove(900, 2300, 200, 2300, 3));
-		cl.addAll(touchMove(200, 1600, 200, 1900, 3));
-		cl.addAll(touchUp());
 		try {
 			sh = Runtime.getRuntime().exec("su", null, null);
 			OutputStream os = sh.getOutputStream();
-			for(String s:cl){
+			for(String s:str){
 				os.write(s.getBytes("ASCII"));
 				os.flush();
 			}
@@ -73,6 +76,67 @@ public class touchService {
 			
 		}
 		return cl;
+	}
+	
+	public static Vector<String> getCommandBySol(solution s){
+
+		Vector<String> ret = new Vector<String>();
+		// step 1. get init
+		int inix = _inix+s.initcursor.w*_ballgap;
+		int iniy = _iniy+s.initcursor.h*_ballgap;
+		ret.addAll(touchDown(inix,iniy));
+		
+		int nowx = inix;
+		int nowy = iniy;
+		// step 2. add path
+		for(Integer p:s.path){
+			touchpos pos = changePathToPos(p);
+			int passx = nowx;
+			int passy = nowy;
+			nowx += pos.x;
+			nowy += pos.y;
+			ret.addAll(touchMove(passx, passy, nowx, nowy, 1));
+ 		}
+		ret.addAll(touchMove(nowx, nowy, nowx+20, nowy+20, 1));
+		ret.addAll(touchUp());
+		
+		return ret;
+	}
+	
+	public static touchpos changePathToPos(Integer p){
+		/**
+		 *  5 6 7
+		 *  4 + 0
+		 *  3 2 1
+		 */
+		touchpos ret =null;
+		switch(p.intValue()){
+		case 0:
+			ret = new touchpos(_ballgap,0);
+			break;
+		case 1:
+			ret = new touchpos(_ballgap,_ballgap);
+			break;
+		case 2:
+			ret = new touchpos(0,_ballgap);
+			break;
+		case 3:
+			ret = new touchpos(-_ballgap,_ballgap);
+			break;
+		case 4:
+			ret = new touchpos(-_ballgap,0);
+			break;
+		case 5:
+			ret = new touchpos(-_ballgap,_ballgap);
+			break;
+		case 6:
+			ret = new touchpos(0,-_ballgap);
+			break;
+		case 7:
+			ret = new touchpos(_ballgap,-_ballgap);
+			break;
+		}
+		return ret;
 	}
 
 }

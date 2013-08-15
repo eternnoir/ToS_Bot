@@ -27,6 +27,7 @@ public class MainActivity extends Activity {
 			public void onClick(View view) {
 				Intent intent = new Intent(MainActivity.this, botService.class);
 				startService(intent);
+				
 			}
 		});
 		
@@ -54,9 +55,8 @@ public class MainActivity extends Activity {
 									{3,2,1,3,3,0},
 									{4,2,1,3,0,0},
 									{5,2,1,3,3,4}};*/
-				puzzleSolver ps = new puzzleSolver( 3, 2);
-				ps.findComboMatch(board, new solution());
-				ArrayList<solution> re = ps.solve_board(board);
+				//puzzleSolver ps = new puzzleSolver(3, 8, 2,4);
+				//ArrayList<solution> re = ps.solve_board(board);
 			}
 		});
 		

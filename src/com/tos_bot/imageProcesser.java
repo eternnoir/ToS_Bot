@@ -58,7 +58,7 @@ public class imageProcesser {
 				Bitmap cropped = Bitmap.createBitmap(sourceBitmap, w * ballsize
 						+ ballsize / 4, h * ballsize + ballsize / 4,
 						ballsize / 4, ballsize / 4);
-				savePng("tmp" + h + w, cropped);
+				//savePng("tmp" + h + w, cropped);
 				ret[h][w] = checkBallColor(cropped);
 			}
 		return ret;

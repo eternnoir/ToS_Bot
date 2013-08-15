@@ -12,12 +12,20 @@ import android.annotation.SuppressLint;
 public class puzzleSolver {
 
 	private int _maxMove;
+	private int _minMove;
 	private int _eightDSupport;
 	private int[][] _board;
+	private int _ComboNumber;
+	private boolean _maxFind;
+	private int _perferOrb;
 
-	public puzzleSolver(int maxMove, int eightDSupport) {
+	public puzzleSolver(int min, int maxMove, int eightDSupport, int cm, int po) {
+		_minMove = min;
 		_maxMove = maxMove;
 		_eightDSupport = eightDSupport;
+		_ComboNumber = cm;
+		_maxFind = false;
+		_perferOrb = po;
 	}
 
 	public ArrayList<solution> solveBoard() {
@@ -29,15 +37,29 @@ public class puzzleSolver {
 	public ArrayList<solution> solve_board(int[][] board) {
 		_board = board;
 		ArrayList<solution> solutions = new ArrayList<solution>();
-
-		solution seed_solution = make_solution(board);
+		solution seed_solution = null;
+		for (int i = 0, s = 0; i < 5; ++i) {
+			for (int j = 0; j < 6; ++j, ++s) {
+				if (board[i][j] == _perferOrb) {
+					seed_solution = make_solution(board, i, j);
+				}
+			}
+		}
+		// solution seed_solution = make_solution(board);
 		inPlaceSolution(seed_solution);
+		// solutions.add(copySolutionCursor(seed_solution, 0, 0));
 
 		for (int i = 0, s = 0; i < 5; ++i) {
 			for (int j = 0; j < 6; ++j, ++s) {
-				if (i == 0 || i == 4 || j == 0 || j == 5) {
-					solutions.add(copySolutionCursor(seed_solution, i, j));
-				}
+
+				//if (i == 0 || i == 4 || j == 0 || j == 5) {
+					//solutions.add(copySolutionCursor(seed_solution, i, j));
+					 solutions.add(copySolutionCursor(seed_solution, 0, 0));
+					 solutions.add(copySolutionCursor(seed_solution, 4, 0));
+					 solutions.add(copySolutionCursor(seed_solution, 0, 5));
+					 solutions.add(copySolutionCursor(seed_solution, 4, 5));
+				//}
+
 			}
 		}
 
@@ -53,7 +75,6 @@ public class puzzleSolver {
 		return solve_state.solutions;
 	}
 
-	@SuppressLint("NewApi")
 	public ArrayList<matchPair> findComboMatch(int[][] board, solution s) {
 		int[][] matchBoard = new int[5][6];
 		for (int i = 0; i < 5; i++) {
@@ -136,7 +157,7 @@ public class puzzleSolver {
 		return ret;
 	}
 
-	public solution make_solution(int[][] board) {
+	public solution make_solution(int[][] board, int h, int w) {
 		solution ret;
 		ret = new solution(board, new pos(0, 0), new pos(0, 0),
 				new ArrayList<Integer>(), false, new ArrayList<matchPair>());
@@ -159,7 +180,10 @@ public class puzzleSolver {
 	}
 
 	public void solve_board_step(solveState s) {
-		if (s.p >= s.max_length) {
+		if (_maxFind && s.p > _minMove) {
+			return;
+		}
+		if (s.p >= _maxMove) {
 			return;
 		}
 		++s.p;
@@ -174,19 +198,30 @@ public class puzzleSolver {
 			if (s.is_done) {
 				continue;
 			}
-			if (s.path.size() > 50) {
-				s.is_done = true;
-				continue;
-			}
 			for (int dir = 0; dir < 8; dir += dir_step) {
 				if (!can_move_orb_in_solution(s, dir)) {
+					continue;
+				}
+				if (dir == 0 && s.initcursor.w > 3) {
+					continue;
+				}
+				if (dir == 4 && s.initcursor.w < 3) {
+					continue;
+				}
+				if (dir == 2 && s.initcursor.h > 2) {
+					continue;
+				}
+				if (dir == 6 && s.initcursor.h < 2) {
 					continue;
 				}
 				solution _solution = new solution(s.board, new pos(s.cursor.h,
 						s.cursor.w), new pos(s.initcursor.h, s.initcursor.w),
 						s.path, s.is_done, s.matches);
-				in_place_swap_orb_in_solution(_solution, dir);
-				in_place_evaluate_solution(_solution);
+				
+					in_place_swap_orb_in_solution(_solution, dir);
+				if (_solution.path.size() > 4) {
+					in_place_evaluate_solution(_solution);
+				}
 				new_solutions.add(_solution);
 			}
 			s.is_done = true;
@@ -297,11 +332,40 @@ public class puzzleSolver {
 			if (matches.size() == 0) {
 				break;
 			}
-			// in_place_remove_matches(current_board, matches.board);
-			// in_place_drop_empty_spaces(current_board);
+			in_place_remove_matches(current_board, s.currentboard);
+			in_place_drop_empty_spaces(current_board);
 			all_matches.addAll(matches);
 			break;
 		}
+		if (all_matches.size() >= _ComboNumber) {
+			_maxFind = true;
+		}
 		s.matches = all_matches;
 	}
+
+	public void in_place_remove_matches(int[][] cb, int[][] mb) {
+		for (int i = 0; i < 5; ++i) {
+			for (int j = 0; j < 6; ++j) {
+				if (mb[i][j] != -1) {
+					cb[i][j] = -8;
+				}
+			}
+		}
+	}
+
+	public void in_place_drop_empty_spaces(int[][] board) {
+		for (int j = 0; j < 6; ++j) {
+			int dest_i = 5 - 1;
+			for (int src_i = 5 - 1; src_i >= 0; --src_i) {
+				if (board[src_i][j] != -1) {
+					board[dest_i][j] = board[src_i][j];
+					--dest_i;
+				}
+			}
+			for (; dest_i >= 0; --dest_i) {
+				board[dest_i][j] = 'X';
+			}
+		}
+	}
+
 }
