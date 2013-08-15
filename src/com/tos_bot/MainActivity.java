@@ -22,6 +22,10 @@ public class MainActivity extends Activity {
 		_startServiceButton = (Button) findViewById(R.id.start_button);
 		_stopServiceButton = (Button) findViewById(R.id.stop_button);
 		Button testb = (Button) findViewById(R.id.test);
+		ConfigData.deep =8;
+		ConfigData.Serverurl="http://vpsl.enoir.tw:3000/users";
+		ConfigData.eightd = 2;
+		touchService.commandDone =true;
 
 		_startServiceButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
