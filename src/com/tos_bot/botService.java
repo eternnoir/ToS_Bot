@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 public class botService extends Service {
 	private Handler handler = new Handler();
-	private String ServerURL = "http://192.168.0.103:3000/users";
 	String solstr;
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -58,14 +57,17 @@ public class botService extends Service {
 
 			final String url1 = ConfigData.Serverurl;
 			final String url2 = "board="+mass+"&deep="+ConfigData.deep;
-			
-			new Thread()
+			Thread solver =new Thread()
 			{
 			    @Override
 			    public void run()
 			    {
 					httpService hs = new httpService();
 					solstr = hs.httpServiceGet(url1, url2);
+					if(solstr.equals("")){
+						Log.i("Bot:", "NetWorkError");
+						return;
+					}
 					String[] recvStr = solstr.split(";");
 					String ini = recvStr[0];
 					String[] inis = ini.split(",");
@@ -78,9 +80,13 @@ public class botService extends Service {
 					touchService.SendCommand(cmd);
 					touchService.commandDone =true;
 			    }
-			}.start();
-			handler.postDelayed(this, 6000);
-			
+			};
+			solver.start();
+			while(solver.isAlive()){
+				Log.i("Bot:", "Wait For Solving");
+				handler.postDelayed(this, 3000);
+			}
+			handler.postDelayed(this, 10000);
 			
 			/*
 			String[] pathsetp = path.split(",");

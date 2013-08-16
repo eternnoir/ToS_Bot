@@ -25,15 +25,15 @@ public class httpService {
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return "ERROR";
+			return "";
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return "ERROR";
+			return "";
 		}
 		catch (Exception e){
 			e.printStackTrace();
-			return"NOooooo \n check your url";
+			return"";
 		};
 		return _ret;
 	}
