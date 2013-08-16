@@ -1,6 +1,8 @@
 package com.tos_bot;
 
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 import java.util.Vector;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 
 public class botService extends Service {
 	private Handler handler = new Handler();
+	final String _filePath = "/data/data/com.madhead.tos.zh/shared_prefs/com.madhead.tos.zh.xml";
+	final String _MyCardFp = "/data/data/com.madhead.tos.zh.ex/shared_prefs/com.madhead.tos.zh.ex.xml";
 	String solstr;
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -46,6 +50,8 @@ public class botService extends Service {
 				//Toast.makeText(getApplicationContext(), "Solving..", Toast.LENGTH_SHORT).show();
 				orbArray = imageProcesser.getBallArray(imageProcesser.cutBallReg("/sdcard/tmp/img.png"));
 			} catch (NotInTosException e) {
+				Log.i("Bot:", "pic Error");
+				handler.postDelayed(this, 5000);
 				return;
 			}
 			String mass = "";
@@ -84,9 +90,9 @@ public class botService extends Service {
 			};
 			solver.start();
 			while(solver.isAlive()){
-				Log.i("Bot:", "Wait For Solving");
+				//Log.i("Bot:", "Wait For Solving");
 			}
-			handler.postDelayed(this, 16000);
+			handler.postDelayed(this, 12000);
 			
 			/*
 			String[] pathsetp = path.split(",");
@@ -126,6 +132,44 @@ public class botService extends Service {
 		} 
 		Toast.makeText(getApplicationContext(), "Capture Screen Done", Toast.LENGTH_SHORT).show();
 		return true;
+	}
+	
+	private void checkoutRoot() {
+		Process p;
+		try {
+			// Preform su to get root privledges
+			p = Runtime.getRuntime().exec("su");
+
+			// Attempt to write a file to a root-only
+			DataOutputStream os = new DataOutputStream(p.getOutputStream());
+			String mkdircmd = "mkdir /mnt/sdcard/tmp\n";
+			os.writeBytes(mkdircmd);
+			
+			String cmd = "cp " + _filePath + " /mnt/sdcard/tmp/TOS_tmp.xml\n";
+			os.writeBytes(cmd);
+			cmd = "cp " + _MyCardFp + " /mnt/sdcard/tmp/TOS_tmp.xml\n";
+			os.writeBytes(cmd);
+
+			// Close the terminal
+			os.writeBytes("exit\n");
+			os.flush();
+			try {
+				p.waitFor();
+				if (p.exitValue() != 255) {
+					// TODO Code to run on success
+					// return true;
+				} else {
+					// TODO Code to run on unsuccessful
+					// return false;
+				}
+			} catch (InterruptedException e) {
+				// TODO Code to run in interrupted exception
+				// return false;
+			}
+		} catch (IOException e) {
+			// TODO Code to run in input/output exception
+			// return false;
+		}
 	}
 
 }

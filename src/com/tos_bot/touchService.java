@@ -45,8 +45,6 @@ public class touchService {
 	
 	public static Vector<String> touchDown(int x,int y){
 		Vector<String> cl = new Vector<String>();
-		cl.add("sendevent /dev/input/event3 3 57 713\n");
-		cl.add("sendevent /dev/input/event3 3 48 83\n");
 		cl.add("sendevent /dev/input/event3 3 53 "+x+"\n");
 		cl.add("sendevent /dev/input/event3 3 54 "+y+"\n");
 		cl.add("sendevent /dev/input/event3 3 57 105\n");
