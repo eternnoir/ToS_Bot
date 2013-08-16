@@ -77,6 +77,7 @@ public class botService extends Service {
 					String[] pathsetp = path.split(",");
 		 			touchService.set(270, 135, 1380);
 					Vector<String> cmd = touchService.getCommandByPath(ih,iw,pathsetp);
+					//Toast.makeText(getApplicationContext(), "Solving..", Toast.LENGTH_SHORT).show();
 					touchService.SendCommand(cmd);
 					touchService.commandDone =true;
 			    }
@@ -84,9 +85,8 @@ public class botService extends Service {
 			solver.start();
 			while(solver.isAlive()){
 				Log.i("Bot:", "Wait For Solving");
-				handler.postDelayed(this, 3000);
 			}
-			handler.postDelayed(this, 10000);
+			handler.postDelayed(this, 16000);
 			
 			/*
 			String[] pathsetp = path.split(",");
