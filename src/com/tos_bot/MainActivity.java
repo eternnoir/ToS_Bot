@@ -45,6 +45,7 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+				touchService.pasCDid="";
 				Intent intent = new Intent(MainActivity.this, botService.class);
 				stopService(intent);
 				
@@ -56,6 +57,7 @@ public class MainActivity extends Activity {
 	@Override
 	public void onStart(){
 		super.onStart();
+		touchService.pasCDid="";
 		Intent intent = new Intent(MainActivity.this, botService.class);
 		stopService(intent);
 	}
