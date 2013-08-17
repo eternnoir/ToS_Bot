@@ -31,6 +31,7 @@ public class xmlParser {
 			while (eventType != XmlPullParser.END_DOCUMENT) {
 
 				if (eventType == XmlPullParser.START_TAG) {
+
 					if (pullParser.getName().equals("string")) {
 						if (pullParser.getAttributeValue(0).equals(ID)) {
 							eventType = pullParser.next();
@@ -41,16 +42,16 @@ public class xmlParser {
 					}
 				}
 				eventType = pullParser.next();
-
 			}
 			fileReader.close();
+			fileReader = null;
+			System.gc();
 		} catch (XmlPullParserException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "Can't Find File";
 		}
-		
 		return ret;
 	}
 }

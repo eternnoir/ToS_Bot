@@ -16,6 +16,7 @@ public class touchService {
 	static int _iniy;
 	public static String pasCDid = "";
 	public static int delay=0;
+	public static int cacheid=0;
 	public static boolean commandDone;
 	public static void set(int bg,int inix,int iniy){
 		_ballgap = bg;

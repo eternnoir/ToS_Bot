@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.util.Vector;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -40,16 +41,30 @@ public class botService extends Service {
 		public void run() {
 			Log.i("Bot:", "Take Pic");
 			cpFile();
+			String board = getBoard();
+			if (board == null) {
+				Log.i("Bot:", "Use Data Frome Pic");
+				getScreenshot();
+				int[][] orbArray;
+				try {
+					//Toast.makeText(getApplicationContext(), "Solving..", Toast.LENGTH_SHORT).show();
+					orbArray = imageProcesser.getBallArray(imageProcesser.cutBallReg("/sdcard/tmp/img.png"));
+				} catch (NotInTosException e) {
+					return;
+				}
+				board = "";
+				for(int i=0;i<5;i++){
+					for(int j=0;j<6;j++){
+						board = board+orbArray[i][j];
+					}
+				}
+			}
+			final String url1 = ConfigData.Serverurl;
+			final String url2 = "board=" + board + "&deep=" + ConfigData.deep;
 			Thread solver = new Thread() {
 				@Override
 				public void run() {
-					String board = getBoard();
-					if (board == null) {
-						return;
-					}
-
-					final String url1 = ConfigData.Serverurl;
-					final String url2 = "board=" + board + "&deep=" + ConfigData.deep;
+					touchService.cacheid++;
 					httpService hs = new httpService();
 					solstr = hs.httpServiceGet(url1, url2);
 					if (solstr.equals("")) {
@@ -123,12 +138,31 @@ public class botService extends Service {
 
 			// Attempt to write a file to a root-only
 			DataOutputStream os = new DataOutputStream(p.getOutputStream());
-			String mkdircmd = "mkdir /mnt/sdcard/tmp\n";
-			os.writeBytes(mkdircmd);
-			String rmcmd = "rm -rf /mnt/sdcard/tmp/TOS_tmp.xml\n";
-			os.writeBytes(rmcmd);
-			String cmd = "cat " + _filePath + ">> /mnt/sdcard/tmp/TOS_tmp.xml";
-			os.writeBytes(cmd);
+			String cmd = "cp " + _filePath+" "+Environment.getExternalStorageDirectory()+"/TOS_tmp.xml\n";
+			os.write(cmd.getBytes());
+			os.flush();
+			os.writeBytes("exit\n");
+			os.flush();
+			os.close();
+			p.waitFor();
+		} catch (Exception e) {
+			// TODO Code to run in input/output exception
+			// return false;
+			e.printStackTrace();
+		}
+	}
+	private void rmFile() {
+		Process p;
+		try {
+			// Preform su to get root privledges
+			p = Runtime.getRuntime().exec("su", null, null);
+
+			// Attempt to write a file to a root-only
+			DataOutputStream os = new DataOutputStream(p.getOutputStream());
+			String rmcmd = "rm -Rf "+Environment.getExternalStorageDirectory()+"/TOS_tmp.xml\n";
+			os.write(rmcmd.getBytes());
+			os.flush();
+			os.writeBytes("exit\n");
 			os.flush();
 			os.close();
 			p.waitFor();
@@ -143,13 +177,13 @@ public class botService extends Service {
 		//cpFile();
 		String ret;
 		xmlParser xmp = new xmlParser();
-		String xmlres = xmp.parserXmlByID("/mnt/sdcard/tmp/TOS_tmp.xml", xmlid);
-		String nowcdid = xmp.parserXmlByID("/mnt/sdcard/tmp/TOS_tmp.xml", cdid);
-		Log.i("Bot:", touchService.pasCDid);
-		Log.i("Bot:", nowcdid);
+		String xmlres = xmp.parserXmlByID(Environment.getExternalStorageDirectory()+"/TOS_tmp.xml", xmlid);
+		String nowcdid = xmp.parserXmlByID(Environment.getExternalStorageDirectory()+"/TOS_tmp.xml", cdid);
+		Log.i("Bot:", "pascdid: "+touchService.pasCDid);
+		Log.i("Bot:", "nowcdid: "+nowcdid);
 
 		if (nowcdid.equals(touchService.pasCDid)) {
-			if(touchService.delay >5){
+			if(touchService.delay >2){
 				touchService.pasCDid ="";	//over 5 times reset
 			}else{
 				touchService.delay++;
