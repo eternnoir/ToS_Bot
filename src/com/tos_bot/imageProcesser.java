@@ -45,7 +45,7 @@ public class imageProcesser {
 						+ ballsize / 4, h * ballsize + ballsize / 4,
 						ballsize / 4, ballsize / 8);
 				//savePng("tmp" + h + w, cropped);
-				ret[h][w] = checkBallColor(cropped);
+				ret[h][w] = checkBallColor(cropped)+1;
 			}
 		int error=0;
 		for (int h = 0; h < 5; h++)
@@ -132,17 +132,17 @@ public class imageProcesser {
 			g = (pix[i]) >> 8 & 0xff;
 			b = (pix[i]) & 0xff;
 			if (r > 150 && b > 150 && g<50) {
-				color[3]++;	//dark
+				color[4]++;	//dark
 			} else if (r > 150 && g < 50 && b < 50) {
-				color[0]++;	//red
+				color[1]++;	//red
 			} else if (r < 150 && g > 150 && b < 150) {
-				color[1]++;	//green
+				color[2]++;	//green
 			} else if (r < 150 && g < 150 && b > 150) {
-				color[2]++;	//blue
+				color[0]++;	//blue
 			} else if (r > 150 && g > 70 && b > 70 && g<150) {
 				color[5]++;	//Hert
 			}else if (r > 50 && g > 100 && b < 150) {
-				color[4]++;	//lght
+				color[3]++;	//lght
 			} else{
 				//throw new NotInTosException();
 			}
