@@ -1,10 +1,6 @@
 package com.tos_bot;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Vector;
 import android.app.Service;
@@ -12,7 +8,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 public class botService extends Service {
 	private Handler handler = new Handler();
@@ -81,8 +76,7 @@ public class botService extends Service {
 			solver.start();
 			while (solver.isAlive()) {
 				// Log.i("Bot:", "Wait For Solving");
-			}
-			cpFile();
+			};
 			handler.postDelayed(this, 12000);
 			/*
 			 * String[] pathsetp = path.split(","); touchService.set(270, 135,
@@ -133,13 +127,8 @@ public class botService extends Service {
 			os.writeBytes(mkdircmd);
 			String rmcmd = "rm -rf /mnt/sdcard/tmp/TOS_tmp.xml\n";
 			os.writeBytes(rmcmd);
-			// String cmd = "cat " + _filePath +
-			// ">> /mnt/sdcard/tmp/TOS_tmp.xml\n";
 			String cmd = "cat " + _filePath + ">> /mnt/sdcard/tmp/TOS_tmp.xml";
 			os.writeBytes(cmd);
-			// cmd = "cp " + _MyCardFp + " /mnt/sdcard/tmp/TOS_tmp.xml\n";
-			// os.writeBytes(cmd);
-			// Close the terminal
 			os.flush();
 			os.close();
 			p.waitFor();
@@ -160,8 +149,14 @@ public class botService extends Service {
 		Log.i("Bot:", nowcdid);
 
 		if (nowcdid.equals(touchService.pasCDid)) {
+			if(touchService.delay >5){
+				touchService.pasCDid ="";	//over 5 times reset
+			}else{
+				touchService.delay++;
+			}
 			return null;
 		} else {
+			touchService.delay =0;
 			touchService.pasCDid = nowcdid;
 		}
 
