@@ -39,7 +39,7 @@ public class botService extends Service {
 
 	private Runnable BotGo = new Runnable() {
 		public void run() {
-			Log.i("Bot:", "Take Pic");
+			Log.i("Bot:", "Take Board");
 			cpFile();
 			String board = getBoard();
 			if (board == null) {
