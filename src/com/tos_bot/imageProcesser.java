@@ -41,10 +41,10 @@ public class imageProcesser {
 		Bitmap sourceBitmap = c;
 		for (int h = 0; h < 5; h++)
 			for (int w = 0; w < 6; w++) {
-				Bitmap cropped = Bitmap.createBitmap(sourceBitmap, w * ballsize
-						+ ballsize / 4, h * ballsize + ballsize / 4,
-						ballsize / 4, ballsize / 8);
-				//savePng("tmp" + h + w, cropped);
+				Bitmap cropped = Bitmap.createBitmap(sourceBitmap, w * ballsize +
+						ballsize - ballsize / 4, h * ballsize + ballsize/2,
+						ballsize / 16, ballsize / 16);
+				savePng("tmp" + h + w, cropped);
 				ret[h][w] = checkBallColor(cropped)+1;
 			}
 		int error=0;
@@ -131,17 +131,17 @@ public class imageProcesser {
 			r = (pix[i]) >> 16 & 0xff;
 			g = (pix[i]) >> 8 & 0xff;
 			b = (pix[i]) & 0xff;
-			if (r > 150 && b > 150 && g<50) {
+			if (r > 200 && b > 200 && g<80) {
 				color[4]++;	//dark
-			} else if (r > 150 && g < 50 && b < 50) {
+			} else if (r > 200 && g < 100 && b < 100) {
 				color[1]++;	//red
 			} else if (r < 150 && g > 150 && b < 150) {
 				color[2]++;	//green
-			} else if (r < 150 && g < 150 && b > 150) {
+			} else if (r < 100 && g < 150 && b > 200) {
 				color[0]++;	//blue
-			} else if (r > 150 && g > 70 && b > 70 && g<150) {
+			} else if (r > 200 && g > 100 && b > 150 && g < 200) {
 				color[5]++;	//Hert
-			}else if (r > 50 && g > 100 && b < 150) {
+			}else if (r > 150 && g > 150 && b < 100) {
 				color[3]++;	//lght
 			} else{
 				//throw new NotInTosException();
@@ -156,6 +156,6 @@ public class imageProcesser {
 				ret = i;
 			}
 		}
-		return ret;  //RGBDLH
+		return ret; 
 	}
 }
