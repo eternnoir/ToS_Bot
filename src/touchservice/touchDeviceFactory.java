@@ -12,16 +12,14 @@ public class touchDeviceFactory {
 		}
 	
 	public static AbstractTouchService getNewTouchService(String deviceName){
+        AbstractTouchService ret = null;
 		if(deviceName.equals("htc_new_one_m7")){
-			AbstractTouchService ret = new htc_new_one_m7();
+			ret = new htc_new_one_m7();
 			ret.setUp(270, 135, 1380);
-			return ret;
 		}else 	if(deviceName.equals("htc_one_x")){
-			AbstractTouchService ret = new htc_one_x();
+			ret = new htc_one_x();
 			ret.setUp(180, 90, 890);
-			return new htc_new_one_m7();
 		}
-		
-		return null;
+		return ret;
 	}
 }
