@@ -48,14 +48,18 @@ public class Gen_nexus_one extends AbstractTouchService {
 
 	@Override
 	public Vector<String> touchMoveX(int x1, int x2, int gap) {
-		// TODO Auto-generated method stub
-		return null;
+		Vector<String> cl = new Vector<String>();
+		cl.add("sendevent /dev/input/event7 3 0 "+ x2 +"\n");
+		cl.add("sendevent /dev/input/event7 0 0 0 \n");
+		return cl;
 	}
 
 	@Override
 	public Vector<String> touchMoveY(int y1, int y2, int gap) {
-		// TODO Auto-generated method stub
-		return null;
+		Vector<String> cl = new Vector<String>();
+		cl.add("sendevent /dev/input/event7 3 1 "+ y2 +"\n");
+		cl.add("sendevent /dev/input/event7 0 0 0 \n");
+		return cl;
 	}
 
 }
