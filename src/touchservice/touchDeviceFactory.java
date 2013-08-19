@@ -10,7 +10,7 @@ public class touchDeviceFactory {
 			};
 		}
 	
-	public static ITouchService getNewTouchService(String deviceName){
+	public static AbstractTouchService getNewTouchService(String deviceName){
 		if(deviceName.equals("htc_new_one_m7")){
 			return new htc_new_one_m7();
 		}else 	if(deviceName.equals("htc_one")){

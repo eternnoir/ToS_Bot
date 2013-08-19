@@ -4,7 +4,7 @@ import java.io.DataOutputStream;
 import java.io.OutputStream;
 import java.util.Vector;
 
-import touchservice.ITouchService;
+import touchservice.AbstractTouchService;
 import touchservice.touchDeviceFactory;
 import android.app.Service;
 import android.content.Intent;
@@ -81,7 +81,7 @@ public class botService extends Service {
 					int iw = Integer.parseInt(inis[1]);
 					String path = recvStr[2];
 					String[] pathsetp = path.split(",");
-					ITouchService ts = touchDeviceFactory.getNewTouchService(ConfigData.DeviceName);
+					AbstractTouchService ts = touchDeviceFactory.getNewTouchService(ConfigData.DeviceName);
 					assert(ts!=null);
 					ts.setUp(270, 135, 1380);
 					Vector<String> cmd = ts.getCommandByPath(ih, iw,
