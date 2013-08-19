@@ -31,6 +31,8 @@ public class MainActivity extends Activity {
 				deepet = (EditText) findViewById(R.id.maxMoveText);
 				ConfigData.Serverurl = serveret.getText().toString();
 				ConfigData.deep = Integer.parseInt(deepet.getText().toString());
+				Spinner deviceS = (Spinner)findViewById(R.id.deviceList);
+				ConfigData.DeviceName = deviceS.getSelectedItem().toString();
 				Intent intent = new Intent(MainActivity.this, botService.class);
 				startService(intent);
 
@@ -53,8 +55,6 @@ public class MainActivity extends Activity {
 	public void onStart() {
 		super.onStart();
 		ConfigData.pasCDid = "";
-		Spinner deviceS = (Spinner)findViewById(R.id.deviceList);
-		ConfigData.DeviceName = deviceS.getSelectedItem().toString();
 		Intent intent = new Intent(MainActivity.this, botService.class);
 		stopService(intent);
 	}
