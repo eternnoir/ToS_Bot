@@ -1,4 +1,4 @@
-package com.tos_bot;
+package touchservice;
 
 public class touchpos {
 	public int x;

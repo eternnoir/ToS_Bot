@@ -1,30 +1,25 @@
-package com.tos_bot;
+package touchservice.devices;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Vector;
-
 import puzzleslove.solution;
+import touchservice.ITouchService;
+import touchservice.touchpos;
 
-import android.os.SystemClock;
-import android.view.MotionEvent;
-
-public class touchService {
+public class htc_new_one_m7 implements ITouchService{
 	
-	static int _ballgap;
-	static int _inix;
-	static int _iniy;
-	public static String pasCDid = "";
-	public static int delay=0;
-	public static int cacheid=0;
-	public static boolean commandDone;
-	public static void set(int bg,int inix,int iniy){
+	private int _ballgap;
+	private int _inix;
+	private int _iniy;
+
+	public  void setUp(int bg,int inix,int iniy){
 		_ballgap = bg;
 		_inix = inix;
 		_iniy = iniy;
 	}
 
-	public static void SendCommand(Vector<String> str) {
+	public  void SendCommand(Vector<String> str) {
 		Process sh;
 		try {
 			sh = Runtime.getRuntime().exec("su", null, null);
@@ -46,7 +41,7 @@ public class touchService {
 		}
 	}
 	
-	public static Vector<String> touchDown(int x,int y){
+	public  Vector<String> touchDown(int x,int y){
 		Vector<String> cl = new Vector<String>();
 		cl.add("sendevent /dev/input/event3 3 53 "+x+"\n");
 		cl.add("sendevent /dev/input/event3 3 54 "+y+"\n");
@@ -54,13 +49,13 @@ public class touchService {
 		cl.add("sendevent /dev/input/event3 0 0 0\n");
 		return cl;
 	}
-	public static Vector<String> touchUp(){
+	public  Vector<String> touchUp(){
 		Vector<String> cl = new Vector<String>();
 		cl.add("sendevent /dev/input/event3 3 57 4294967295\n");
 		cl.add("sendevent /dev/input/event3 0 0 0 \n");
 		return cl;
 	}
-	public static Vector<String> touchMove(int x1, int y1, int x2, int y2, int gap){
+	public  Vector<String> touchMove(int x1, int y1, int x2, int y2, int gap){
 		Vector<String> cl = new Vector<String>();
 		int x=x1;
 		int y=y1;
@@ -80,7 +75,7 @@ public class touchService {
 		return cl;
 	}
 	
-	public static Vector<String> touchMoveX(int x1,  int x2,  int gap){
+	public  Vector<String> touchMoveX(int x1,  int x2,  int gap){
 		Vector<String> cl = new Vector<String>();
 		int x=x1;
 
@@ -95,7 +90,7 @@ public class touchService {
 		}
 		return cl;
 	}
-	public static Vector<String> touchMoveY(int y1,  int y2, int gap){
+	public  Vector<String> touchMoveY(int y1,  int y2, int gap){
 		Vector<String> cl = new Vector<String>();
 		int y=y1;
 		int yGap = (y2-y1)/gap;
@@ -110,7 +105,7 @@ public class touchService {
 	}
 	
 	
-	public static Vector<String> getCommandBySol(solution s){
+	public  Vector<String> getCommandBySol(solution s){
 
 		Vector<String> ret = new Vector<String>();
 		// step 1. get init
@@ -134,7 +129,7 @@ public class touchService {
 		
 		return ret;
 	}
-	public static Vector<String> getCommandByPath(int inith,int initw,String[] pathsetp){
+	public  Vector<String> getCommandByPath(int inith,int initw,String[] pathsetp){
 
 		Vector<String> ret = new Vector<String>();
 		// step 1. get init
@@ -160,7 +155,7 @@ public class touchService {
 		return ret;
 	}
 	
-	public static touchpos changePathToPos(Integer p){
+	private  touchpos changePathToPos(Integer p){
 		/**
 		 *  5 6 7
 		 *  4 + 0
