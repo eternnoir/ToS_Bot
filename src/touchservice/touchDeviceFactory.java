@@ -7,7 +7,7 @@ public class touchDeviceFactory {
 	public static String[] getDeviceList(){
 		return new String[]{
 				"htc_new_one_m7",
-				"hte_one"
+				"htcS_one"
 			};
 		}
 	
