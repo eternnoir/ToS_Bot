@@ -83,7 +83,6 @@ public class botService extends Service {
 					String[] pathsetp = path.split(",");
 					AbstractTouchService ts = touchDeviceFactory.getNewTouchService(ConfigData.DeviceName);
 					assert(ts!=null);
-					ts.setUp(270, 135, 1380);
 					Vector<String> cmd = ts.getCommandByPath(ih, iw,
 							pathsetp);
 					// Toast.makeText(getApplicationContext(), "Solving..",
