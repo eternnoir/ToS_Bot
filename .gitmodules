@@ -1,0 +1,3 @@
+[submodule "solverServer"]
+	path = solverServer
+	url = https://github.com/eternnoir/puzzleSolverServer.git
