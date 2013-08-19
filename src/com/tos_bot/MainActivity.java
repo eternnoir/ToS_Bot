@@ -22,9 +22,6 @@ public class MainActivity extends Activity {
 		this.initDeviceList();		//create device list
 		_startServiceButton = (Button) findViewById(R.id.start_button);
 		_stopServiceButton = (Button) findViewById(R.id.stop_button);
-		ConfigData.deep = 8;
-		ConfigData.Serverurl = "http://127.0.0.1:3000";
-		ConfigData.eightd = 2;
 
 		_startServiceButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
