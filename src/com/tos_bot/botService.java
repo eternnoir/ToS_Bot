@@ -3,6 +3,9 @@ package com.tos_bot;
 import java.io.DataOutputStream;
 import java.io.OutputStream;
 import java.util.Vector;
+
+import touchservice.ITouchService;
+import touchservice.touchDeviceFactory;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Environment;
@@ -64,7 +67,6 @@ public class botService extends Service {
 			Thread solver = new Thread() {
 				@Override
 				public void run() {
-					touchService.cacheid++;
 					httpService hs = new httpService();
 					solstr = hs.httpServiceGet(url1, url2);
 					if (solstr.equals("")) {
@@ -79,13 +81,14 @@ public class botService extends Service {
 					int iw = Integer.parseInt(inis[1]);
 					String path = recvStr[2];
 					String[] pathsetp = path.split(",");
-					touchService.set(270, 135, 1380);
-					Vector<String> cmd = touchService.getCommandByPath(ih, iw,
+					ITouchService ts = touchDeviceFactory.getNewTouchService(ConfigData.DeviceName);
+					assert(ts!=null);
+					ts.setUp(270, 135, 1380);
+					Vector<String> cmd = ts.getCommandByPath(ih, iw,
 							pathsetp);
 					// Toast.makeText(getApplicationContext(), "Solving..",
 					// Toast.LENGTH_SHORT).show();
-					touchService.SendCommand(cmd);
-					touchService.commandDone = true;
+					ts.SendCommand(cmd);
 				}
 			};
 			solver.start();
@@ -179,19 +182,13 @@ public class botService extends Service {
 		xmlParser xmp = new xmlParser();
 		String xmlres = xmp.parserXmlByID(Environment.getExternalStorageDirectory()+"/TOS_tmp.xml", xmlid);
 		String nowcdid = xmp.parserXmlByID(Environment.getExternalStorageDirectory()+"/TOS_tmp.xml", cdid);
-		Log.i("Bot:", "pascdid: "+touchService.pasCDid);
+		Log.i("Bot:", "pascdid: "+ConfigData.pasCDid);
 		Log.i("Bot:", "nowcdid: "+nowcdid);
 
-		if (nowcdid.equals(touchService.pasCDid)) {
-			if(touchService.delay >2){
-				touchService.pasCDid ="";	//over 5 times reset
-			}else{
-				touchService.delay++;
-			}
+		if (nowcdid.equals(ConfigData.pasCDid)) {
 			return null;
 		} else {
-			touchService.delay =0;
-			touchService.pasCDid = nowcdid;
+			ConfigData.pasCDid = nowcdid;
 		}
 
 		if (xmlres.equals("")) {
