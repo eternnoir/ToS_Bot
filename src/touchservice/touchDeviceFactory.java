@@ -1,13 +1,13 @@
 package touchservice;
 
 import touchservice.devices.htc_new_one_m7;
-import touchservice.devices.htc_one;
+import touchservice.devices.htc_one_x;
 
 public class touchDeviceFactory {
 	public static String[] getDeviceList(){
 		return new String[]{
 				"htc_new_one_m7",
-				"htcS_one"
+				"htc_one_x"
 			};
 		}
 	
@@ -16,8 +16,8 @@ public class touchDeviceFactory {
 			AbstractTouchService ret = new htc_new_one_m7();
 			ret.setUp(270, 135, 1380);
 			return ret;
-		}else 	if(deviceName.equals("htc_one")){
-			AbstractTouchService ret = new htc_one();
+		}else 	if(deviceName.equals("htc_one_x")){
+			AbstractTouchService ret = new htc_one_x();
 			ret.setUp(180, 90, 890);
 			return new htc_new_one_m7();
 		}
