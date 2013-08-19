@@ -14,14 +14,16 @@ import android.widget.Spinner;
 public class MainActivity extends Activity {
 	private Button _startServiceButton;
 	private Button _stopServiceButton;
+	private Spinner _deviceS;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		this.initDeviceList();		//create device list
+		this.initDeviceList(); // create device list
 		_startServiceButton = (Button) findViewById(R.id.start_button);
 		_stopServiceButton = (Button) findViewById(R.id.stop_button);
+		_deviceS = (Spinner) findViewById(R.id.deviceList);
 
 		_startServiceButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
@@ -31,7 +33,7 @@ public class MainActivity extends Activity {
 				deepet = (EditText) findViewById(R.id.maxMoveText);
 				ConfigData.Serverurl = serveret.getText().toString();
 				ConfigData.deep = Integer.parseInt(deepet.getText().toString());
-				Spinner deviceS = (Spinner)findViewById(R.id.deviceList);
+				Spinner deviceS = (Spinner) findViewById(R.id.deviceList);
 				ConfigData.DeviceName = deviceS.getSelectedItem().toString();
 				Intent intent = new Intent(MainActivity.this, botService.class);
 				startService(intent);
@@ -69,7 +71,8 @@ public class MainActivity extends Activity {
 	private void initDeviceList() {
 		Spinner spinner = (Spinner) findViewById(R.id.deviceList);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item,touchDeviceFactory.getDeviceList());
+				android.R.layout.simple_spinner_item,
+				touchDeviceFactory.getDeviceList());
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
 	}

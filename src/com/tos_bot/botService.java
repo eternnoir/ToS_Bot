@@ -50,15 +50,17 @@ public class botService extends Service {
 				getScreenshot();
 				int[][] orbArray;
 				try {
-					//Toast.makeText(getApplicationContext(), "Solving..", Toast.LENGTH_SHORT).show();
-					orbArray = imageProcesser.getBallArray(imageProcesser.cutBallReg("/sdcard/tmp/img.png"));
+					// Toast.makeText(getApplicationContext(), "Solving..",
+					// Toast.LENGTH_SHORT).show();
+					orbArray = imageProcesser.getBallArray(imageProcesser
+							.cutBallReg("/sdcard/tmp/img.png"));
 				} catch (NotInTosException e) {
 					return;
 				}
 				board = "";
-				for(int i=0;i<5;i++){
-					for(int j=0;j<6;j++){
-						board = board+orbArray[i][j];
+				for (int i = 0; i < 5; i++) {
+					for (int j = 0; j < 6; j++) {
+						board = board + orbArray[i][j];
 					}
 				}
 			}
@@ -81,10 +83,10 @@ public class botService extends Service {
 					int iw = Integer.parseInt(inis[1]);
 					String path = recvStr[2];
 					String[] pathsetp = path.split(",");
-					AbstractTouchService ts = touchDeviceFactory.getNewTouchService(ConfigData.DeviceName);
-					assert(ts!=null);
-					Vector<String> cmd = ts.getCommandByPath(ih, iw,
-							pathsetp);
+					AbstractTouchService ts = touchDeviceFactory
+							.getNewTouchService(ConfigData.DeviceName);
+					assert (ts != null);
+					Vector<String> cmd = ts.getCommandByPath(ih, iw, pathsetp);
 					// Toast.makeText(getApplicationContext(), "Solving..",
 					// Toast.LENGTH_SHORT).show();
 					ts.SendCommand(cmd);
@@ -93,7 +95,8 @@ public class botService extends Service {
 			solver.start();
 			while (solver.isAlive()) {
 				// Log.i("Bot:", "Wait For Solving");
-			};
+			}
+			;
 			handler.postDelayed(this, 12000);
 			/*
 			 * String[] pathsetp = path.split(","); touchService.set(270, 135,
@@ -140,7 +143,14 @@ public class botService extends Service {
 
 			// Attempt to write a file to a root-only
 			DataOutputStream os = new DataOutputStream(p.getOutputStream());
-			String cmd = "cp " + _filePath+" "+Environment.getExternalStorageDirectory()+"/TOS_tmp.xml\n";
+			String cmd = "cp " + _filePath + " "
+					+ Environment.getExternalStorageDirectory()
+					+ "/TOS_tmp.xml\n";
+			os.write(cmd.getBytes());
+			os.flush();
+			cmd = "cp " + _MyCardFp + " "
+					+ Environment.getExternalStorageDirectory()
+					+ "/TOS_tmp.xml\n";
 			os.write(cmd.getBytes());
 			os.flush();
 			os.writeBytes("exit\n");
@@ -153,6 +163,7 @@ public class botService extends Service {
 			e.printStackTrace();
 		}
 	}
+
 	private void rmFile() {
 		Process p;
 		try {
@@ -161,7 +172,9 @@ public class botService extends Service {
 
 			// Attempt to write a file to a root-only
 			DataOutputStream os = new DataOutputStream(p.getOutputStream());
-			String rmcmd = "rm -Rf "+Environment.getExternalStorageDirectory()+"/TOS_tmp.xml\n";
+			String rmcmd = "rm -Rf "
+					+ Environment.getExternalStorageDirectory()
+					+ "/TOS_tmp.xml\n";
 			os.write(rmcmd.getBytes());
 			os.flush();
 			os.writeBytes("exit\n");
@@ -176,13 +189,17 @@ public class botService extends Service {
 	}
 
 	private String getBoard() {
-		//cpFile();
+		// cpFile();
 		String ret;
 		xmlParser xmp = new xmlParser();
-		String xmlres = xmp.parserXmlByID(Environment.getExternalStorageDirectory()+"/TOS_tmp.xml", xmlid);
-		String nowcdid = xmp.parserXmlByID(Environment.getExternalStorageDirectory()+"/TOS_tmp.xml", cdid);
-		Log.i("Bot:", "pascdid: "+ConfigData.pasCDid);
-		Log.i("Bot:", "nowcdid: "+nowcdid);
+		String xmlres = xmp.parserXmlByID(
+				Environment.getExternalStorageDirectory() + "/TOS_tmp.xml",
+				xmlid);
+		String nowcdid = xmp.parserXmlByID(
+				Environment.getExternalStorageDirectory() + "/TOS_tmp.xml",
+				cdid);
+		Log.i("Bot:", "pascdid: " + ConfigData.pasCDid);
+		Log.i("Bot:", "nowcdid: " + nowcdid);
 
 		if (nowcdid.equals(ConfigData.pasCDid)) {
 			return null;
