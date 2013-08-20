@@ -38,7 +38,7 @@
     android:layout_weight="1"
     android:ems="10"
     android:inputType="textEmailAddress"
-    android:text="http://127.0.0.1:3000" />
+    android:text="http://tbserver.herokuapp.com/" />
 
         </LinearLayout>
 
