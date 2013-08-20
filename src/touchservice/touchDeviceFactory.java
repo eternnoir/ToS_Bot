@@ -19,7 +19,7 @@ public class touchDeviceFactory {
 			ret.setUp(180, 90, 890);
 		} else if (deviceName.equals("Gen_nexus_one")) {
 			ret = new Gen_nexus_one();
-			ret.setUp(90, 45, 475);
+			ret.setUp(88, 44, 477);
 		}
 		return ret;
 	}
