@@ -140,9 +140,10 @@ public class botService extends Service {
 		try {
 			// Preform su to get root privledges
 			p = Runtime.getRuntime().exec("su", null, null);
-
-			// Attempt to write a file to a root-only
 			DataOutputStream os = new DataOutputStream(p.getOutputStream());
+			String mkdircmd = "mkdir /mnt/sdcard/tmp\n";
+			os.writeBytes(mkdircmd);
+			// Attempt to write a file to a root-only
 			String cmd = "cp " + _filePath + " "
 					+ Environment.getExternalStorageDirectory()
 					+ "/TOS_tmp.xml\n";
