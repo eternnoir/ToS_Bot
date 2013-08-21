@@ -45,7 +45,8 @@ public class botService extends Service {
 		public void run() {
 			Log.i("Bot:", "Take Board");
 			cpFile();
-			String board = getBoard();
+			String board /*= getBoard()*/;
+			board = null;
 			if (board == null) {
 				Log.i("Bot:", "Use Data Frome Pic");
 				getScreenshot();
