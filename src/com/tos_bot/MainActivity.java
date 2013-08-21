@@ -2,19 +2,28 @@ package com.tos_bot;
 
 import touchservice.touchDeviceFactory;
 import android.os.Bundle;
+import android.os.StrictMode.VmPolicy;
 import android.app.Activity;
 import android.content.Intent;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private Button _startServiceButton;
 	private Button _stopServiceButton;
 	private Spinner _deviceS;
+	private Button _floatStartButtonView = null;
+	private Button _floatStopButtonView = null;
+	private WindowManager _wm = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +33,6 @@ public class MainActivity extends Activity {
 		_startServiceButton = (Button) findViewById(R.id.start_button);
 		_stopServiceButton = (Button) findViewById(R.id.stop_button);
 		_deviceS = (Spinner) findViewById(R.id.deviceList);
-
 		_startServiceButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				EditText serveret;
@@ -35,9 +43,8 @@ public class MainActivity extends Activity {
 				ConfigData.deep = Integer.parseInt(deepet.getText().toString());
 				Spinner deviceS = (Spinner) findViewById(R.id.deviceList);
 				ConfigData.DeviceName = deviceS.getSelectedItem().toString();
-				Intent intent = new Intent(MainActivity.this, botService.class);
-				startService(intent);
-
+				if(_floatStartButtonView != null);
+					createFStartButton();
 			}
 		});
 
@@ -46,6 +53,12 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				ConfigData.pasCDid = "";
+				try {
+					_wm.removeView(_floatStartButtonView);
+					_wm.removeView(_floatStopButtonView);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
 				Intent intent = new Intent(MainActivity.this, botService.class);
 				stopService(intent);
 			}
@@ -75,6 +88,59 @@ public class MainActivity extends Activity {
 				touchDeviceFactory.getDeviceList());
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
+	}
+
+	private void createFStartButton() {
+		Display display = getWindowManager().getDefaultDisplay();
+		_floatStartButtonView = new Button(getApplicationContext());
+		_wm = (WindowManager) getApplicationContext()
+				.getSystemService("window");
+		WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
+		wmParams.gravity = Gravity.TOP | Gravity.LEFT ;
+		wmParams.x = 0+display.getWidth()/8;
+		wmParams.y = display.getHeight()/8;
+		wmParams.type = 2002;
+		wmParams.format = 1;
+		wmParams.flags = 40;
+		wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+		wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+		_floatStartButtonView.setText("Start");
+		_floatStartButtonView.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				_wm.removeView(_floatStartButtonView);
+				createFStopButton();
+				Intent intent = new Intent(MainActivity.this, botService.class);
+				startService(intent);
+			}
+		});
+		_wm.addView(_floatStartButtonView, wmParams); // 创建View
+	}
+	
+	private void createFStopButton() {
+		Display display = getWindowManager().getDefaultDisplay();
+		_floatStopButtonView = new Button(getApplicationContext());
+		_wm = (WindowManager) getApplicationContext()
+				.getSystemService("window");
+		WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
+		wmParams.gravity = Gravity.TOP | Gravity.LEFT ;
+		wmParams.x = display.getWidth()/2+display.getWidth()/8;
+		wmParams.y = display.getHeight()/8;
+		wmParams.type = 2002;
+		wmParams.format = 1;
+		wmParams.flags = 40;
+		wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+		wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+		_floatStopButtonView.setText("Stop");
+		_floatStopButtonView.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				_wm.removeView(_floatStopButtonView);
+				createFStartButton();
+				ConfigData.pasCDid = "";
+				Intent intent = new Intent(MainActivity.this, botService.class);
+				stopService(intent);
+			}
+		});
+		_wm.addView(_floatStopButtonView, wmParams);
 	}
 
 }

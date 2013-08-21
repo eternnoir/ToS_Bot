@@ -31,7 +31,7 @@ public class botService extends Service {
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		handler.postDelayed(BotGo, 5000);
+		handler.postDelayed(BotGo, 1000);
 		super.onStart(intent, startId);
 	}
 
