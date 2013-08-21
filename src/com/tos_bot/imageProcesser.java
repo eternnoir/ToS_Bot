@@ -16,7 +16,6 @@ public class imageProcesser {
 
 	}
 
-	public static int ballRegionX;
 	public static int ballsize;
 
 	public static Bitmap cutBallReg(String FilePath) {
@@ -26,19 +25,18 @@ public class imageProcesser {
 		int screenhigh = sourceBitmap.getHeight();
 		int oneball = sourceBitmap.getWidth() / 6;
 		ballsize = oneball;
-		int ballAreaHigh = screenhigh - oneball * 6;
-		ballRegionX = ballAreaHigh + (oneball / 5);
+		int ballAreaHigh = oneball * 5;
 		float wh = (float) sourceBitmap.getWidth()
 				/ (float) sourceBitmap.getHeight();
 		Bitmap cropped = null;
-		if (wh == 0.5625) {
+		if (wh == 0.5625f) {
+			
 			cropped = Bitmap.createBitmap(sourceBitmap, 0, ballAreaHigh
 					+ (oneball / 5), sourceBitmap.getWidth(),
 					sourceBitmap.getHeight() - ballAreaHigh - oneball);
-		} else if (wh == 0.6) {
-			cropped = Bitmap.createBitmap(sourceBitmap, 0, ballAreaHigh
-					+ (oneball / 5), sourceBitmap.getWidth(),
-					sourceBitmap.getHeight() - ballAreaHigh - oneball);
+		} else if (wh == 0.6f) {
+			cropped = Bitmap.createBitmap(sourceBitmap, 0,(int)(screenhigh*0.45),
+					sourceBitmap.getWidth(),ballAreaHigh);
 		}
 		savePng("tmp_ballA", cropped);
 		return cropped;
