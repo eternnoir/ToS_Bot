@@ -43,8 +43,9 @@ public class MainActivity extends Activity {
 				ConfigData.deep = Integer.parseInt(deepet.getText().toString());
 				Spinner deviceS = (Spinner) findViewById(R.id.deviceList);
 				ConfigData.DeviceName = deviceS.getSelectedItem().toString();
-				if(_floatStartButtonView != null);
+				if(_floatStartButtonView == null){
 					createFStartButton();
+				}
 			}
 		});
 
@@ -59,6 +60,8 @@ public class MainActivity extends Activity {
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
+				_floatStartButtonView = null;
+				_floatStopButtonView = null;
 				Intent intent = new Intent(MainActivity.this, botService.class);
 				stopService(intent);
 			}
@@ -113,7 +116,7 @@ public class MainActivity extends Activity {
 				startService(intent);
 			}
 		});
-		_wm.addView(_floatStartButtonView, wmParams); // 创建View
+		_wm.addView(_floatStartButtonView, wmParams); // �遣View
 	}
 	
 	private void createFStopButton() {
