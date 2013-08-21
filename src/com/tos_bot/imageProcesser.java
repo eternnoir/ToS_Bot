@@ -50,7 +50,7 @@ public class imageProcesser {
 		int error=0;
 		for (int h = 0; h < 5; h++)
 			for (int w = 0; w < 6; w++) {
-				if(ret[h][w] == -1){
+				if(ret[h][w] == 0){
 					error++;
 				}
 			}

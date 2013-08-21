@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 public class botService extends Service {
 	private Handler handler = new Handler();
@@ -50,11 +51,10 @@ public class botService extends Service {
 				getScreenshot();
 				int[][] orbArray;
 				try {
-					// Toast.makeText(getApplicationContext(), "Solving..",
-					// Toast.LENGTH_SHORT).show();
 					orbArray = imageProcesser.getBallArray(imageProcesser
 							.cutBallReg("/sdcard/tmp/img.png"));
 				} catch (NotInTosException e) {
+					handler.postDelayed(this, 3000);
 					return;
 				}
 				board = "";
@@ -66,6 +66,7 @@ public class botService extends Service {
 			}
 			final String url1 = ConfigData.Serverurl;
 			final String url2 = "board=" + board + "&deep=" + ConfigData.deep;
+
 			Thread solver = new Thread() {
 				@Override
 				public void run() {
@@ -96,7 +97,7 @@ public class botService extends Service {
 			while (solver.isAlive()) {
 				// Log.i("Bot:", "Wait For Solving");
 			}
-			;
+			//Toast.makeText(getApplicationContext(), board,Toast.LENGTH_SHORT).show();
 			handler.postDelayed(this, 12000);
 			/*
 			 * String[] pathsetp = path.split(","); touchService.set(270, 135,
