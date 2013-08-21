@@ -29,12 +29,10 @@ public class imageProcesser {
 		float wh = (float) sourceBitmap.getWidth()
 				/ (float) sourceBitmap.getHeight();
 		Bitmap cropped = null;
-		if (wh == 0.5625f) {
-			
+		if (wh == 0.5625f) {		//1080*1920
 			cropped = Bitmap.createBitmap(sourceBitmap, 0, ballAreaHigh
-					+ (oneball / 5), sourceBitmap.getWidth(),
-					sourceBitmap.getHeight() - ballAreaHigh - oneball);
-		} else if (wh == 0.6f) {
+					- (oneball / 6), sourceBitmap.getWidth(),ballAreaHigh);
+		} else if (wh == 0.6f) {	//480*800
 			cropped = Bitmap.createBitmap(sourceBitmap, 0,(int)(screenhigh*0.45),
 					sourceBitmap.getWidth(),ballAreaHigh);
 		}
