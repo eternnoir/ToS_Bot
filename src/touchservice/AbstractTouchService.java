@@ -58,7 +58,6 @@ public abstract class AbstractTouchService {
 			nowy += pos.y;
 			ret.addAll(touchMove(passx, passy, nowx, nowy, 1));
 		}
-		ret.addAll(touchMove(nowx, nowy, nowx + 20, nowy + 20, 1));
 		ret.addAll(touchUp());
 
 		return ret;
