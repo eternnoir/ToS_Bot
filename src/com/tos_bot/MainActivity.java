@@ -41,8 +41,7 @@ public class MainActivity extends Activity {
 				deepet = (EditText) findViewById(R.id.maxMoveText);
 				ConfigData.Serverurl = serveret.getText().toString();
 				ConfigData.deep = Integer.parseInt(deepet.getText().toString());
-				Spinner deviceS = (Spinner) findViewById(R.id.deviceList);
-				ConfigData.DeviceName = deviceS.getSelectedItem().toString();
+				ConfigData.DeviceName = _deviceS.getSelectedItem().toString();
 				if(_floatStartButtonView == null){
 					createFStartButton();
 				}
