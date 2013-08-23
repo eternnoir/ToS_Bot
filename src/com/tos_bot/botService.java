@@ -12,7 +12,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 public class botService extends Service {
 	private Handler handler = new Handler();
@@ -65,7 +64,7 @@ public class botService extends Service {
 				}
 			}
 			final String url1 = ConfigData.Serverurl;
-			final String url2 = "board=" + board + "&deep=" + ConfigData.deep;
+			final String url2 = "board=" + board + "&deep=" + ConfigData.deep + "&weight=" + weightMap.getInstance().getWeight(ConfigData.StyleName);
 
 			Thread solver = new Thread() {
 				@Override
@@ -222,5 +221,4 @@ public class botService extends Service {
 
 		return ret;
 	}
-
 }

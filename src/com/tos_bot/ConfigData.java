@@ -6,4 +6,5 @@ public class ConfigData {
 	public static int deep;
 	public static String pasCDid="";
 	public static String DeviceName="";
+    public static String StyleName = "";
 }
