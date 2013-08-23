@@ -120,7 +120,7 @@ public class botService extends Service {
 		try {
 			sh = Runtime.getRuntime().exec("su", null, null);
 			OutputStream os = sh.getOutputStream();
-			os.write(("/system/bin/screencap -p " + "/sdcard/tmp/img.png")
+			os.write(("/system/bin/screencap -p " + "/sdcard/tmp/img.png\n")
 					.getBytes("ASCII"));
 			os.flush();
 
