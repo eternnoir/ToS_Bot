@@ -1,12 +1,13 @@
 package touchservice;
 
 import touchservice.devices.Gen_nexus_one;
+import touchservice.devices.SonyXperiaTXLT29i;
 import touchservice.devices.htc_new_one_m7;
 import touchservice.devices.htc_one_x;
 
 public class touchDeviceFactory {
 	public static String[] getDeviceList() {
-		return new String[] { "htc_new_one_m7", "htc_one_x", "Gen_nexus_one" };
+		return new String[] { "htc_new_one_m7", "htc_one_x", "Gen_nexus_one", "SonyXperiaTXLT29i" };
 	}
 
 	public static AbstractTouchService getNewTouchService(String deviceName) {
@@ -20,6 +21,10 @@ public class touchDeviceFactory {
 		} else if (deviceName.equals("Gen_nexus_one")) {
 			ret = new Gen_nexus_one();
 			ret.setUp(80, 40, 400);
+		}
+		else if (deviceName.equals("SonyXperiaTXLT29i")) {
+			ret = new SonyXperiaTXLT29i();
+			ret.setUp(120, 60, 595);
 		}
 		return ret;
 	}
