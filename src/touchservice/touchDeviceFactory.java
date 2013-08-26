@@ -14,7 +14,7 @@ public class touchDeviceFactory {
 		AbstractTouchService ret = null;
 		if (deviceName.equals("htc_new_one_m7")) {
 			ret = new htc_new_one_m7();
-			ret.setUp(270, 135, 1380);
+			ret.setUp(270, 135, (int)((2880*0.425)+135));
 		} else if (deviceName.equals("htc_one_x")) {
 			ret = new htc_one_x();
 			ret.setUp(180, 90, 890);
@@ -24,7 +24,7 @@ public class touchDeviceFactory {
 		}
 		else if (deviceName.equals("SonyXperiaTXLT29i")) {
 			ret = new SonyXperiaTXLT29i();
-			ret.setUp(120, 60, 595);
+			ret.setUp(120, 60, 604);
 		}
 		return ret;
 	}
