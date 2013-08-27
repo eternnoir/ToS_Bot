@@ -14,6 +14,7 @@ public class AtecDevice extends AbstractTouchService {
 	@Override
 		public Vector<String> touchDown(int x, int y) {
 			Vector<String> cl = new Vector<String>();
+			cl.add("sendevent "+_de.getTrackingEvent()+"12345\n");
 			cl.add("sendevent "+_de.getPosXEvent() + x + "\n");
 			cl.add("sendevent "+_de.getPosYEvent() + y + "\n");
 			cl.add("sendevent "+_de.getPresureEvent()+ "105\n");
@@ -24,7 +25,9 @@ public class AtecDevice extends AbstractTouchService {
 		@Override
 		public Vector<String> touchUp() {
 			Vector<String> cl = new Vector<String>();
-			cl.add("sendevent "+_de.getPresureEvent()+"4294967295\n");
+			cl.add("sendevent "+_de.getPresureEvent()+_de.getPMax()+"\n");
+			cl.add("sendevent "+_de.getBlankEvent()+"\n");
+			cl.add("sendevent "+_de.getTrackingEvent()+"4294967295\n");
 			cl.add("sendevent "+_de.getBlankEvent()+"\n");
 			return cl;
 		}
