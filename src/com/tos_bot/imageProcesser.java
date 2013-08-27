@@ -32,27 +32,26 @@ public class imageProcesser {
 				/ (float) sourceBitmap.getHeight();
 		Bitmap cropped = null;
 		if (wh == 0.5625f) {		//1080*1920
-			cropped = Bitmap.createBitmap(sourceBitmap, 0, ballAreaHigh
-					- (oneball / 6), sourceBitmap.getWidth(),ballAreaHigh);
+			cropped = Bitmap.createBitmap(sourceBitmap, 0, (int)(screenhigh*0.45)
+					, sourceBitmap.getWidth(),ballAreaHigh);
 		} else if (wh == 0.6f) {	//480*800
 			cropped = Bitmap.createBitmap(sourceBitmap, 0,(int)(screenhigh*0.45),
 					sourceBitmap.getWidth(),ballAreaHigh);
 		}
-		savePng("tmp_ballA", cropped);
+		//savePng("tmp_ballA", cropped);
 		return cropped;
 
 	}
 
 	public static int[][] getBallArray(Bitmap c) throws NotInTosException {
 		int[][] ret = new int[5][6];
-		// BitmapFactory.decodeFile("/sdcard/tmp/img3.png");
 		Bitmap sourceBitmap = c;
 		for (int h = 0; h < 5; h++)
 			for (int w = 0; w < 6; w++) {
 				Bitmap cropped = Bitmap.createBitmap(sourceBitmap, w * ballsize
 						+ ballsize - ballsize / 4, h * ballsize + ballsize / 2,
 						ballsize / 16, ballsize / 16);
-				// savePng("tmp" + h + w, cropped);
+				//savePng("tmp" + h + w, cropped);
 				ret[h][w] = checkBallColor(cropped) + 1;
 			}
 		int error = 0;
@@ -96,7 +95,7 @@ public class imageProcesser {
 
 	public static void savePng(String Filename, Bitmap bm) {
 		try {
-			File file = new File(_Path + Filename);
+			File file = new File(_Path + Filename+".png");
 			file.createNewFile();
 			BufferedOutputStream out = new BufferedOutputStream(
 					new FileOutputStream(file));

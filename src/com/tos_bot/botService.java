@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 public class botService extends Service {
 	private Handler handler = new Handler();
@@ -53,6 +54,7 @@ public class botService extends Service {
 					orbArray = imageProcesser.getBallArray(imageProcesser
 							.cutBallReg(getCacheDir()+"/img.png"));
 				} catch (NotInTosException e) {
+					Toast.makeText(getApplicationContext(), "Take Pic Error",Toast.LENGTH_SHORT).show();
 					handler.postDelayed(this, 3000);
 					return;
 				}
@@ -96,7 +98,6 @@ public class botService extends Service {
 			while (solver.isAlive()) {
 				// Log.i("Bot:", "Wait For Solving");
 			}
-			//Toast.makeText(getApplicationContext(), board,Toast.LENGTH_SHORT).show();
 			handler.postDelayed(this, 12000);
 			/*
 			 * String[] pathsetp = path.split(","); touchService.set(270, 135,
