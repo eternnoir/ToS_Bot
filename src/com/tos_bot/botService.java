@@ -123,6 +123,8 @@ public class botService extends Service {
 			os.write(("/system/bin/screencap -p " + "/sdcard/tmp/img.png\n")
 					.getBytes("ASCII"));
 			os.flush();
+			os.write(("exit\n").getBytes("ASCII"));
+		   os.flush();
 
 			os.close();
 			sh.waitFor();
