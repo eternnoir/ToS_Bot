@@ -51,7 +51,7 @@ public class botService extends Service {
 				int[][] orbArray;
 				try {
 					orbArray = imageProcesser.getBallArray(imageProcesser
-							.cutBallReg("/sdcard/tmp/img.png"));
+							.cutBallReg(getCacheDir()+"/img.png"));
 				} catch (NotInTosException e) {
 					handler.postDelayed(this, 3000);
 					return;
@@ -120,7 +120,10 @@ public class botService extends Service {
 		try {
 			sh = Runtime.getRuntime().exec("su", null, null);
 			OutputStream os = sh.getOutputStream();
-			os.write(("/system/bin/screencap -p " +Environment.getExternalStorageDirectory()+"/tmp/img.png\n")
+			os.write(("/system/bin/screencap -p "+getCacheDir()+"/img.png\n")
+					.getBytes("ASCII"));
+			os.flush();
+			os.write(("chmod 777 "+getCacheDir()+"/img.png\n")
 					.getBytes("ASCII"));
 			os.flush();
 			os.write(("exit\n").getBytes("ASCII"));
@@ -143,19 +146,22 @@ public class botService extends Service {
 			// Preform su to get root privledges
 			p = Runtime.getRuntime().exec("su", null, null);
 			DataOutputStream os = new DataOutputStream(p.getOutputStream());
-			String mkdircmd = "mkdir /mnt/sdcard/tmp\n";
-			os.writeBytes(mkdircmd);
 			// Attempt to write a file to a root-only
 			String cmd = "cp " + _filePath + " "
-					+ Environment.getExternalStorageDirectory()
+					+ getCacheDir()
 					+ "/TOS_tmp.xml\n";
 			os.write(cmd.getBytes());
 			os.flush();
 			cmd = "cp " + _MyCardFp + " "
-					+ Environment.getExternalStorageDirectory()
+					+ getCacheDir()
 					+ "/TOS_tmp.xml\n";
 			os.write(cmd.getBytes());
 			os.flush();
+			cmd = "chmod 777  "+ getCacheDir()
+					+ "/TOS_tmp.xml\n";
+			os.write(cmd.getBytes());
+			os.flush();
+			
 			os.writeBytes("exit\n");
 			os.flush();
 			os.close();
@@ -196,10 +202,12 @@ public class botService extends Service {
 		String ret;
 		xmlParser xmp = new xmlParser();
 		String xmlres = xmp.parserXmlByID(
-				Environment.getExternalStorageDirectory() + "/TOS_tmp.xml",
+				getCacheDir()
+				+ "/TOS_tmp.xml",
 				xmlid);
 		String nowcdid = xmp.parserXmlByID(
-				Environment.getExternalStorageDirectory() + "/TOS_tmp.xml",
+				getCacheDir()
+				+ "/TOS_tmp.xml",
 				cdid);
 		Log.i("Bot:", "pascdid: " + ConfigData.pasCDid);
 		Log.i("Bot:", "nowcdid: " + nowcdid);
@@ -211,6 +219,8 @@ public class botService extends Service {
 		}
 
 		if (xmlres.equals("")) {
+			return null;
+		}else if(xmlres.equals("Can't Find File")){
 			return null;
 		}
 		String[] result = xmlres.split("_");

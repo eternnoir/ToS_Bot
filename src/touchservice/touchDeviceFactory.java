@@ -1,5 +1,7 @@
 package touchservice;
 
+import com.tos_bot.ConfigData;
+
 import android.graphics.Bitmap;
 import net.atec.analyzer.Analizer;
 import net.atec.sender.DeviceEvent;
@@ -32,6 +34,7 @@ public class touchDeviceFactory {
 		}
 		else if (deviceName.equals("Others")) {
 			Analizer an = new Analizer();
+			an.setFileDir(ConfigData.TempDir);
 			DeviceEvent de = an.getDeviceEvent();
 			int width = Integer.parseInt(de.getScreenXMax());
 			int oneball = width/6;

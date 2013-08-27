@@ -10,8 +10,10 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Environment;
 
 public class imageProcesser {
+	static String _Path = "";
 	private imageProcesser() {
 
 	}
@@ -19,9 +21,9 @@ public class imageProcesser {
 	public static int ballsize;
 
 	public static Bitmap cutBallReg(String FilePath) {
-
+		_Path = FilePath;
 		Bitmap sourceBitmap;
-		sourceBitmap = BitmapFactory.decodeFile("/sdcard/tmp/img.png");
+		sourceBitmap = BitmapFactory.decodeFile(FilePath);
 		int screenhigh = sourceBitmap.getHeight();
 		int oneball = sourceBitmap.getWidth() / 6;
 		ballsize = oneball;
@@ -94,7 +96,7 @@ public class imageProcesser {
 
 	public static void savePng(String Filename, Bitmap bm) {
 		try {
-			File file = new File("/sdcard/tmp/" + Filename);
+			File file = new File(_Path + Filename);
 			file.createNewFile();
 			BufferedOutputStream out = new BufferedOutputStream(
 					new FileOutputStream(file));
