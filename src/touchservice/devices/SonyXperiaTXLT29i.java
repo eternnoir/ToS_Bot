@@ -18,7 +18,7 @@ public class SonyXperiaTXLT29i extends AbstractTouchService {
 	@Override
 	public Vector<String> touchUp() {
 		Vector<String> cl = new Vector<String>();
-		cl.add("sendevent /dev/input/event0 3 57 4294967295\n");
+		cl.add("sendevent /dev/input/event0 3 58 4294967295\n");
 		cl.add("sendevent /dev/input/event0 0 0 0 \n");
 		return cl;
 	}
