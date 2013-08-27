@@ -120,7 +120,7 @@ public class botService extends Service {
 		try {
 			sh = Runtime.getRuntime().exec("su", null, null);
 			OutputStream os = sh.getOutputStream();
-			os.write(("/system/bin/screencap -p " + "/sdcard/tmp/img.png\n")
+			os.write(("/system/bin/screencap -p " + "/mnt/sdcard/tmp/img.png\n")
 					.getBytes("ASCII"));
 			os.flush();
 			os.write(("exit\n").getBytes("ASCII"));
@@ -146,14 +146,10 @@ public class botService extends Service {
 			String mkdircmd = "mkdir /mnt/sdcard/tmp\n";
 			os.writeBytes(mkdircmd);
 			// Attempt to write a file to a root-only
-			String cmd = "cp " + _filePath + " "
-					+ Environment.getExternalStorageDirectory()
-					+ "/TOS_tmp.xml\n";
+			String cmd = "cp " + _filePath + "/mnt/sdcard/TOS_tmp.xml\n";
 			os.write(cmd.getBytes());
 			os.flush();
-			cmd = "cp " + _MyCardFp + " "
-					+ Environment.getExternalStorageDirectory()
-					+ "/TOS_tmp.xml\n";
+			cmd = "cp " + _MyCardFp + "/mnt/sdcard/TOS_tmp.xml\n";
 			os.write(cmd.getBytes());
 			os.flush();
 			os.writeBytes("exit\n");
@@ -196,10 +192,10 @@ public class botService extends Service {
 		String ret;
 		xmlParser xmp = new xmlParser();
 		String xmlres = xmp.parserXmlByID(
-				Environment.getExternalStorageDirectory() + "/TOS_tmp.xml",
+				"/mnt/sdcard/TOS_tmp.xml",
 				xmlid);
 		String nowcdid = xmp.parserXmlByID(
-				Environment.getExternalStorageDirectory() + "/TOS_tmp.xml",
+				"/mnt/sdcard/TOS_tmp.xml",
 				cdid);
 		Log.i("Bot:", "pascdid: " + ConfigData.pasCDid);
 		Log.i("Bot:", "nowcdid: " + nowcdid);
