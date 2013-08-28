@@ -43,62 +43,16 @@ public class botService extends Service {
 
 	private Runnable BotGo = new Runnable() {
 		public void run() {
-			Log.i("Bot:", "Take Board");
-			cpFile();
-			String board = getBoard();	//get board data from file
-			if (board == null) {	//get board data from image
-				Log.i("Bot:", "Use Data Frome Pic");
-				getScreenshot();
-				int[][] orbArray;
-				try {
-					orbArray = imageProcesser.getBallArray(imageProcesser
-							.cutBallReg(getCacheDir()+"/img.png"));
-				} catch (NotInTosException e) {
-					Toast.makeText(getApplicationContext(), "Take Pic Error",Toast.LENGTH_SHORT).show();
-					handler.postDelayed(this, 3000);
-					return;
-				}
-				board = "";
-				for (int i = 0; i < 5; i++) {
-					for (int j = 0; j < 6; j++) {
-						board = board + orbArray[i][j];
-					}
-				}
+			if(ConfigData.solver == null){
+				setSolverThread();
+				ConfigData.solver.start();
+			}else if(!ConfigData.solver.isAlive()) {
+				ConfigData.solver=null;
+				handler.postDelayed(this, 10000);
+				return;
 			}
-			final String url1 = ConfigData.Serverurl;
-			final String url2 = "board=" + board + "&deep=" + ConfigData.deep + "&weight=" + weightMap.getInstance().getWeight(ConfigData.StyleName);
+			handler.postDelayed(this, 1000);
 
-			Thread solver = new Thread() {
-				@Override
-				public void run() {
-					httpService hs = new httpService();
-					solstr = hs.httpServiceGet(url1, url2);
-					if (solstr.equals("")) {
-						Log.i("Bot:", "NetWorkError");
-						handler.postDelayed(this, 3000);
-						return;
-					}
-					String[] recvStr = solstr.split(";");
-					String ini = recvStr[0];
-					String[] inis = ini.split(",");
-					int ih = Integer.parseInt(inis[0]);
-					int iw = Integer.parseInt(inis[1]);
-					String path = recvStr[2];
-					String[] pathsetp = path.split(",");
-					AbstractTouchService ts = touchDeviceFactory
-							.getNewTouchService(ConfigData.DeviceName);
-					assert (ts != null);
-					Vector<String> cmd = ts.getCommandByPath(ih, iw, pathsetp);
-					// Toast.makeText(getApplicationContext(), "Solving..",
-					// Toast.LENGTH_SHORT).show();
-					ts.SendCommand(cmd);
-				}
-			};
-			solver.start();
-			while (solver.isAlive()) {
-				// Log.i("Bot:", "Wait For Solving");
-			}
-			handler.postDelayed(this, 12000);
 			/*
 			 * String[] pathsetp = path.split(","); touchService.set(270, 135,
 			 * 1380); Vector<String> cmd =
@@ -114,6 +68,59 @@ public class botService extends Service {
 			 */
 		}
 	};
+	private void setSolverThread(){
+		ConfigData.solver = new Thread() {
+			@Override
+			public void run() {
+				Log.i("Bot:", "Take Board");
+				cpFile();
+				String board = getBoard();	//get board data from file
+				if (board == null) {	//get board data from image
+					Log.i("Bot:", "Use Data Frome Pic");
+					getScreenshot();
+					int[][] orbArray;
+					try {
+						orbArray = imageProcesser.getBallArray(imageProcesser
+								.cutBallReg(getCacheDir()+"/img.png"));
+					} catch (NotInTosException e) {
+						Log.i("Bot:", "Can find bord Pic");
+						return;
+					}	catch (Exception e) {
+						Log.i("Bot:", "Can find bord from Pic error");
+						return;
+					}
+					board = "";
+					for (int i = 0; i < 5; i++) {
+						for (int j = 0; j < 6; j++) {
+							board = board + orbArray[i][j];
+						}
+					}
+				}
+				String url1 = ConfigData.Serverurl;
+				String url2 = "board=" + board + "&deep=" + ConfigData.deep + "&weight=" + weightMap.getInstance().getWeight(ConfigData.StyleName);
+
+				httpService hs = new httpService();
+				solstr = hs.httpServiceGet(url1, url2);
+				if (solstr.equals("")) {
+					Log.i("Bot:", "NetWorkError");
+					handler.postDelayed(this, 3000);
+					return;
+				}
+				String[] recvStr = solstr.split(";");
+				String ini = recvStr[0];
+				String[] inis = ini.split(",");
+				int ih = Integer.parseInt(inis[0]);
+				int iw = Integer.parseInt(inis[1]);
+				String path = recvStr[2];
+				String[] pathsetp = path.split(",");
+				AbstractTouchService ts = touchDeviceFactory
+						.getNewTouchService(ConfigData.DeviceName);
+				assert (ts != null);
+				Vector<String> cmd = ts.getCommandByPath(ih, iw, pathsetp);
+				ts.SendCommand(cmd);
+			}
+		};
+	}
 
 	private boolean getScreenshot() {
 
