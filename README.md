@@ -6,6 +6,8 @@ Support Devices
 * HTC Oone X
 * Samsung Galaxy S3
 * Samsung Galaxy S2
+
+
 Requirements
 =======
 * https://github.com/eternnoir/ATEC
