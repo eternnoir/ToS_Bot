@@ -151,7 +151,11 @@ public class MainActivity extends Activity {
 			public void onClick(View view) {
 				_wm.removeView(_floatStopButtonView);
 				createFStartButton();
-				ConfigData.pasCDid = "";
+				if(ConfigData.solver != null){
+				    Thread moribund = ConfigData.solver;
+				    ConfigData.solver = null;
+				    moribund.interrupt();
+				  }
 				Intent intent = new Intent(MainActivity.this, botService.class);
 				stopService(intent);
 			}
