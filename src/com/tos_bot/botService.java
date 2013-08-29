@@ -48,7 +48,7 @@ public class botService extends Service {
 				ConfigData.solver.start();
 			}else if(!ConfigData.solver.isAlive()) {
 				ConfigData.solver=null;
-				handler.postDelayed(this, 10000);
+				handler.postDelayed(this, 6000);
 				return;
 			}
 			handler.postDelayed(this, 1000);
@@ -103,7 +103,6 @@ public class botService extends Service {
 				solstr = hs.httpServiceGet(url1, url2);
 				if (solstr.equals("")) {
 					Log.i("Bot:", "NetWorkError");
-					handler.postDelayed(this, 3000);
 					return;
 				}
 				String[] recvStr = solstr.split(";");
