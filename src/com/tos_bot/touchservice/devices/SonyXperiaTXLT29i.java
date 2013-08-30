@@ -1,8 +1,9 @@
-package touchservice.devices;
+package com.tos_bot.touchservice.devices;
 
 import java.util.Vector;
 
-import touchservice.AbstractTouchService;
+import com.tos_bot.touchservice.AbstractTouchService;
+
 
 public class SonyXperiaTXLT29i extends AbstractTouchService {
 	@Override

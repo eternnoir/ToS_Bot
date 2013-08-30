@@ -1,15 +1,15 @@
-package touchservice;
+package com.tos_bot.touchservice;
 
 import com.tos_bot.ConfigData;
+import com.tos_bot.touchservice.devices.AtecDevice;
+import com.tos_bot.touchservice.devices.Gen_nexus_one;
+import com.tos_bot.touchservice.devices.SonyXperiaTXLT29i;
+import com.tos_bot.touchservice.devices.htc_new_one_m7;
+import com.tos_bot.touchservice.devices.htc_one_x;
 
 import android.graphics.Bitmap;
 import net.atec.analyzer.Analizer;
 import net.atec.sender.DeviceEvent;
-import touchservice.devices.AtecDevice;
-import touchservice.devices.Gen_nexus_one;
-import touchservice.devices.SonyXperiaTXLT29i;
-import touchservice.devices.htc_new_one_m7;
-import touchservice.devices.htc_one_x;
 
 public class touchDeviceFactory {
 	public static String[] getDeviceList() {

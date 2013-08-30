@@ -1,10 +1,11 @@
-package touchservice.devices;
+package com.tos_bot.touchservice.devices;
 
 import java.util.Vector;
 
+import com.tos_bot.touchservice.AbstractTouchService;
+
 import net.atec.sender.DeviceEvent;
 
-import touchservice.AbstractTouchService;
 
 public class AtecDevice extends AbstractTouchService {
 	DeviceEvent _de;

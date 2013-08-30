@@ -4,8 +4,9 @@ import java.io.DataOutputStream;
 import java.io.OutputStream;
 import java.util.Vector;
 
-import touchservice.AbstractTouchService;
-import touchservice.touchDeviceFactory;
+import com.tos_bot.touchservice.AbstractTouchService;
+import com.tos_bot.touchservice.touchDeviceFactory;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.Environment;
@@ -45,7 +46,7 @@ public class botService extends Service {
 		public void run() {
 			//check thread is alive?
 			if(ConfigData.solver == null){
-				setSolverThread();
+				ConfigData.solver = getSolverThread();
 				ConfigData.solver.start();
 			}else if(!ConfigData.solver.isAlive()) {
 				ConfigData.solver=null;
@@ -55,8 +56,8 @@ public class botService extends Service {
 			handler.postDelayed(this, 1000);
 		}
 	};
-	private void setSolverThread(){
-		ConfigData.solver = new Thread() {
+	private Thread getSolverThread(){
+		return new Thread() {
 			@Override
 			public void run() {
 				Log.i("Bot:", "Take Board");

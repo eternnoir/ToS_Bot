@@ -1,4 +1,4 @@
-package puzzleslove;
+package com.tos_bot.puzzleslove;
 
 public class matchPair {
 	public int orbType;

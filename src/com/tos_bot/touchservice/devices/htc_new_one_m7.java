@@ -1,11 +1,13 @@
-package touchservice.devices;
+package com.tos_bot.touchservice.devices;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Vector;
-import puzzleslove.solution;
-import touchservice.AbstractTouchService;
-import touchservice.touchpos;
+
+import com.tos_bot.puzzleslove.solution;
+import com.tos_bot.touchservice.AbstractTouchService;
+import com.tos_bot.touchservice.touchpos;
+
 
 public class htc_new_one_m7 extends AbstractTouchService {
 

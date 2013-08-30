@@ -1,4 +1,4 @@
-package puzzleslove;
+package com.tos_bot.puzzleslove;
 
 import java.util.ArrayList;
 import java.util.Arrays;

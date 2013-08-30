@@ -7,7 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import puzzleslove.solution;
+import com.tos_bot.puzzleslove.solution;
+
 
 public class jsonToSolution {
 	public static boolean cmdDone;

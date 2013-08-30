@@ -1,6 +1,7 @@
 package com.tos_bot;
 
-import touchservice.touchDeviceFactory;
+import com.tos_bot.touchservice.touchDeviceFactory;
+
 import android.os.Bundle;
 import android.os.StrictMode.VmPolicy;
 import android.app.Activity;

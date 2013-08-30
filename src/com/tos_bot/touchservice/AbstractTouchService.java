@@ -1,10 +1,11 @@
-package touchservice;
+package com.tos_bot.touchservice;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Vector;
 
-import puzzleslove.solution;
+import com.tos_bot.puzzleslove.solution;
+
 
 public abstract class AbstractTouchService {
 	private int _ballgap;
