@@ -43,6 +43,7 @@ public class botService extends Service {
 
 	private Runnable BotGo = new Runnable() {
 		public void run() {
+			//check thread is alive?
 			if(ConfigData.solver == null){
 				setSolverThread();
 				ConfigData.solver.start();
@@ -52,20 +53,6 @@ public class botService extends Service {
 				return;
 			}
 			handler.postDelayed(this, 1000);
-
-			/*
-			 * String[] pathsetp = path.split(","); touchService.set(270, 135,
-			 * 1380); Vector<String> cmd =
-			 * touchService.getCommandByPath(pathsetp);
-			 * touchService.SendCommand(cmd); handler.postDelayed(this, 10000);
-			 * /* puzzleSolver ps = new puzzleSolver(2,30,2,4); solution re =
-			 * ps.solve_board(orbArray);
-			 * 
-			 * //Toast.makeText(getApplicationContext(), "Send path",
-			 * Toast.LENGTH_SHORT).show(); touchService.set(270, 135, 1380);
-			 * Vector<String> cmd = touchService.getCommandBySol(re);
-			 * touchService.SendCommand(cmd); handler.postDelayed(this, 10000);
-			 */
 		}
 	};
 	private void setSolverThread(){
