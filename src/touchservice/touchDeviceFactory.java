@@ -13,7 +13,7 @@ import touchservice.devices.htc_one_x;
 
 public class touchDeviceFactory {
 	public static String[] getDeviceList() {
-		return new String[] { "htc_new_one_m7", "htc_one_x", "Gen_nexus_one", "SonyXperiaTXLT29i","Others" };
+		return new String[] { "Auto","htc_new_one_m7", "htc_one_x", "Gen_nexus_one", "SonyXperiaTXLT29i" };
 	}
 
 	public static AbstractTouchService getNewTouchService(String deviceName) {
@@ -32,7 +32,7 @@ public class touchDeviceFactory {
 			ret = new SonyXperiaTXLT29i();
 			ret.setUp(120, 60, 604);
 		}
-		else if (deviceName.equals("Others")) {
+		else if (deviceName.equals("Auto")) {
 			Analizer an = new Analizer();
 			an.setFileDir(ConfigData.TempDir);
 			DeviceEvent de = an.getDeviceEvent();
