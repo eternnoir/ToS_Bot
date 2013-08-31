@@ -3,7 +3,6 @@ package com.tos_bot.touchservice;
 import com.tos_bot.ConfigData;
 import com.tos_bot.touchservice.devices.AtecDevice;
 import com.tos_bot.touchservice.devices.Gen_nexus_one;
-import com.tos_bot.touchservice.devices.SonyXperiaTXLT29i;
 import com.tos_bot.touchservice.devices.htc_new_one_m7;
 import com.tos_bot.touchservice.devices.htc_one_x;
 
@@ -13,7 +12,7 @@ import net.atec.sender.DeviceEvent;
 
 public class touchDeviceFactory {
 	public static String[] getDeviceList() {
-		return new String[] { "Auto","htc_new_one_m7", "htc_one_x", "Gen_nexus_one", "SonyXperiaTXLT29i" };
+		return new String[] { "Auto","htc_new_one_m7", "htc_one_x", "Gen_nexus_one" };
 	}
 
 	public static AbstractTouchService getNewTouchService(String deviceName) {
@@ -27,10 +26,6 @@ public class touchDeviceFactory {
 		} else if (deviceName.equals("Gen_nexus_one")) {
 			ret = new Gen_nexus_one();
 			ret.setUp(80, 40, 400);
-		}
-		else if (deviceName.equals("SonyXperiaTXLT29i")) {
-			ret = new SonyXperiaTXLT29i();
-			ret.setUp(120, 60, 604);
 		}
 		else if (deviceName.equals("Auto")) {
 			Analizer an = new Analizer();
