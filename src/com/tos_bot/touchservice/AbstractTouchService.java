@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Vector;
 
+import android.os.SystemClock;
+
 import com.tos_bot.puzzleslove.solution;
 
 
@@ -76,7 +78,7 @@ public abstract class AbstractTouchService {
 		int nowx = inix;
 		int nowy = iniy;
 		// step 2. add path
-		int gap = 70;
+		int gap = 50;
 		for (String p : pathsetp) {
 			int pp = Integer.parseInt(p);
 			touchpos pos = changePathToPos(pp);
@@ -110,10 +112,10 @@ public abstract class AbstractTouchService {
 				ret.addAll(touchMove(passx, passy, nowx, nowy, gap));
 				break;
 			}
+			
 		}
-		
-
-		ret.addAll(touchMove(nowx, nowy, nowx + 20, nowy + 20, 1));
+		touchMove(nowx, nowy, nowx, nowy+5, gap);
+		SystemClock.sleep(100);
 		ret.addAll(touchUp());
 
 		return ret;

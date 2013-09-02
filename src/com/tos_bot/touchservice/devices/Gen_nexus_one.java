@@ -2,6 +2,8 @@ package com.tos_bot.touchservice.devices;
 
 import java.util.Vector;
 
+import android.os.SystemClock;
+
 import com.tos_bot.touchservice.AbstractTouchService;
 
 
@@ -52,6 +54,7 @@ public class Gen_nexus_one extends AbstractTouchService {
 		Vector<String> cl = new Vector<String>();
 		cl.add("sendevent /dev/input/event7 3 0 "+ x2 +"\n");
 		cl.add("sendevent /dev/input/event7 0 0 0 \n");
+		SystemClock.sleep(10);
 		return cl;
 	}
 
@@ -60,6 +63,7 @@ public class Gen_nexus_one extends AbstractTouchService {
 		Vector<String> cl = new Vector<String>();
 		cl.add("sendevent /dev/input/event7 3 1 "+ y2 +"\n");
 		cl.add("sendevent /dev/input/event7 0 0 0 \n");
+		SystemClock.sleep(10);
 		return cl;
 	}
 

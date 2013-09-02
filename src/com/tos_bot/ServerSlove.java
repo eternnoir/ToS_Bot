@@ -52,12 +52,15 @@ public class ServerSlove extends Thread {
 		int ih = Integer.parseInt(inis[0]);
 		int iw = Integer.parseInt(inis[1]);
 		String path = recvStr[2];
+		Log.i("Bot:", "Path: "+path);
 		String[] pathsetp = path.split(",");
 		AbstractTouchService ts = touchDeviceFactory
 				.getNewTouchService(ConfigData.DeviceName);
 		assert (ts != null);
 		Vector<String> cmd = ts.getCommandByPath(ih, iw, pathsetp);
 		ts.SendCommand(cmd);
+		cpFile();
+		getBoard();
 	}
 	private boolean getScreenshot() {
 
