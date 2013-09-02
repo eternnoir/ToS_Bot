@@ -76,6 +76,7 @@ public abstract class AbstractTouchService {
 		int nowx = inix;
 		int nowy = iniy;
 		// step 2. add path
+		int gap = 70;
 		for (String p : pathsetp) {
 			int pp = Integer.parseInt(p);
 			touchpos pos = changePathToPos(pp);
@@ -85,31 +86,32 @@ public abstract class AbstractTouchService {
 			nowy += pos.y;
 			switch (pp) {
 			case 0:
-				ret.addAll(touchMoveX(passx, nowx, 1));
+				ret.addAll(touchMoveX(passx, nowx, gap));
 				break;
 			case 1:
-				ret.addAll(touchMove(passx, passy, nowx, nowy, 1));
+				ret.addAll(touchMove(passx, passy, nowx, nowy, gap));
 				break;
 			case 2:
-				ret.addAll(touchMoveY(passy, nowy, 1));
+				ret.addAll(touchMoveY(passy, nowy, gap));
 				break;
 			case 3:
-				ret.addAll(touchMove(passx, passy, nowx, nowy, 1));
+				ret.addAll(touchMove(passx, passy, nowx, nowy, gap));
 				break;
 			case 4:
-				ret.addAll(touchMoveX(passx, nowx, 1));
+				ret.addAll(touchMoveX(passx, nowx, gap));
 				break;
 			case 5:
-				ret.addAll(touchMove(passx, passy, nowx, nowy, 1));
+				ret.addAll(touchMove(passx, passy, nowx, nowy,gap ));
 				break;
 			case 6:
-				ret.addAll(touchMoveY(passy, nowy, 1));
+				ret.addAll(touchMoveY(passy, nowy, gap));
 				break;
 			case 7:
-				ret.addAll(touchMove(passx, passy, nowx, nowy, 1));
+				ret.addAll(touchMove(passx, passy, nowx, nowy, gap));
 				break;
 			}
 		}
+		
 
 		ret.addAll(touchMove(nowx, nowy, nowx + 20, nowy + 20, 1));
 		ret.addAll(touchUp());
