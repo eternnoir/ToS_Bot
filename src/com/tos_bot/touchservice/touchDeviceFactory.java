@@ -30,12 +30,19 @@ public class touchDeviceFactory {
 		else if (deviceName.equals("Auto")) {
 			Analizer an = new Analizer();
 			an.setFileDir(ConfigData.TempDir);
-			DeviceEvent de = an.getDeviceEvent();
-			int width = Integer.parseInt(de.getScreenXMax());
-			int oneball = width/6;
-			int heigh = Integer.parseInt(de.getScreenYMax());
-			ret = new AtecDevice(de);
-			ret.setUp(oneball, oneball/2, (int)((heigh*0.45)+(oneball/2)));
+			DeviceEvent de;
+			try {
+				de = an.getDeviceEvent();
+				int width = Integer.parseInt(de.getScreenXMax());
+				int oneball = width/6;
+				int heigh = Integer.parseInt(de.getScreenYMax());
+				ret = new AtecDevice(de);
+				ret.setUp(oneball, oneball/2, (int)((heigh*0.45)+(oneball/2)));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
 		}
 		return ret;
 	}
