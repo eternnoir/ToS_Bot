@@ -115,7 +115,7 @@ public abstract class AbstractTouchService {
 			
 		}
 		touchMove(nowx, nowy, nowx, nowy+5, gap);
-		SystemClock.sleep(100);
+		SystemClock.sleep(500);
 		ret.addAll(touchUp());
 
 		return ret;

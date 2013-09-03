@@ -112,21 +112,6 @@ public class imageProcesser {
 		}
 	}
 
-	public static Bitmap highD(Bitmap bm) {
-		int picw = bm.getWidth();
-		int pich = bm.getHeight();
-		int[] pix = new int[picw * pich];
-		bm.getPixels(pix, 0, picw, 0, 0, picw, pich);
-		int r, g, b;
-		for (int i = 0; i < pix.length; i++) {
-			r = (pix[i]) >> 16 & 0xff;
-			g = (pix[i]) >> 8 & 0xff;
-			b = (pix[i]) & 0xff;
-		}
-		return bm;
-
-	}
-
 	public static int checkBallColor(Bitmap bm) throws NotInTosException {
 		int color[] = new int[6]; // RGBDLH
 		int picw = bm.getWidth();
