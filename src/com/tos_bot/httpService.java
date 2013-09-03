@@ -37,8 +37,4 @@ public class httpService {
 		};
 		return _ret;
 	}
-	
-	public String getResult(){
-		return result;
-	}
 }
