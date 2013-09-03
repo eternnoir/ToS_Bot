@@ -25,7 +25,7 @@ public class touchDeviceFactory {
 			ret.setUp(180, 90, 890);
 		} else if (deviceName.equals("Gen_nexus_one")) {
 			ret = new Gen_nexus_one();
-			ret.setUp(80, 40, 400);
+			ret.setUp(80, 40-10, 400);
 		}
 		else if (deviceName.equals("Auto")) {
 			Analizer an = new Analizer();
