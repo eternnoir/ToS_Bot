@@ -11,6 +11,7 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Environment;
+import android.os.Build;
 
 public class imageProcesser {
 	static String _Path = "";
@@ -24,6 +25,10 @@ public class imageProcesser {
 		_Path = FilePath;
 		Bitmap sourceBitmap;
 		sourceBitmap = BitmapFactory.decodeFile(FilePath);
+        if (Build.MODEL.contains("C6602")) {
+            sourceBitmap = Bitmap.createBitmap(sourceBitmap, 0, 0,
+                           sourceBitmap.getWidth(), (int)(sourceBitmap.getWidth() / 0.6));
+        }
 		int screenhigh = sourceBitmap.getHeight();
 		int oneball = sourceBitmap.getWidth() / 6;
 		ballsize = oneball;
@@ -31,12 +36,9 @@ public class imageProcesser {
 		float wh = (float) sourceBitmap.getWidth()
 				/ (float) sourceBitmap.getHeight();
 		Bitmap cropped = null;
-		if (wh == 0.5625f) {		//1080*1920
-			cropped = Bitmap.createBitmap(sourceBitmap, 0, (int)(screenhigh*0.45)
-					, sourceBitmap.getWidth(),ballAreaHigh);
-		} else if (wh == 0.6f) {	//480*800
-			cropped = Bitmap.createBitmap(sourceBitmap, 0,(int)(screenhigh*0.45),
-					sourceBitmap.getWidth(),ballAreaHigh);
+		if (wh == 0.5625f || wh == 0.6f) {		//1080*1920 && 480*800
+			cropped = Bitmap.createBitmap(sourceBitmap, 0, (int)(screenhigh * 0.45),
+					  sourceBitmap.getWidth(), ballAreaHigh);
 		}
 		//savePng("tmp_ballA", cropped);
 		return cropped;
