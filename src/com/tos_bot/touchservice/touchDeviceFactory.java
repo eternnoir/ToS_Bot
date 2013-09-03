@@ -25,7 +25,7 @@ public class touchDeviceFactory {
 			ret.setUp(180, 90, 890);
 		} else if (deviceName.equals("Gen_nexus_one")) {
 			ret = new Gen_nexus_one();
-			ret.setUp(80, 40-10, 400);
+			ret.setUp(80, 40, 400);
 		}
 		else if (deviceName.equals("Auto")) {
 			Analizer an = new Analizer();
@@ -37,7 +37,7 @@ public class touchDeviceFactory {
 				int oneball = width/6;
 				int heigh = Integer.parseInt(de.getScreenYMax());
 				ret = new AtecDevice(de);
-				ret.setUp(oneball, oneball/2 - oneball/6, (int)(heigh*0.425)+(oneball/2));
+				ret.setUp(oneball, oneball/2, (int)(heigh*0.45)+(oneball/2));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
