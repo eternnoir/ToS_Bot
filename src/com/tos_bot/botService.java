@@ -220,7 +220,6 @@ public class botService extends Service {
 				return null;
 			}	catch (Exception e) {
 				Log.i("Bot:", "Can find bord from Pic error");
-				Toast.makeText(getApplicationContext(), "Find Board Error", Toast.LENGTH_SHORT).show();
 				return null;
 			}
 			String board = "";
