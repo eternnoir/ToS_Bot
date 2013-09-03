@@ -38,37 +38,37 @@ public class botService extends Service {
 
 	private Runnable BotGo = new Runnable() {
 		public void run() {
-			//check thread is alive?
-			if(ConfigData.solver == null){
+			// check thread is alive?
+			if (ConfigData.solver == null) {
 				ConfigData.solver = new ServerSlove();
 				ConfigData.solver.start();
-			}else if(!ConfigData.solver.isAlive()) {
-				ConfigData.solver=null;
-				handler.postDelayed(this, 6000);
-				return;
+			} else if (!ConfigData.solver.isAlive()) {
+				ConfigData.solver = null;
 			}
-			// retry in 1 sec
-			handler.postDelayed(this, 1000);
+			handler.postDelayed(this, 10);
 		}
 	};
-	
+
 	public class ServerSlove extends Thread {
 		@Override
 		public void run() {
 			Log.i("Bot:", "Take Board");
 			cpFile();
-			String board = getBoard();	//get board data from file
-			if (board == null) {	//get board data from image
+			String board = getBoard(); // get board data from file
+			if (board == null) { // get board data from image
 				return;
 			}
 			String url1 = ConfigData.Serverurl;
-			String url2 = "board=" + board + "&deep=" + ConfigData.deep + "&weight=" + weightMap.getInstance().getWeight(ConfigData.StyleName);
-
+			String url2 = "board=" + board + "&deep=" + ConfigData.deep
+					+ "&weight="
+					+ weightMap.getInstance().getWeight(ConfigData.StyleName);
+			Log.i("Bot:", "Url: "+url1+"?"+url2);
 			httpService hs = new httpService();
 			String solstr = hs.httpServiceGet(url1, url2);
 			if (solstr.equals("")) {
 				Log.i("Bot:", "NetWorkError");
-				Toast.makeText(getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Network Error",
+						Toast.LENGTH_SHORT).show();
 				return;
 			}
 			String[] recvStr = solstr.split(";");
@@ -77,32 +77,37 @@ public class botService extends Service {
 			int ih = Integer.parseInt(inis[0]);
 			int iw = Integer.parseInt(inis[1]);
 			String path = recvStr[2];
-			Log.i("Bot:", "Path: "+path);
+			Log.i("Bot:", "Path: " + path);
 			String[] pathsetp = path.split(",");
-			AbstractTouchService ts = touchDeviceFactory
-					.getNewTouchService(ConfigData.DeviceName);
-			if( ts == null){
-				Log.i("Bot:", "Touch Event Not Found");
+			if (!this.isInterrupted()) {
+				AbstractTouchService ts = touchDeviceFactory
+						.getNewTouchService(ConfigData.DeviceName);
+				if (ts == null) {
+					Log.i("Bot:", "Touch Event Not Found");
+				}
+				Vector<String> cmd = ts.getCommandByPath(ih, iw, pathsetp);
+				ts.SendCommand(cmd);
+				cpFile();
+				getBoard();
+			} else {
+				Log.i("Bot:", "Thread interrupt by User");
 			}
-			Vector<String> cmd = ts.getCommandByPath(ih, iw, pathsetp);
-			ts.SendCommand(cmd);
-			cpFile();
-			getBoard();
 		}
+
 		private boolean getScreenshot() {
 
 			Process sh;
 			try {
 				sh = Runtime.getRuntime().exec("su", null, null);
 				OutputStream os = sh.getOutputStream();
-				os.write(("/system/bin/screencap -p "+ConfigData.TempDir+"/img.png\n")
+				os.write(("/system/bin/screencap -p " + ConfigData.TempDir + "/img.png\n")
 						.getBytes("ASCII"));
 				os.flush();
-				os.write(("chmod 777 "+ConfigData.TempDir+"/img.png\n")
+				os.write(("chmod 777 " + ConfigData.TempDir + "/img.png\n")
 						.getBytes("ASCII"));
 				os.flush();
 				os.write(("exit\n").getBytes("ASCII"));
-			   os.flush();
+				os.flush();
 
 				os.close();
 				sh.waitFor();
@@ -123,20 +128,17 @@ public class botService extends Service {
 				DataOutputStream os = new DataOutputStream(p.getOutputStream());
 				// Attempt to write a file to a root-only
 				String cmd = "cp " + ConfigData.GooglePlayFp + " "
-						+ ConfigData.TempDir
+						+ ConfigData.TempDir + "/TOS_tmp.xml\n";
+				os.write(cmd.getBytes());
+				os.flush();
+				cmd = "cp " + ConfigData.MyCardFp + " " + ConfigData.TempDir
 						+ "/TOS_tmp.xml\n";
 				os.write(cmd.getBytes());
 				os.flush();
-				cmd = "cp " + ConfigData.MyCardFp + " "
-						+ ConfigData.TempDir
-						+ "/TOS_tmp.xml\n";
+				cmd = "chmod 777  " + ConfigData.TempDir + "/TOS_tmp.xml\n";
 				os.write(cmd.getBytes());
 				os.flush();
-				cmd = "chmod 777  "+ ConfigData.TempDir
-						+ "/TOS_tmp.xml\n";
-				os.write(cmd.getBytes());
-				os.flush();
-				
+
 				os.writeBytes("exit\n");
 				os.flush();
 				os.close();
@@ -176,17 +178,13 @@ public class botService extends Service {
 			// cpFile();
 			String ret;
 			xmlParser xmp = new xmlParser();
-			String xmlres = xmp.parserXmlByID(
-					ConfigData.TempDir
-					+ "/TOS_tmp.xml",
-					ConfigData.xmlid);
-			String nowcdid = xmp.parserXmlByID(
-					ConfigData.TempDir
-					+ "/TOS_tmp.xml",
-					ConfigData.cdid);
+			String xmlres = xmp.parserXmlByID(ConfigData.TempDir
+					+ "/TOS_tmp.xml", ConfigData.xmlid);
+			String nowcdid = xmp.parserXmlByID(ConfigData.TempDir
+					+ "/TOS_tmp.xml", ConfigData.cdid);
 			Log.i("Bot:", "pascdid: " + ConfigData.pasCDid);
 			Log.i("Bot:", "nowcdid: " + nowcdid);
-			
+
 			// check the xml file is change?
 			if (nowcdid.equals(ConfigData.pasCDid)) {
 				return getBoardFromPic();
@@ -196,7 +194,7 @@ public class botService extends Service {
 
 			if (xmlres.equals("")) {
 				return null;
-			}else if(xmlres.equals("Can't Find File")){
+			} else if (xmlres.equals("Can't Find File")) {
 				return null;
 			}
 			String[] result = xmlres.split("_");
@@ -208,17 +206,18 @@ public class botService extends Service {
 			}
 			return ret;
 		}
-		private String getBoardFromPic(){
+
+		private String getBoardFromPic() {
 			Log.i("Bot:", "Use Data Frome Pic");
 			getScreenshot();
 			int[][] orbArray;
 			try {
 				orbArray = imageProcesser.getBallArray(imageProcesser
-						.cutBallReg(ConfigData.TempDir+"/img.png"));
+						.cutBallReg(ConfigData.TempDir + "/img.png"));
 			} catch (NotInTosException e) {
 				Log.i("Bot:", "Can find bord Pic");
 				return null;
-			}	catch (Exception e) {
+			} catch (Exception e) {
 				Log.i("Bot:", "Can find bord from Pic error");
 				return null;
 			}
