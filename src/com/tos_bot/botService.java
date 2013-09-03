@@ -45,7 +45,7 @@ public class botService extends Service {
 			} else if (!ConfigData.solver.isAlive()) {
 				ConfigData.solver = null;
 			}
-			handler.postDelayed(this, 10);
+			handler.postDelayed(this, 500);
 		}
 	};
 
@@ -54,14 +54,15 @@ public class botService extends Service {
 		public void run() {
 			Log.i("Bot:", "Take Board");
 			cpFile();
-			String board = getBoard(); // get board data from file
+			String board = getBoardFromPic(); // get board data from file
 			if (board == null) { // get board data from image
 				return;
 			}
 			String url1 = ConfigData.Serverurl;
 			String url2 = "board=" + board + "&deep=" + ConfigData.deep
 					+ "&weight="
-					+ weightMap.getInstance().getWeight(ConfigData.StyleName);
+					+ weightMap.getInstance().getWeight(ConfigData.StyleName)
+					+ "&ed="+ConfigData.eightd;
 			Log.i("Bot:", "Url: "+url1+"?"+url2);
 			httpService hs = new httpService();
 			String solstr = hs.httpServiceGet(url1, url2);
@@ -71,6 +72,7 @@ public class botService extends Service {
 						Toast.LENGTH_SHORT).show();
 				return;
 			}
+			Log.i("Bot:", "ServerRet: " + solstr);
 			String[] recvStr = solstr.split(";");
 			String ini = recvStr[0];
 			String[] inis = ini.split(",");
@@ -78,6 +80,7 @@ public class botService extends Service {
 			int iw = Integer.parseInt(inis[1]);
 			String path = recvStr[2];
 			Log.i("Bot:", "Path: " + path);
+			Log.i("Bot:", "Combo: " + recvStr[1]);
 			String[] pathsetp = path.split(",");
 			if (!this.isInterrupted()) {
 				AbstractTouchService ts = touchDeviceFactory
@@ -91,6 +94,7 @@ public class botService extends Service {
 				getBoard();
 			} else {
 				Log.i("Bot:", "Thread interrupt by User");
+				return ;
 			}
 		}
 

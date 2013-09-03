@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -44,10 +45,16 @@ public class MainActivity extends Activity {
 				EditText deepet;
 				serveret = (EditText) findViewById(R.id.serverUrlText);
 				deepet = (EditText) findViewById(R.id.maxMoveText);
+				CheckBox edcheck =  (CheckBox) findViewById(R.id.eightDircheck);
 				ConfigData.Serverurl = serveret.getText().toString();
 				ConfigData.deep = Integer.parseInt(deepet.getText().toString());
 				ConfigData.DeviceName = _deviceS.getSelectedItem().toString();
 				ConfigData.StyleName = _styleList.getSelectedItem().toString();
+				if(edcheck.isChecked()){
+					ConfigData.eightd = 1;
+				}else{
+					ConfigData.eightd = 0;
+				}
 				if (_floatStartButtonView == null) {
 					createFStartButton();
 				}
@@ -152,13 +159,13 @@ public class MainActivity extends Activity {
 			public void onClick(View view) {
 				_wm.removeView(_floatStopButtonView);
 				createFStartButton();
-				Intent intent = new Intent(MainActivity.this, botService.class);
-				stopService(intent);
 				if (ConfigData.solver != null) {
 					Thread moribund = ConfigData.solver;
 					ConfigData.solver = null;
 					moribund.interrupt();
 				}
+				Intent intent = new Intent(MainActivity.this, botService.class);
+				stopService(intent);
 			}
 		});
 		_wm.addView(_floatStopButtonView, wmParams);

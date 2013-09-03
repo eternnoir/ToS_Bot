@@ -56,7 +56,6 @@ public class AtecDevice extends AbstractTouchService {
 		Vector<String> cl = new Vector<String>();
 		int x = x1;
 		int y = y1;
-		_id.SendTouchAbsCoord((x1 + x2) / 2, (y1 + y2) / 2);
 		_id.SendTouchAbsCoord(x2, y2);
 		SystemClock.sleep(gap);
 		return cl;
@@ -66,7 +65,6 @@ public class AtecDevice extends AbstractTouchService {
 	@Override
 	public Vector<String> touchMoveX(int x1, int x2, int gap) {
 		Vector<String> cl = new Vector<String>();
-		_id.SendTouchAbsXCoord((x1 + x2) / 2);
 		_id.SendTouchAbsXCoord(x2);
 		SystemClock.sleep(gap);
 
@@ -76,7 +74,6 @@ public class AtecDevice extends AbstractTouchService {
 	@Override
 	public Vector<String> touchMoveY(int y1, int y2, int gap) {
 		Vector<String> cl = new Vector<String>();
-		_id.SendTouchAbsYCoord((y1 + y2) / 2);
 		_id.SendTouchAbsYCoord(y2);
 		SystemClock.sleep(gap);
 		return cl;

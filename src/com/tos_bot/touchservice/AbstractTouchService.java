@@ -74,11 +74,11 @@ public abstract class AbstractTouchService {
 		int inix = _inix + initw * _ballgap;
 		int iniy = _iniy + inith * _ballgap;
 		ret.addAll(touchDown(inix, iniy));
-
+		SystemClock.sleep(100);
 		int nowx = inix;
 		int nowy = iniy;
 		// step 2. add path
-		int gap = 50;
+		int gap = 70;
 		for (String p : pathsetp) {
 			int pp = Integer.parseInt(p);
 			touchpos pos = changePathToPos(pp);
@@ -143,7 +143,7 @@ public abstract class AbstractTouchService {
 			ret = new touchpos(-_ballgap, 0);
 			break;
 		case 5:
-			ret = new touchpos(-_ballgap, _ballgap);
+			ret = new touchpos(-_ballgap, -_ballgap);
 			break;
 		case 6:
 			ret = new touchpos(0, -_ballgap);
