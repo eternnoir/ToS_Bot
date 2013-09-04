@@ -73,6 +73,10 @@ public class botService extends Service {
 			}
 			Log.i("Bot:", "ServerRet: " + solstr);
 			String[] recvStr = solstr.split(";");
+			if(recvStr.length!=3){
+				Log.i("Bot:", "Server Error ");
+				return;
+			}
 			String ini = recvStr[0];
 			String[] inis = ini.split(",");
 			int ih = Integer.parseInt(inis[0]);
