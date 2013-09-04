@@ -44,6 +44,8 @@ public class botService extends Service {
 				ConfigData.solver.start();
 			} else if (!ConfigData.solver.isAlive()) {
 				ConfigData.solver = null;
+				handler.postDelayed(this, 15000);
+				return;
 			}
 			handler.postDelayed(this, 500);
 		}
