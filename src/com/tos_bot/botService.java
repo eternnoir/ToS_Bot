@@ -53,9 +53,8 @@ public class botService extends Service {
 		@Override
 		public void run() {
 			Log.i("Bot:", "Take Board");
-			cpFile();
-			String board = getBoardFromPic(); // get board data from file
-			if (board == null) { // get board data from image
+			String board = getBoardFromPic();
+			if (board == null) {
 				return;
 			}
 			String url1 = ConfigData.Serverurl;
@@ -90,16 +89,15 @@ public class botService extends Service {
 				}
 				Vector<String> cmd = ts.getCommandByPath(ih, iw, pathsetp);
 				ts.SendCommand(cmd);
-				cpFile();
-				getBoard();
 			} else {
 				Log.i("Bot:", "Thread interrupt by User");
 				return ;
 			}
+			this.rmFile();
 		}
 
 		private boolean getScreenshot() {
-
+			Log.i("Bot:", "Take ScreenShot");
 			Process sh;
 			try {
 				sh = Runtime.getRuntime().exec("su", null, null);
@@ -110,9 +108,6 @@ public class botService extends Service {
 				os.write(("chmod 777 " + ConfigData.TempDir + "/img.png\n")
 						.getBytes("ASCII"));
 				os.flush();
-				os.write(("exit\n").getBytes("ASCII"));
-				os.flush();
-
 				os.close();
 				sh.waitFor();
 			} catch (Exception e) {
@@ -120,7 +115,7 @@ public class botService extends Service {
 				e.printStackTrace();
 				return false;
 			}
-
+			Log.i("Bot:", "Take ScreenShot Done");
 			return true;
 		}
 
@@ -163,8 +158,7 @@ public class botService extends Service {
 				// Attempt to write a file to a root-only
 				DataOutputStream os = new DataOutputStream(p.getOutputStream());
 				String rmcmd = "rm -Rf "
-						+ Environment.getExternalStorageDirectory()
-						+ "/TOS_tmp.xml\n";
+						+ ConfigData.TempDir + "/img.png\n";
 				os.write(rmcmd.getBytes());
 				os.flush();
 				os.writeBytes("exit\n");
