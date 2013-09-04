@@ -93,7 +93,6 @@ public class botService extends Service {
 				Log.i("Bot:", "Thread interrupt by User");
 				return ;
 			}
-			this.rmFile();
 		}
 
 		private boolean getScreenshot() {
