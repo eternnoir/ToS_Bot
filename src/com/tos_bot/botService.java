@@ -1,6 +1,7 @@
 package com.tos_bot;
 
 import java.io.DataOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Vector;
 
@@ -66,7 +67,8 @@ public class botService extends Service {
 			String url2 = "board=" + board + "&deep=" + ConfigData.deep
 					+ "&weight="
 					+ weightMap.getInstance().getWeight(ConfigData.StyleName)
-					+ "&ed="+ConfigData.eightd;
+					+ "&ed="+ConfigData.eightd
+					+ "&ml="+ConfigData.deep/10;
 			Log.i("Bot:", "Url: "+url1+"?"+url2);
 			showMessage("Solving");
 			httpService hs = new httpService();
@@ -116,14 +118,19 @@ public class botService extends Service {
 			try {
 				sh = Runtime.getRuntime().exec("su", null, null);
 				OutputStream os = sh.getOutputStream();
+				InputStream is = sh.getInputStream();
 				os.write(("/system/bin/screencap -p " + ConfigData.TempDir + "/img.png\n")
 						.getBytes("ASCII"));
 				os.flush();
+				String  cmd = "echo -n 0\n";
+				  os.write(cmd.getBytes("ASCII"));
+				  os.flush();
+				  is.read();
+
 				os.write(("chmod 777 " + ConfigData.TempDir + "/img.png\n")
 						.getBytes("ASCII"));
 				os.flush();
 				os.close();
-				sh.waitFor();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
