@@ -63,7 +63,7 @@ public class imageProcesser {
 					error++;
 				}
 			}
-		if (error > 5) {
+		if (error > 0) {
 			throw new NotInTosException();
 		}
 		return ret;
