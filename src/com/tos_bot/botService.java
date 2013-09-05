@@ -67,8 +67,7 @@ public class botService extends Service {
 			String url2 = "board=" + board + "&deep=" + ConfigData.deep
 					+ "&weight="
 					+ weightMap.getInstance().getWeight(ConfigData.StyleName)
-					+ "&ed="+ConfigData.eightd
-					+ "&ml="+ConfigData.deep/10;
+					+ "&ed="+ConfigData.eightd;
 			Log.i("Bot:", "Url: "+url1+"?"+url2);
 			showMessage("Solving");
 			httpService hs = new httpService();
