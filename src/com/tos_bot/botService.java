@@ -12,12 +12,15 @@ import android.content.Intent;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
 public class botService extends Service {
 	private Handler handler = new Handler();
-
+	
 	@Override
 	public IBinder onBind(Intent arg0) {
 		// TODO Auto-generated method stub
@@ -44,8 +47,6 @@ public class botService extends Service {
 				ConfigData.solver.start();
 			} else if (!ConfigData.solver.isAlive()) {
 				ConfigData.solver = null;
-				handler.postDelayed(this, 15000);
-				return;
 			}
 			handler.postDelayed(this, 500);
 		}
@@ -55,8 +56,10 @@ public class botService extends Service {
 		@Override
 		public void run() {
 			Log.i("Bot:", "Take Board");
+			showMessage("Take Screen Shot");
 			String board = getBoardFromPic();
 			if (board == null) {
+				showMessage("Cannot find board");
 				return;
 			}
 			String url1 = ConfigData.Serverurl;
@@ -65,10 +68,12 @@ public class botService extends Service {
 					+ weightMap.getInstance().getWeight(ConfigData.StyleName)
 					+ "&ed="+ConfigData.eightd;
 			Log.i("Bot:", "Url: "+url1+"?"+url2);
+			showMessage("Solving");
 			httpService hs = new httpService();
 			String solstr = hs.httpServiceGet(url1, url2);
 			if (solstr.equals("")) {
 				Log.i("Bot:", "NetWorkError");
+				showMessage("Network Error");
 				Toast.makeText(getApplicationContext(), "Network Error",
 						Toast.LENGTH_SHORT).show();
 				return;
@@ -77,6 +82,7 @@ public class botService extends Service {
 			String[] recvStr = solstr.split(";");
 			if(recvStr.length!=3){
 				Log.i("Bot:", "Server Error ");
+				showMessage("Server Error");
 				return;
 			}
 			String ini = recvStr[0];
@@ -96,9 +102,12 @@ public class botService extends Service {
 				Vector<String> cmd = ts.getCommandByPath(ih, iw, pathsetp);
 				ts.SendCommand(cmd);
 			} else {
+				showMessage("Bot Stop");
 				Log.i("Bot:", "Thread interrupt by User");
 				return ;
 			}
+			Log.i("Bot:", "Wait 12 Secs");
+			SystemClock.sleep(12000);
 		}
 
 		private boolean getScreenshot() {
@@ -231,6 +240,20 @@ public class botService extends Service {
 				}
 			}
 			return board;
+		}
+		private void showMessage(final String msg){
+			new Thread()  
+			 {   
+			  public void run()  
+			  {  
+			   Looper.prepare();  
+				Toast.makeText(getApplicationContext(), msg,
+						Toast.LENGTH_SHORT).show();
+			  
+			   Looper.loop();  
+			  }  
+			      
+			 }.start();  
 		}
 	}
 }
