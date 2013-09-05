@@ -49,7 +49,7 @@ public class botService extends Service {
 			} else if (!ConfigData.solver.isAlive()) {
 				ConfigData.solver = null;
 			}
-			handler.postDelayed(this, 500);
+			handler.postDelayed(this, 2000);
 		}
 	};
 
