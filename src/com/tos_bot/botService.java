@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 public class botService extends Service {
 	private Handler handler = new Handler();
-	
+
 	@Override
 	public IBinder onBind(Intent arg0) {
 		// TODO Auto-generated method stub
@@ -57,7 +57,6 @@ public class botService extends Service {
 		@Override
 		public void run() {
 			Log.i("Bot:", "Take Board");
-			showMessage("Take Screen Shot");
 			String board = getBoardFromPic();
 			if (board == null) {
 				showMessage("Cannot find board");
@@ -67,8 +66,8 @@ public class botService extends Service {
 			String url2 = "board=" + board + "&deep=" + ConfigData.deep
 					+ "&weight="
 					+ weightMap.getInstance().getWeight(ConfigData.StyleName)
-					+ "&ed="+ConfigData.eightd;
-			Log.i("Bot:", "Url: "+url1+"?"+url2);
+					+ "&ed=" + ConfigData.eightd;
+			Log.i("Bot:", "Url: " + url1 + "?" + url2);
 			showMessage("Solving");
 			httpService hs = new httpService();
 			String solstr = hs.httpServiceGet(url1, url2);
@@ -81,7 +80,7 @@ public class botService extends Service {
 			}
 			Log.i("Bot:", "ServerRet: " + solstr);
 			String[] recvStr = solstr.split(";");
-			if(recvStr.length!=3){
+			if (recvStr.length != 3) {
 				Log.i("Bot:", "Server Error ");
 				showMessage("Server Error");
 				return;
@@ -105,7 +104,7 @@ public class botService extends Service {
 			} else {
 				showMessage("Bot Stop");
 				Log.i("Bot:", "Thread interrupt by User");
-				return ;
+				return;
 			}
 			Log.i("Bot:", "Wait 12 Secs");
 			SystemClock.sleep(12000);
@@ -121,11 +120,11 @@ public class botService extends Service {
 				os.write(("/system/bin/screencap -p " + ConfigData.TempDir + "/img.png\n")
 						.getBytes("ASCII"));
 				os.flush();
-				String  cmd = "echo -n 0\n";
-				  os.write(cmd.getBytes("ASCII"));
-				  os.flush();
-				  is.read();
-
+				String cmd = "echo -n 0\n";
+				os.write(cmd.getBytes("ASCII"));
+				os.flush();
+				is.read();
+				showMessage("Take Screen Shot");
 				os.write(("chmod 777 " + ConfigData.TempDir + "/img.png\n")
 						.getBytes("ASCII"));
 				os.flush();
@@ -177,8 +176,7 @@ public class botService extends Service {
 
 				// Attempt to write a file to a root-only
 				DataOutputStream os = new DataOutputStream(p.getOutputStream());
-				String rmcmd = "rm -Rf "
-						+ ConfigData.TempDir + "/img.png\n";
+				String rmcmd = "rm -Rf " + ConfigData.TempDir + "/img.png\n";
 				os.write(rmcmd.getBytes());
 				os.flush();
 				os.writeBytes("exit\n");
@@ -247,19 +245,18 @@ public class botService extends Service {
 			}
 			return board;
 		}
-		private void showMessage(final String msg){
-			new Thread()  
-			 {   
-			  public void run()  
-			  {  
-			   Looper.prepare();  
-				Toast.makeText(getApplicationContext(), msg,
-						Toast.LENGTH_SHORT).show();
-			  
-			   Looper.loop();  
-			  }  
-			      
-			 }.start();  
+
+		private void showMessage(final String msg) {
+			new Thread() {
+				public void run() {
+					Looper.prepare();
+					Toast.makeText(getApplicationContext(), msg,
+							Toast.LENGTH_SHORT).show();
+
+					Looper.loop();
+				}
+
+			}.start();
 		}
 	}
 }
