@@ -59,7 +59,6 @@ public class botService extends Service {
 			Log.i("Bot:", "Take Board");
 			String board = getBoardFromPic();
 			if (board == null) {
-				showMessage("Cannot find board");
 				return;
 			}
 			String url1 = ConfigData.Serverurl;
@@ -107,6 +106,7 @@ public class botService extends Service {
 				return;
 			}
 			Log.i("Bot:", "Wait 12 Secs");
+			showMessage("Waiting");
 			SystemClock.sleep(12000);
 		}
 
@@ -124,7 +124,7 @@ public class botService extends Service {
 				os.write(cmd.getBytes("ASCII"));
 				os.flush();
 				is.read();
-				showMessage("Take Screen Shot");
+				showMessage("Take Screenshot");
 				os.write(("chmod 777 " + ConfigData.TempDir + "/img.png\n")
 						.getBytes("ASCII"));
 				os.flush();
