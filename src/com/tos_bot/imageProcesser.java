@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Environment;
 import android.os.Build;
+import android.util.Log;
 
 public class imageProcesser {
 	static String _Path = "";
@@ -25,9 +26,11 @@ public class imageProcesser {
 		_Path = FilePath;
 		Bitmap sourceBitmap;
 		sourceBitmap = BitmapFactory.decodeFile(FilePath);
-        if (Build.MODEL.contains("C6602")) {
+		String deivceModel = Build.MODEL;
+        if (deivceModel.contains("C6602")||deivceModel.contains("LT29")) {
             sourceBitmap = Bitmap.createBitmap(sourceBitmap, 0, 0,
                            sourceBitmap.getWidth(), (int)(sourceBitmap.getWidth() / 0.6));
+            Log.i("Bot:", "Sony Device");
         }
 		int screenhigh = sourceBitmap.getHeight();
 		int oneball = sourceBitmap.getWidth() / 6;
