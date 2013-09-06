@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 public class botService extends Service {
 	private Handler handler = new Handler();
+	final Handler mHandler = new Handler();
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -247,16 +248,12 @@ public class botService extends Service {
 		}
 
 		private void showMessage(final String msg) {
-			new Thread() {
-				public void run() {
-					Looper.prepare();
-					Toast.makeText(getApplicationContext(), msg,
-							Toast.LENGTH_SHORT).show();
-
-					Looper.loop();
-				}
-
-			}.start();
+			final Runnable mShowMessage = new Runnable() {
+			    public void run() {
+			        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+			    }
+			};
+			mHandler.post(mShowMessage);
 		}
 	}
 }
