@@ -98,6 +98,8 @@ public class botService extends Service {
 						.getNewTouchService(ConfigData.DeviceName);
 				if (ts == null) {
 					Log.i("Bot:", "Touch Event Not Found");
+					showMessage("Touch Event Not Found, Check Your Device");
+					return;
 				}
 				Vector<String> cmd = ts.getCommandByPath(ih, iw, pathsetp);
 				ts.SendCommand(cmd);
