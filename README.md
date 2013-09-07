@@ -8,6 +8,7 @@ Support Devices
 * HTC Oone X
 * Samsung Galaxy S3
 * Samsung Galaxy S2
+
 ##Genymotion
 * Nexus One 4.1.1 with Google API image
 
@@ -15,7 +16,6 @@ Support Devices
 Requirements
 =======
 * https://github.com/eternnoir/ATEC
-* 
 
 #IRC
 irc://irc.freenode.net/TOS_Auto
