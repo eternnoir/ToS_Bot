@@ -66,10 +66,9 @@ public class imageProcesser {
 					error++;
 				}
 			}
-		if (error > 0) {
+		if (error > 1) {
 			throw new NotInTosException();
-		}
-		return ret;
+		~		return ret;
 	}
 
 	public static int checkColor(Bitmap bm) {
@@ -136,7 +135,7 @@ public class imageProcesser {
 				color[2]++; // green
 			} else if (r < 100 && g < 150 && b > 200) {
 				color[0]++; // blue
-			} else if (r > 200 && g > 100 && b > 150 && g < 200) {
+			} else if (r > 200 && g > 100 && b > 150 && g < 250) {
 				color[5]++; // Hert
 			} else if (r > 150 && g > 150 && b < 100) {
 				color[3]++; // lght
