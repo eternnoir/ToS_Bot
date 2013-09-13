@@ -1,6 +1,6 @@
 ToS_Bot
 =======
-An tower of saviors bot
+A tower of saviors supporter
 Support Devices
 =======
 ##Auto
