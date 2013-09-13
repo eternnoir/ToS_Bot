@@ -8,6 +8,7 @@ Support Devices
 * HTC Oone X
 * Samsung Galaxy S3
 * Samsung Galaxy S2
+
 ##Genymotion
 * Nexus One 4.1.1 with Google API image [Download Link](https://mega.co.nz/#!dlsCkY6C!ehqo5VnbnNWL98dTn6ySfkeHcmgQ0i6u8Ty-hOhOF3c)
 
