@@ -16,7 +16,6 @@ Support Devices
 Requirements
 =======
 * https://github.com/eternnoir/ATEC
-* 
 
 #IRC
 irc://irc.freenode.net/TOS_Auto
