@@ -44,11 +44,11 @@ public class botService extends Service {
 	private Runnable BotGo = new Runnable() {
 		public void run() {
 			// check thread is alive?
-			if (ConfigData.solver == null) {
-				ConfigData.solver = new ServerSlove();
-				ConfigData.solver.start();
-			} else if (!ConfigData.solver.isAlive()) {
-				ConfigData.solver = null;
+			if (ConfigData.solverThread == null) {
+				ConfigData.solverThread = new ServerSlove();
+				ConfigData.solverThread.start();
+			} else if (!ConfigData.solverThread.isAlive()) {
+				ConfigData.solverThread = null;
 			}
 			handler.postDelayed(this, 2000);
 		}
@@ -148,11 +148,11 @@ public class botService extends Service {
 				p = Runtime.getRuntime().exec("su", null, null);
 				DataOutputStream os = new DataOutputStream(p.getOutputStream());
 				// Attempt to write a file to a root-only
-				String cmd = "cp " + ConfigData.GooglePlayFp + " "
+				String cmd = "cp " + ConfigData.GooglePlayFilePath + " "
 						+ ConfigData.TempDir + "/TOS_tmp.xml\n";
 				os.write(cmd.getBytes());
 				os.flush();
-				cmd = "cp " + ConfigData.MyCardFp + " " + ConfigData.TempDir
+				cmd = "cp " + ConfigData.MyCardFilePath + " " + ConfigData.TempDir
 						+ "/TOS_tmp.xml\n";
 				os.write(cmd.getBytes());
 				os.flush();
@@ -171,29 +171,8 @@ public class botService extends Service {
 			}
 		}
 
-		private void rmFile() {
-			Process p;
-			try {
-				// Preform su to get root privledges
-				p = Runtime.getRuntime().exec("su", null, null);
 
-				// Attempt to write a file to a root-only
-				DataOutputStream os = new DataOutputStream(p.getOutputStream());
-				String rmcmd = "rm -Rf " + ConfigData.TempDir + "/img.png\n";
-				os.write(rmcmd.getBytes());
-				os.flush();
-				os.writeBytes("exit\n");
-				os.flush();
-				os.close();
-				p.waitFor();
-			} catch (Exception e) {
-				// TODO Code to run in input/output exception
-				// return false;
-				e.printStackTrace();
-			}
-		}
-
-		private String getBoard() {
+		private String getBoardFormFile() {
 			// cpFile();
 			String ret;
 			xmlParser xmp = new xmlParser();

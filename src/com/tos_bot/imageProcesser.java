@@ -68,7 +68,8 @@ public class imageProcesser {
 			}
 		if (error > 1) {
 			throw new NotInTosException();
-		~		return ret;
+		}
+		return ret;
 	}
 
 	public static int checkColor(Bitmap bm) {
