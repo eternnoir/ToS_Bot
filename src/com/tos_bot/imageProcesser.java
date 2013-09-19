@@ -27,7 +27,7 @@ public class imageProcesser {
 		Bitmap sourceBitmap;
 		sourceBitmap = BitmapFactory.decodeFile(FilePath);
 		String deivceModel = Build.MODEL;
-        if (deivceModel.contains("C6602")||deivceModel.contains("LT29")) {
+        if (deivceModel.contains("C6602")||deivceModel.contains("LT29")||deivceModel.contains("C6802")) {
             sourceBitmap = Bitmap.createBitmap(sourceBitmap, 0, 0,
                            sourceBitmap.getWidth(), (int)(sourceBitmap.getWidth() / 0.6));
             Log.i("Bot:", "Sony Device");
