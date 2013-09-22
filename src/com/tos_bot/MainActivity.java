@@ -2,6 +2,8 @@ package com.tos_bot;
 
 import com.tos_bot.touchservice.touchDeviceFactory;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.StrictMode.VmPolicy;
 import android.app.Activity;
@@ -17,6 +19,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -26,7 +31,13 @@ public class MainActivity extends Activity {
 	private Spinner _styleList;
 	private Button _floatStartButtonView = null;
 	private Button _floatStopButtonView = null;
+    private Button _floatStrategyButtonView = null;
+    private HorizontalScrollView _floatStrategyHorizontalScrollView = null;
 	private WindowManager _wm = null;
+    private Boolean _isStartButtonExist = false;
+    private Boolean _isStopButtonExist = false;
+    private Boolean _isStrategyButtonExist = false;
+    private Boolean _isStrategyHorizontalScrollViewExist = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +49,8 @@ public class MainActivity extends Activity {
 		_startServiceButton = (Button) findViewById(R.id.start_button);
 		_stopServiceButton = (Button) findViewById(R.id.stop_button);
 		_deviceS = (Spinner) findViewById(R.id.deviceList);
-		_styleList = (Spinner) findViewById(R.id.styleList);
-		_startServiceButton.setOnClickListener(new View.OnClickListener() {
+        _styleList = (Spinner) findViewById(R.id.styleList);
+        _startServiceButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				EditText serveret;
 				EditText deepet;
@@ -58,6 +69,10 @@ public class MainActivity extends Activity {
 				if (_floatStartButtonView == null) {
 					createFStartButton();
 				}
+
+                if (_floatStrategyButtonView == null) {
+                    createFStrategyButton();
+                }
 			}
 		});
 
@@ -67,13 +82,24 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				ConfigData.pasCDid = "";
 				try {
-					_wm.removeView(_floatStartButtonView);
-					_wm.removeView(_floatStopButtonView);
-				} catch (Exception e) {
+                    if (_isStartButtonExist)
+                        _wm.removeView(_floatStartButtonView);
+                    if (_isStopButtonExist)
+					    _wm.removeView(_floatStopButtonView);
+                    if (_isStrategyButtonExist)
+                        _wm.removeView(_floatStrategyButtonView);
+                    if (_isStrategyHorizontalScrollViewExist)
+                        _wm.removeView(_floatStrategyHorizontalScrollView);
+                    _isStartButtonExist = false;
+                    _isStopButtonExist = false;
+                    _isStrategyButtonExist = false;
+                    _isStrategyHorizontalScrollViewExist = false;
+                } catch (Exception e) {
 					// TODO: handle exception
 				}
 				_floatStartButtonView = null;
 				_floatStopButtonView = null;
+                _floatStrategyButtonView = null;
 				Intent intent = new Intent(MainActivity.this, botService.class);
 				stopService(intent);
 			}
@@ -132,12 +158,16 @@ public class MainActivity extends Activity {
 		_floatStartButtonView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				_wm.removeView(_floatStartButtonView);
+                _isStartButtonExist = false;
+                _wm.removeView(_floatStrategyButtonView);
+                _isStrategyButtonExist = false;
 				createFStopButton();
 				Intent intent = new Intent(MainActivity.this, botService.class);
 				startService(intent);
 			}
 		});
-		_wm.addView(_floatStartButtonView, wmParams); // �遣View
+		_wm.addView(_floatStartButtonView, wmParams); // ?遣View
+        _isStartButtonExist = true;
 	}
 
 	private void createFStopButton() {
@@ -158,7 +188,9 @@ public class MainActivity extends Activity {
 		_floatStopButtonView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				_wm.removeView(_floatStopButtonView);
+                _isStopButtonExist = false;
 				createFStartButton();
+                createFStrategyButton();
 				if (ConfigData.solverThread != null) {
 					Thread moribund = ConfigData.solverThread;
 					ConfigData.solverThread = null;
@@ -169,6 +201,74 @@ public class MainActivity extends Activity {
 			}
 		});
 		_wm.addView(_floatStopButtonView, wmParams);
+        _isStopButtonExist = true;
 	}
+
+    private void createFStrategyButton() {
+        Display display = getWindowManager().getDefaultDisplay();
+        _floatStrategyButtonView = new Button(getApplicationContext());
+        _wm = (WindowManager) getApplicationContext()
+                .getSystemService("window");
+        WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
+        wmParams.gravity = Gravity.TOP | Gravity.LEFT;
+        wmParams.x = 0 + display.getWidth() / 8;
+        wmParams.y = display.getHeight() * 2 / 8;
+        wmParams.type = 2002;
+        wmParams.format = 1;
+        wmParams.flags = 40;
+        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        _floatStrategyButtonView.setText("Strategy");
+        _floatStrategyButtonView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                //_wm.removeView(_floatStrategyButtonView);
+                createFStrategyHorizontalScrollView();
+            }
+        });
+        _wm.addView(_floatStrategyButtonView, wmParams); // ?遣View
+        _isStrategyButtonExist = true;
+    }
+
+    private void createFStrategyHorizontalScrollView() {
+        Display display = getWindowManager().getDefaultDisplay();
+        _floatStrategyHorizontalScrollView = new HorizontalScrollView(getApplicationContext());
+        _wm = (WindowManager) getApplicationContext()
+                .getSystemService("window");
+        WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
+        wmParams.gravity = Gravity.TOP | Gravity.LEFT;
+        wmParams.x = 0;
+        wmParams.y = 0;
+        wmParams.type = 2002;
+        wmParams.format = 1;
+        wmParams.flags = 40;
+        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        _floatStrategyHorizontalScrollView.addView(getStrategyLinearLayout());
+        //_floatStrategyButtonView.setText("Strategy");
+        /*_floatStrategyButtonView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                //_wm.removeView(_floatStrategyButtonView);
+            }
+        });*/
+        _wm.addView(_floatStrategyHorizontalScrollView, wmParams); // ?遣View
+        _isStrategyHorizontalScrollViewExist = true;
+    }
+
+    private LinearLayout getStrategyLinearLayout(){
+        LinearLayout layout = new LinearLayout(this);
+        String[] styleList = weightMap.getInstance().getStyleList();
+
+        for (int i = 0; i < styleList.length; i++){
+            layout.addView(getImageButton(styleList[i]));
+        }
+
+        return layout;
+    }
+
+    private ImageButton getImageButton(String styleName){
+        ImageButton button = new ImageButton(this);
+        button.setImageBitmap(BitmapFactory.decodeStream(getClassLoader().getResourceAsStream("image/" + styleName + ".png")));
+        return button;
+    }
 
 }
