@@ -4,24 +4,24 @@ import java.util.LinkedHashMap;
 
 public class weightMap {
     private static weightMap ourInstance = new weightMap();
-    private final LinkedHashMap<String, String> weightMap = new LinkedHashMap<String, String>() {
+    private final LinkedHashMap<Integer, String> weightMap = new LinkedHashMap<Integer, String>() {
         {
-            put("5-color, Single",  "0,0,3,1,3,1,3,1,3,1,3,1,3,1");
-            put("5-color, Multi",   "0,0,1,3,1,3,1,3,1,3,1,3,1,3");
-            put("Water, Single",    "0,0,3,1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.3,0.3");
-            put("Water, Multi",     "0,0,1,3,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.3,0.3");
-            put("Fire, Single",     "0,0,0.1,0.1,3,1,0.1,0.1,0.1,0.1,0.1,0.1,0.3,0.3");
-            put("Fire, Multi",      "0,0,0.1,0.1,1,3,0.1,0.1,0.1,0.1,0.1,0.1,0.3,0.3");
-            put("Wood, Single",     "0,0,0.1,0.1,0.1,0.1,3,1,0.1,0.1,0.1,0.1,0.3,0.3");
-            put("Wood, Multi",      "0,0,0.1,0.1,0.1,0.1,1,3,0.1,0.1,0.1,0.1,0.3,0.3");
-            put("Light, Single",    "0,0,0.1,0.1,0.1,0.1,0.1,0.1,3,1,0.1,0.1,0.3,0.3");
-            put("Light, Multi",     "0,0,0.1,0.1,0.1,0.1,0.1,0.1,1,3,0.1,0.1,0.3,0.3");
-            put("Dark, Single",     "0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,3,1,0.3,0.3");
-            put("Dark, Multi",      "0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,1,3,0.3,0.3");
-            put("Recover, Single",  "0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,1,1");
-            put("Recover, Multi",   "0,0,0.1,0.3,0.1,0.3,0.1,0.3,0.1,0.3,0.1,0.3,1,1");
-            put("Low HP, Single",   "0,0,3,1,3,1,3,1,3,1,3,1,-0.1,-0.1");
-            put("Low HP, Multi",   "0,0,1,3,1,3,1,3,1,3,1,3,-0.1,-0.1");
+            put(R.id.Vary_color_Single,    "0,0,3,1,3,1,3,1,3,1,3,1,3,1");
+            put(R.id.Vary_color_Multi,     "0,0,1,3,1,3,1,3,1,3,1,3,1,3");
+            put(R.id.Water_Single,         "0,0,3,1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.3,0.3");
+            put(R.id.Water_Multi,          "0,0,1,3,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.3,0.3");
+            put(R.id.Fire_Single,          "0,0,0.1,0.1,3,1,0.1,0.1,0.1,0.1,0.1,0.1,0.3,0.3");
+            put(R.id.Fire_Multi,           "0,0,0.1,0.1,1,3,0.1,0.1,0.1,0.1,0.1,0.1,0.3,0.3");
+            put(R.id.Wood_Single,          "0,0,0.1,0.1,0.1,0.1,3,1,0.1,0.1,0.1,0.1,0.3,0.3");
+            put(R.id.Wood_Multi,           "0,0,0.1,0.1,0.1,0.1,1,3,0.1,0.1,0.1,0.1,0.3,0.3");
+            put(R.id.Light_Single,         "0,0,0.1,0.1,0.1,0.1,0.1,0.1,3,1,0.1,0.1,0.3,0.3");
+            put(R.id.Light_Multi,          "0,0,0.1,0.1,0.1,0.1,0.1,0.1,1,3,0.1,0.1,0.3,0.3");
+            put(R.id.Dark_Single,          "0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,3,1,0.3,0.3");
+            put(R.id.Dark_Multi,           "0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,1,3,0.3,0.3");
+            put(R.id.Recover_Single,       "0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,1,1");
+            put(R.id.Recover_Multi,        "0,0,0.1,0.3,0.1,0.3,0.1,0.3,0.1,0.3,0.1,0.3,1,1");
+            put(R.id.Low_HP_Single,        "0,0,3,1,3,1,3,1,3,1,3,1,-0.1,-0.1");
+            put(R.id.Low_HP_Multi,         "0,0,1,3,1,3,1,3,1,3,1,3,-0.1,-0.1");
         }
     };
 
@@ -29,11 +29,15 @@ public class weightMap {
         return ourInstance;
     }
 
-    public String[] getStyleList() {
+    public Integer[] getStyleList() {
+        return weightMap.keySet().toArray(new Integer[0]);
+    }
+
+    public String[] getStyleListString() {
         return weightMap.keySet().toArray(new String[0]);
     }
 
-    public String getWeight(String key) {
+    public String getWeight(Integer key) {
         return weightMap.get(key);
     }
 }

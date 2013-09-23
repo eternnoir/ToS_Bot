@@ -8,7 +8,7 @@ public class ConfigData {
 	public static int deep;
 	public static String pasCDid = "";
 	public static String DeviceName = "";
-	public static String StyleName = "";
+	public static Integer StyleName = R.id.Vary_color_Single;
 	public static String TempDir = "";
 	public static Thread solverThread = null;
 	public static final String GooglePlayFilePath = "/data/data/com.madhead.tos.zh/shared_prefs/com.madhead.tos.zh.xml";

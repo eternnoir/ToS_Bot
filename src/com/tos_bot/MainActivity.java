@@ -2,10 +2,8 @@ package com.tos_bot;
 
 import com.tos_bot.touchservice.touchDeviceFactory;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.StrictMode.VmPolicy;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Display;
@@ -17,12 +15,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ImageButton;
-import android.widget.Toast;
+
+import java.util.LinkedHashMap;
 
 public class MainActivity extends Activity {
 	private Button _startServiceButton;
@@ -37,7 +35,27 @@ public class MainActivity extends Activity {
     private Boolean _isStartButtonExist = false;
     private Boolean _isStopButtonExist = false;
     private Boolean _isStrategyButtonExist = false;
-    private Boolean _isStrategyHorizontalScrollViewExist = false;
+    private Boolean _isStrategyLayoutExist = false;
+    private final LinkedHashMap<Integer, String> IdStringMap = new LinkedHashMap<Integer, String>() {
+        {
+            put(R.id.Vary_color_Single,    "Vary_color_Single");
+            put(R.id.Vary_color_Multi,     "Vary_color_Multi");
+            put(R.id.Water_Single,         "Water_Single");
+            put(R.id.Water_Multi,          "Water_Multi");
+            put(R.id.Fire_Single,          "Fire_Single");
+            put(R.id.Fire_Multi,           "Fire_Multi");
+            put(R.id.Wood_Single,          "Wood_Single");
+            put(R.id.Wood_Multi,           "Wood_Multi");
+            put(R.id.Light_Single,         "Light_Single");
+            put(R.id.Light_Multi,          "Light_Multi");
+            put(R.id.Dark_Single,          "Dark_Single");
+            put(R.id.Dark_Multi,           "Dark_Multi");
+            put(R.id.Recover_Single,       "Recover_Single");
+            put(R.id.Recover_Multi,        "Recover_Multi");
+            put(R.id.Low_HP_Single,        "Low_HP_Single");
+            put(R.id.Low_HP_Multi,         "Low_HP_Multi");
+        }
+    };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +78,7 @@ public class MainActivity extends Activity {
 				ConfigData.Serverurl = serveret.getText().toString();
 				ConfigData.deep = Integer.parseInt(deepet.getText().toString());
 				ConfigData.DeviceName = _deviceS.getSelectedItem().toString();
-				ConfigData.StyleName = _styleList.getSelectedItem().toString();
+				//ConfigData.StyleName = _styleList.getSelectedItem().toString();
 				if(edcheck.isChecked()){
 					ConfigData.eightd = 1;
 				}else{
@@ -88,18 +106,19 @@ public class MainActivity extends Activity {
 					    _wm.removeView(_floatStopButtonView);
                     if (_isStrategyButtonExist)
                         _wm.removeView(_floatStrategyButtonView);
-                    if (_isStrategyHorizontalScrollViewExist)
+                    if (_isStrategyLayoutExist)
                         _wm.removeView(_floatStrategyLayout);
                     _isStartButtonExist = false;
                     _isStopButtonExist = false;
                     _isStrategyButtonExist = false;
-                    _isStrategyHorizontalScrollViewExist = false;
+                    _isStrategyLayoutExist = false;
                 } catch (Exception e) {
 					// TODO: handle exception
 				}
 				_floatStartButtonView = null;
 				_floatStopButtonView = null;
                 _floatStrategyButtonView = null;
+                _floatStrategyLayout = null;
 				Intent intent = new Intent(MainActivity.this, botService.class);
 				stopService(intent);
 			}
@@ -133,11 +152,11 @@ public class MainActivity extends Activity {
 
 	private void initStyleList() {
 		Spinner spinner = (Spinner) findViewById(R.id.styleList);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+		/*ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, weightMap.getInstance()
-						.getStyleList());
+						.getStyleListString());
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinner.setAdapter(adapter);
+		spinner.setAdapter(adapter);*/
 	}
 
 	private void createFStartButton() {
@@ -145,24 +164,19 @@ public class MainActivity extends Activity {
 		_floatStartButtonView = new Button(getApplicationContext());
 		_wm = (WindowManager) getApplicationContext()
 				.getSystemService("window");
-		WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
-		wmParams.gravity = Gravity.TOP | Gravity.LEFT;
-		wmParams.x = 0 + display.getWidth() / 8;
-		wmParams.y = display.getHeight() / 8;
-		wmParams.type = 2002;
-		wmParams.format = 1;
-		wmParams.flags = 40;
-		wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-		wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        WindowManager.LayoutParams wmParams =
+                getFloatingLayoutParams(0 + display.getWidth() / 8, display.getHeight() / 8);
+
 		_floatStartButtonView.setText("Start");
 		_floatStartButtonView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				_wm.removeView(_floatStartButtonView);
-                _isStartButtonExist = false;
-                _wm.removeView(_floatStrategyButtonView);
-                _isStrategyButtonExist = false;
-				createFStopButton();
-				Intent intent = new Intent(MainActivity.this, botService.class);
+                _floatStartButtonView.setVisibility(View.INVISIBLE);
+                _floatStrategyButtonView.setVisibility(View.INVISIBLE);
+                if (_floatStopButtonView == null)
+                    createFStopButton();
+                else
+                    _floatStopButtonView.setVisibility(View.VISIBLE);
+                Intent intent = new Intent(MainActivity.this, botService.class);
 				startService(intent);
 			}
 		});
@@ -175,22 +189,22 @@ public class MainActivity extends Activity {
 		_floatStopButtonView = new Button(getApplicationContext());
 		_wm = (WindowManager) getApplicationContext()
 				.getSystemService("window");
-		WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
-		wmParams.gravity = Gravity.TOP | Gravity.LEFT;
-		wmParams.x = display.getWidth() / 2 + display.getWidth() / 8;
-		wmParams.y = display.getHeight() / 8;
-		wmParams.type = 2002;
-		wmParams.format = 1;
-		wmParams.flags = 40;
-		wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-		wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        WindowManager.LayoutParams wmParams =
+                getFloatingLayoutParams(display.getWidth() / 2 + display.getWidth() / 8, display.getHeight() / 8);
+
 		_floatStopButtonView.setText("Stop");
 		_floatStopButtonView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				_wm.removeView(_floatStopButtonView);
-                _isStopButtonExist = false;
-				createFStartButton();
-                createFStrategyButton();
+                _floatStopButtonView.setVisibility(View.INVISIBLE);
+                if (_floatStartButtonView == null)
+				    createFStartButton();
+                else
+                    _floatStartButtonView.setVisibility(View.VISIBLE);
+                if (_floatStrategyButtonView == null)
+                    createFStrategyButton();
+                else
+                    _floatStrategyButtonView.setVisibility(View.VISIBLE);
+
 				if (ConfigData.solverThread != null) {
 					Thread moribund = ConfigData.solverThread;
 					ConfigData.solverThread = null;
@@ -209,20 +223,18 @@ public class MainActivity extends Activity {
         _floatStrategyButtonView = new Button(getApplicationContext());
         _wm = (WindowManager) getApplicationContext()
                 .getSystemService("window");
-        WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
-        wmParams.gravity = Gravity.TOP | Gravity.LEFT;
-        wmParams.x = 0 + display.getWidth() / 8;
-        wmParams.y = display.getHeight() * 2 / 8;
-        wmParams.type = 2002;
-        wmParams.format = 1;
-        wmParams.flags = 40;
-        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        WindowManager.LayoutParams wmParams =
+                getFloatingLayoutParams(0 + display.getWidth() / 8, display.getHeight() * 2 / 8);
+
         _floatStrategyButtonView.setText("Strategy");
         _floatStrategyButtonView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                //_wm.removeView(_floatStrategyButtonView);
-                createFStrategyHorizontalScrollView();
+                if (_floatStrategyLayout == null)
+                    createFStrategyHorizontalScrollView();
+                else
+                    _floatStrategyLayout.setVisibility(View.VISIBLE);
+                _floatStrategyButtonView.setVisibility(View.INVISIBLE);
+                _floatStartButtonView.setVisibility(View.INVISIBLE);
             }
         });
         _wm.addView(_floatStrategyButtonView, wmParams); // ?遣View
@@ -233,31 +245,32 @@ public class MainActivity extends Activity {
         _floatStrategyLayout = new LinearLayout(getApplicationContext());
         _wm = (WindowManager) getApplicationContext()
                 .getSystemService("window");
-        WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
-        wmParams.gravity = Gravity.TOP | Gravity.LEFT;
-        wmParams.x = 0;
-        wmParams.y = 0;
-        wmParams.type = 2002;
-        wmParams.format = 1;
-        wmParams.flags = 40;
-        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        WindowManager.LayoutParams wmParams =
+                getFloatingLayoutParams(0, 0);
 
         HorizontalScrollView scrollView = new HorizontalScrollView(this);
         scrollView.addView(getStrategyLinearLayout());
         _floatStrategyLayout.addView(scrollView);
         _wm.addView(_floatStrategyLayout, wmParams); // ?遣View
-        _isStrategyHorizontalScrollViewExist = true;
-        _floatStrategyButtonView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                _wm.removeView(_floatStrategyButtonView);
-            }
-        });
+        _isStrategyLayoutExist = true;
+    }
+
+    private WindowManager.LayoutParams getFloatingLayoutParams(int x, int y){
+        WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
+        wmParams.gravity = Gravity.TOP | Gravity.LEFT;
+        wmParams.x = x;
+        wmParams.y = y;
+        wmParams.type = 2002;
+        wmParams.format = 1;
+        wmParams.flags = 40;
+        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        return wmParams;
     }
 
     private LinearLayout getStrategyLinearLayout(){
         LinearLayout layout = new LinearLayout(this);
-        String[] styleList = weightMap.getInstance().getStyleList();
+        Integer[] styleList = weightMap.getInstance().getStyleList();
 
         for (int i = 0; i < styleList.length; i++){
             layout.addView(getImageButton(styleList[i]));
@@ -266,10 +279,19 @@ public class MainActivity extends Activity {
         return layout;
     }
 
-    private ImageButton getImageButton(String styleName){
+    private ImageButton getImageButton(Integer styleName){
         ImageButton button = new ImageButton(this);
         button.getBackground().setAlpha(0);
-        button.setImageBitmap(BitmapFactory.decodeStream(getClassLoader().getResourceAsStream("image/" + styleName + ".png")));
+        button.setId(styleName);
+        button.setImageBitmap(BitmapFactory.decodeStream(getClassLoader().getResourceAsStream("image/" + IdStringMap.get(styleName) + ".png")));
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                ConfigData.StyleName = view.getId();
+                _floatStrategyLayout.setVisibility(View.INVISIBLE);
+                _floatStartButtonView.setVisibility(View.VISIBLE);
+                _floatStrategyButtonView.setVisibility(View.VISIBLE);
+            }
+        });
         return button;
     }
 
