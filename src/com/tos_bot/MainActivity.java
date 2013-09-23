@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
 	private Button _floatStartButtonView = null;
 	private Button _floatStopButtonView = null;
     private Button _floatStrategyButtonView = null;
-    private HorizontalScrollView _floatStrategyHorizontalScrollView = null;
+    private LinearLayout _floatStrategyLayout = null;
 	private WindowManager _wm = null;
     private Boolean _isStartButtonExist = false;
     private Boolean _isStopButtonExist = false;
@@ -89,7 +89,7 @@ public class MainActivity extends Activity {
                     if (_isStrategyButtonExist)
                         _wm.removeView(_floatStrategyButtonView);
                     if (_isStrategyHorizontalScrollViewExist)
-                        _wm.removeView(_floatStrategyHorizontalScrollView);
+                        _wm.removeView(_floatStrategyLayout);
                     _isStartButtonExist = false;
                     _isStopButtonExist = false;
                     _isStrategyButtonExist = false;
@@ -230,8 +230,7 @@ public class MainActivity extends Activity {
     }
 
     private void createFStrategyHorizontalScrollView() {
-        Display display = getWindowManager().getDefaultDisplay();
-        _floatStrategyHorizontalScrollView = new HorizontalScrollView(getApplicationContext());
+        _floatStrategyLayout = new LinearLayout(getApplicationContext());
         _wm = (WindowManager) getApplicationContext()
                 .getSystemService("window");
         WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
@@ -243,15 +242,17 @@ public class MainActivity extends Activity {
         wmParams.flags = 40;
         wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        _floatStrategyHorizontalScrollView.addView(getStrategyLinearLayout());
-        //_floatStrategyButtonView.setText("Strategy");
-        /*_floatStrategyButtonView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                //_wm.removeView(_floatStrategyButtonView);
-            }
-        });*/
-        _wm.addView(_floatStrategyHorizontalScrollView, wmParams); // ?遣View
+
+        HorizontalScrollView scrollView = new HorizontalScrollView(this);
+        scrollView.addView(getStrategyLinearLayout());
+        _floatStrategyLayout.addView(scrollView);
+        _wm.addView(_floatStrategyLayout, wmParams); // ?遣View
         _isStrategyHorizontalScrollViewExist = true;
+        _floatStrategyButtonView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                _wm.removeView(_floatStrategyButtonView);
+            }
+        });
     }
 
     private LinearLayout getStrategyLinearLayout(){
@@ -267,6 +268,7 @@ public class MainActivity extends Activity {
 
     private ImageButton getImageButton(String styleName){
         ImageButton button = new ImageButton(this);
+        button.getBackground().setAlpha(0);
         button.setImageBitmap(BitmapFactory.decodeStream(getClassLoader().getResourceAsStream("image/" + styleName + ".png")));
         return button;
     }
