@@ -97,14 +97,18 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				ConfigData.pasCDid = "";
 				try {
-					if (_isStartButtonExist)
+					if (_isStartButtonExist) {
 						_wm.removeView(_floatStartButtonView);
-					if (_isStopButtonExist)
+					}
+					if (_isStopButtonExist) {
 						_wm.removeView(_floatStopButtonView);
-					if (_isStrategyButtonExist)
+					}
+					if (_isStrategyButtonExist) {
 						_wm.removeView(_floatStrategyButtonView);
-					if (_isStrategyLayoutExist)
+					}
+					if (_isStrategyLayoutExist) {
 						_wm.removeView(_floatStrategyLayout);
+					}
 					_isStartButtonExist = false;
 					_isStopButtonExist = false;
 					_isStrategyButtonExist = false;
@@ -185,14 +189,16 @@ public class MainActivity extends Activity {
 		_floatStopButtonView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				_floatStopButtonView.setVisibility(View.INVISIBLE);
-				if (_floatStartButtonView == null)
+				if (_floatStartButtonView == null) {
 					createFStartButton();
-				else
+				} else {
 					_floatStartButtonView.setVisibility(View.VISIBLE);
-				if (_floatStrategyButtonView == null)
+				}
+				if (_floatStrategyButtonView == null) {
 					createFStrategyButton();
-				else
+				} else {
 					_floatStrategyButtonView.setVisibility(View.VISIBLE);
+				}
 
 				if (ConfigData.solverThread != null) {
 					Thread moribund = ConfigData.solverThread;
@@ -218,10 +224,11 @@ public class MainActivity extends Activity {
 		_floatStrategyButtonView.setText("Strategy");
 		_floatStrategyButtonView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				if (_floatStrategyLayout == null)
+				if (_floatStrategyLayout == null) {
 					createFStrategyHorizontalScrollView();
-				else
+				} else {
 					_floatStrategyLayout.setVisibility(View.VISIBLE);
+				}
 				_floatStrategyButtonView.setVisibility(View.INVISIBLE);
 				_floatStartButtonView.setVisibility(View.INVISIBLE);
 			}
@@ -272,7 +279,8 @@ public class MainActivity extends Activity {
 		button.getBackground().setAlpha(0);
 		button.setId(styleName);
 		FileLoader.setContext(this);
-		InputStream imageInputStream = FileLoader.getFileByAsset("image/" + IdStringMap.get(styleName) + ".png");
+		InputStream imageInputStream = FileLoader.getFileByAsset("image/"
+				+ IdStringMap.get(styleName) + ".png");
 		button.setImageBitmap(BitmapFactory.decodeStream(imageInputStream));
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
