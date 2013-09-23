@@ -26,7 +26,6 @@ public class MainActivity extends Activity {
 	private Button _startServiceButton;
 	private Button _stopServiceButton;
 	private Spinner _deviceS;
-	private Spinner _styleList;
 	private Button _floatStartButtonView = null;
 	private Button _floatStopButtonView = null;
     private Button _floatStrategyButtonView = null;
@@ -62,12 +61,10 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		this.initDeviceList(); // create device list
-		this.initStyleList();
 		ConfigData.TempDir = getCacheDir() + "";
 		_startServiceButton = (Button) findViewById(R.id.start_button);
 		_stopServiceButton = (Button) findViewById(R.id.stop_button);
 		_deviceS = (Spinner) findViewById(R.id.deviceList);
-        _styleList = (Spinner) findViewById(R.id.styleList);
         _startServiceButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				EditText serveret;
@@ -78,7 +75,6 @@ public class MainActivity extends Activity {
 				ConfigData.Serverurl = serveret.getText().toString();
 				ConfigData.deep = Integer.parseInt(deepet.getText().toString());
 				ConfigData.DeviceName = _deviceS.getSelectedItem().toString();
-				//ConfigData.StyleName = _styleList.getSelectedItem().toString();
 				if(edcheck.isChecked()){
 					ConfigData.eightd = 1;
 				}else{
@@ -148,15 +144,6 @@ public class MainActivity extends Activity {
 				touchDeviceFactory.getDeviceList());
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
-	}
-
-	private void initStyleList() {
-		Spinner spinner = (Spinner) findViewById(R.id.styleList);
-		/*ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, weightMap.getInstance()
-						.getStyleListString());
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinner.setAdapter(adapter);*/
 	}
 
 	private void createFStartButton() {
