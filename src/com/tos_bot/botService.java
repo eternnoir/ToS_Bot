@@ -62,15 +62,15 @@ public class botService extends Service {
 			if (board == null) {
 				return;
 			}
-			String url1 = ConfigData.Serverurl;
-			String url2 = "board=" + board + "&deep=" + ConfigData.deep
+			String serverUrl = ConfigData.Serverurl;
+			String parameters = "board=" + board + "&deep=" + ConfigData.deep
 					+ "&weight="
 					+ weightMap.getInstance().getWeight(ConfigData.StyleName)
 					+ "&ed=" + ConfigData.eightd;
-			Log.i("Bot:", "Url: " + url1 + "?" + url2);
+			Log.i("Bot:", "Url: " + serverUrl + "?" + parameters);
 			showMessage("Solving");
 			httpService hs = new httpService();
-			String solstr = hs.httpServiceGet(url1, url2);
+			String solstr = hs.httpServiceGet(serverUrl, parameters);
 			if (solstr.equals("")) {
 				Log.i("Bot:", "NetWorkError");
 				showMessage("Network Error");
@@ -140,71 +140,6 @@ public class botService extends Service {
 			Log.i("Bot:", "Take ScreenShot Done");
 			return true;
 		}
-
-		private void cpFile() {
-			Process p;
-			try {
-				// Preform su to get root privledges
-				p = Runtime.getRuntime().exec("su", null, null);
-				DataOutputStream os = new DataOutputStream(p.getOutputStream());
-				// Attempt to write a file to a root-only
-				String cmd = "cp " + ConfigData.GooglePlayFilePath + " "
-						+ ConfigData.TempDir + "/TOS_tmp.xml\n";
-				os.write(cmd.getBytes());
-				os.flush();
-				cmd = "cp " + ConfigData.MyCardFilePath + " " + ConfigData.TempDir
-						+ "/TOS_tmp.xml\n";
-				os.write(cmd.getBytes());
-				os.flush();
-				cmd = "chmod 777  " + ConfigData.TempDir + "/TOS_tmp.xml\n";
-				os.write(cmd.getBytes());
-				os.flush();
-
-				os.writeBytes("exit\n");
-				os.flush();
-				os.close();
-				p.waitFor();
-			} catch (Exception e) {
-				// TODO Code to run in input/output exception
-				// return false;
-				e.printStackTrace();
-			}
-		}
-
-
-		private String getBoardFormFile() {
-			// cpFile();
-			String ret;
-			xmlParser xmp = new xmlParser();
-			String xmlres = xmp.parserXmlByID(ConfigData.TempDir
-					+ "/TOS_tmp.xml", ConfigData.xmlid);
-			String nowcdid = xmp.parserXmlByID(ConfigData.TempDir
-					+ "/TOS_tmp.xml", ConfigData.cdid);
-			Log.i("Bot:", "pascdid: " + ConfigData.pasCDid);
-			Log.i("Bot:", "nowcdid: " + nowcdid);
-
-			// check the xml file is change?
-			if (nowcdid.equals(ConfigData.pasCDid)) {
-				return getBoardFromPic();
-			} else {
-				ConfigData.pasCDid = nowcdid;
-			}
-
-			if (xmlres.equals("")) {
-				return null;
-			} else if (xmlres.equals("Can't Find File")) {
-				return null;
-			}
-			String[] result = xmlres.split("_");
-			ret = result[3];
-			int k = 5;
-			for (int i = 1; i < 30; i++) {
-				ret += result[k];
-				k = k + 2;
-			}
-			return ret;
-		}
-
 		private String getBoardFromPic() {
 			Log.i("Bot:", "Use Data Frome Pic");
 			getScreenshot();
