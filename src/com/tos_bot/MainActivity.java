@@ -32,10 +32,6 @@ public class MainActivity extends Activity {
 	private Button _floatStrategyButtonView = null;
 	private LinearLayout _floatStrategyLayout = null;
 	private WindowManager _wm = null;
-	private Boolean _isStartButtonExist = false;
-	private Boolean _isStopButtonExist = false;
-	private Boolean _isStrategyButtonExist = false;
-	private Boolean _isStrategyLayoutExist = false;
 	private final LinkedHashMap<Integer, String> IdStringMap = new LinkedHashMap<Integer, String>() {
 		{
 			put(R.id.Vary_color_Single,     "Vary_color_Single");
@@ -103,22 +99,18 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				ConfigData.pasCDid = "";
 				try {
-					if (_isStartButtonExist) {
+					if (_floatStartButtonView != null) {
 						_wm.removeView(_floatStartButtonView);
 					}
-					if (_isStopButtonExist) {
+					if (_floatStopButtonView != null) {
 						_wm.removeView(_floatStopButtonView);
 					}
-					if (_isStrategyButtonExist) {
+					if (_floatStrategyButtonView != null) {
 						_wm.removeView(_floatStrategyButtonView);
 					}
-					if (_isStrategyLayoutExist) {
+					if (_floatStrategyLayout != null) {
 						_wm.removeView(_floatStrategyLayout);
 					}
-					_isStartButtonExist = false;
-					_isStopButtonExist = false;
-					_isStrategyButtonExist = false;
-					_isStrategyLayoutExist = false;
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
@@ -179,7 +171,6 @@ public class MainActivity extends Activity {
 			}
 		});
 		_wm.addView(_floatStartButtonView, wmParams); // ?遣View
-		_isStartButtonExist = true;
 	}
 
 	private void createFStopButton() {
@@ -216,7 +207,6 @@ public class MainActivity extends Activity {
 			}
 		});
 		_wm.addView(_floatStopButtonView, wmParams);
-		_isStopButtonExist = true;
 	}
 
 	private void createFStrategyButton() {
@@ -240,7 +230,6 @@ public class MainActivity extends Activity {
 			}
 		});
 		_wm.addView(_floatStrategyButtonView, wmParams); // ?遣View
-		_isStrategyButtonExist = true;
 	}
 
 	private void createFStrategyHorizontalScrollView() {
@@ -253,7 +242,6 @@ public class MainActivity extends Activity {
 		scrollView.addView(getStrategyLinearLayout());
 		_floatStrategyLayout.addView(scrollView);
 		_wm.addView(_floatStrategyLayout, wmParams);
-		_isStrategyLayoutExist = true;
 	}
 
 	private WindowManager.LayoutParams getFloatingLayoutParams(int x, int y) {
