@@ -1,8 +1,17 @@
-ToS_Bot
-=======
+#ToS_Bot
+
 A tower of saviors supporter
-Support Devices
-=======
+
+#How To Use
+1. Install to your Android Device
+1. Open ToS_Bot
+1. Select Your Device
+1. Press Start
+1. Go to Game
+1. Press Start floating button 
+
+#Support Devices
+
 ##Auto
 * HTC One M7
 * HTC Oone X
@@ -13,8 +22,7 @@ Support Devices
 * Nexus One 4.1.1 with Google API image [Download Link](https://mega.co.nz/#!dlsCkY6C!ehqo5VnbnNWL98dTn6ySfkeHcmgQ0i6u8Ty-hOhOF3c)
 
 
-Requirements
-=======
+#Requirements
 * https://github.com/eternnoir/ATEC
 
 #IRC
