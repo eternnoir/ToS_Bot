@@ -19,7 +19,7 @@
     <item type="id" name="Wood_Except" />
     <item type="id" name="Light_Except" />
     <item type="id" name="Dark_Except" />
-    <item type="id" name="Heart_Except" />
+    <item type="id" name="Recover_Except" />
     <item type="id" name="Low_HP_Single" />
     <item type="id" name="Low_HP_Multi" />
 </resources>
