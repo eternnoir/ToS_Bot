@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
             put(R.id.Wood_Except,           "Wood_Except");
             put(R.id.Light_Except,          "Light_Except");
             put(R.id.Dark_Except,           "Dark_Except");
-            put(R.id.Heart_Except,          "Heart_Except");
+            put(R.id.Recover_Except,        "Recover_Except");
 			put(R.id.Low_HP_Single,         "Low_HP_Single");
 			put(R.id.Low_HP_Multi,          "Low_HP_Multi");
 		}
