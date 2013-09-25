@@ -3,6 +3,7 @@ package com.tos_bot;
 import com.tos_bot.touchservice.touchDeviceFactory;
 
 import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -27,8 +28,8 @@ public class MainActivity extends Activity {
 	private Button _startServiceButton;
 	private Button _stopServiceButton;
 	private Spinner _deviceS;
-	private Button _floatStartButtonView = null;
-	private Button _floatStopButtonView = null;
+	private ImageButton _floatStartButtonView = null;
+	private ImageButton _floatStopButtonView = null;
 	private Button _floatStrategyButtonView = null;
 	private LinearLayout _floatStrategyLayout = null;
 	private WindowManager _wm = null;
@@ -151,13 +152,13 @@ public class MainActivity extends Activity {
 
 	private void createFStartButton() {
 		Display display = getWindowManager().getDefaultDisplay();
-		_floatStartButtonView = new Button(getApplicationContext());
+		_floatStartButtonView = new ImageButton(getApplicationContext());
 		_wm = (WindowManager) getApplicationContext()
 				.getSystemService("window");
 		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(
 				0 + display.getWidth() / 8, display.getHeight() / 8);
-
-		_floatStartButtonView.setText("Start");
+        _floatStartButtonView.getBackground().setAlpha(0);
+        _floatStartButtonView.setImageBitmap(getBitmapByFilename("start"));
 		_floatStartButtonView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				_floatStartButtonView.setVisibility(View.INVISIBLE);
@@ -175,14 +176,14 @@ public class MainActivity extends Activity {
 
 	private void createFStopButton() {
 		Display display = getWindowManager().getDefaultDisplay();
-		_floatStopButtonView = new Button(getApplicationContext());
+		_floatStopButtonView = new ImageButton(getApplicationContext());
 		_wm = (WindowManager) getApplicationContext()
 				.getSystemService("window");
 		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(
 				display.getWidth() / 2 + display.getWidth() / 8,
 				display.getHeight() / 8);
-
-		_floatStopButtonView.setText("Stop");
+        _floatStopButtonView.getBackground().setAlpha(0);
+        _floatStopButtonView.setImageBitmap(getBitmapByFilename("stop"));
 		_floatStopButtonView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				_floatStopButtonView.setVisibility(View.INVISIBLE);
@@ -272,10 +273,7 @@ public class MainActivity extends Activity {
 		ImageButton button = new ImageButton(this);
 		button.getBackground().setAlpha(0);
 		button.setId(styleName);
-		FileLoader.setContext(this);
-		InputStream imageInputStream = FileLoader.getFileByAsset("image/"
-				+ IdStringMap.get(styleName) + ".png");
-		button.setImageBitmap(BitmapFactory.decodeStream(imageInputStream));
+		button.setImageBitmap(getBitmapByFilename(IdStringMap.get(styleName)));
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				ConfigData.StyleName = view.getId();
@@ -286,5 +284,12 @@ public class MainActivity extends Activity {
 		});
 		return button;
 	}
+
+    private Bitmap getBitmapByFilename(String filename){
+        FileLoader.setContext(this);
+        InputStream imageInputStream = FileLoader.getFileByAsset("image/"
+                + filename + ".png");
+        return BitmapFactory.decodeStream(imageInputStream);
+    }
 
 }
