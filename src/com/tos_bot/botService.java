@@ -110,7 +110,7 @@ public class botService extends Service {
 			}
 			Log.i("Bot:", "Wait 12 Secs");
 			showMessage("Waiting");
-			SystemClock.sleep(12000);
+			SystemClock.sleep(ConfigData.waitForStageChageTimeSec*1000);
 		}
 
 		private boolean getScreenshot() {

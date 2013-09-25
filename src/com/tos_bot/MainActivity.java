@@ -35,28 +35,28 @@ public class MainActivity extends Activity {
 	private WindowManager _wm = null;
 	private final LinkedHashMap<Integer, String> IdStringMap = new LinkedHashMap<Integer, String>() {
 		{
-			put(R.id.Vary_color_Single,     "Vary_color_Single");
-			put(R.id.Vary_color_Multi,      "Vary_color_Multi");
-			put(R.id.Water_Single,          "Water_Single");
-			put(R.id.Water_Multi,           "Water_Multi");
-			put(R.id.Fire_Single,           "Fire_Single");
-			put(R.id.Fire_Multi,            "Fire_Multi");
-			put(R.id.Wood_Single,           "Wood_Single");
-			put(R.id.Wood_Multi,            "Wood_Multi");
-			put(R.id.Light_Single,          "Light_Single");
-			put(R.id.Light_Multi,           "Light_Multi");
-			put(R.id.Dark_Single,           "Dark_Single");
-			put(R.id.Dark_Multi,            "Dark_Multi");
-			put(R.id.Recover_Single,        "Recover_Single");
-			put(R.id.Recover_Multi,         "Recover_Multi");
-            put(R.id.Water_Except,          "Water_Except");
-            put(R.id.Fire_Except,           "Fire_Except");
-            put(R.id.Wood_Except,           "Wood_Except");
-            put(R.id.Light_Except,          "Light_Except");
-            put(R.id.Dark_Except,           "Dark_Except");
-            put(R.id.Recover_Except,        "Recover_Except");
-			put(R.id.Low_HP_Single,         "Low_HP_Single");
-			put(R.id.Low_HP_Multi,          "Low_HP_Multi");
+			put(R.id.Vary_color_Single, "Vary_color_Single");
+			put(R.id.Vary_color_Multi, "Vary_color_Multi");
+			put(R.id.Water_Single, "Water_Single");
+			put(R.id.Water_Multi, "Water_Multi");
+			put(R.id.Fire_Single, "Fire_Single");
+			put(R.id.Fire_Multi, "Fire_Multi");
+			put(R.id.Wood_Single, "Wood_Single");
+			put(R.id.Wood_Multi, "Wood_Multi");
+			put(R.id.Light_Single, "Light_Single");
+			put(R.id.Light_Multi, "Light_Multi");
+			put(R.id.Dark_Single, "Dark_Single");
+			put(R.id.Dark_Multi, "Dark_Multi");
+			put(R.id.Recover_Single, "Recover_Single");
+			put(R.id.Recover_Multi, "Recover_Multi");
+			put(R.id.Water_Except, "Water_Except");
+			put(R.id.Fire_Except, "Fire_Except");
+			put(R.id.Wood_Except, "Wood_Except");
+			put(R.id.Light_Except, "Light_Except");
+			put(R.id.Dark_Except, "Dark_Except");
+			put(R.id.Recover_Except, "Recover_Except");
+			put(R.id.Low_HP_Single, "Low_HP_Single");
+			put(R.id.Low_HP_Multi, "Low_HP_Multi");
 		}
 	};
 
@@ -157,8 +157,8 @@ public class MainActivity extends Activity {
 				.getSystemService("window");
 		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(
 				0 + display.getWidth() / 8, display.getHeight() / 8);
-        _floatStartButtonView.getBackground().setAlpha(0);
-        _floatStartButtonView.setImageBitmap(getBitmapByFilename("start"));
+		_floatStartButtonView.getBackground().setAlpha(0);
+		_floatStartButtonView.setImageBitmap(getBitmapByFilename("start"));
 		_floatStartButtonView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				_floatStartButtonView.setVisibility(View.INVISIBLE);
@@ -182,8 +182,8 @@ public class MainActivity extends Activity {
 		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(
 				display.getWidth() / 2 + display.getWidth() / 8,
 				display.getHeight() / 8);
-        _floatStopButtonView.getBackground().setAlpha(0);
-        _floatStopButtonView.setImageBitmap(getBitmapByFilename("stop"));
+		_floatStopButtonView.getBackground().setAlpha(0);
+		_floatStopButtonView.setImageBitmap(getBitmapByFilename("stop"));
 		_floatStopButtonView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				_floatStopButtonView.setVisibility(View.INVISIBLE);
@@ -218,8 +218,9 @@ public class MainActivity extends Activity {
 		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(
 				0 + display.getWidth() / 8, display.getHeight() * 2 / 8);
 
-        _floatStrategyButtonView.getBackground().setAlpha(0);
-        _floatStrategyButtonView.setImageBitmap(getBitmapByFilename(IdStringMap.get(ConfigData.StyleName) + "_Button"));
+		_floatStrategyButtonView.getBackground().setAlpha(0);
+		_floatStrategyButtonView.setImageBitmap(getBitmapByFilename(IdStringMap
+				.get(ConfigData.StyleName) + "_Button"));
 		_floatStrategyButtonView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				if (_floatStrategyLayout == null) {
@@ -278,7 +279,9 @@ public class MainActivity extends Activity {
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				ConfigData.StyleName = view.getId();
-                _floatStrategyButtonView.setImageBitmap(getBitmapByFilename(IdStringMap.get(ConfigData.StyleName) + "_Button"));
+				_floatStrategyButtonView
+						.setImageBitmap(getBitmapByFilename(IdStringMap
+								.get(ConfigData.StyleName) + "_Button"));
 				_floatStrategyLayout.setVisibility(View.INVISIBLE);
 				_floatStartButtonView.setVisibility(View.VISIBLE);
 				_floatStrategyButtonView.setVisibility(View.VISIBLE);
@@ -287,11 +290,11 @@ public class MainActivity extends Activity {
 		return button;
 	}
 
-    private Bitmap getBitmapByFilename(String filename){
-        FileLoader.setContext(this);
-        InputStream imageInputStream = FileLoader.getFileByAsset("image/"
-                + filename + ".png");
-        return BitmapFactory.decodeStream(imageInputStream);
-    }
+	private Bitmap getBitmapByFilename(String filename) {
+		FileLoader.setContext(this);
+		InputStream imageInputStream = FileLoader.getFileByAsset("image/"
+				+ filename + ".png");
+		return BitmapFactory.decodeStream(imageInputStream);
+	}
 
 }
