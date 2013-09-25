@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
 	private Spinner _deviceS;
 	private ImageButton _floatStartButtonView = null;
 	private ImageButton _floatStopButtonView = null;
-	private Button _floatStrategyButtonView = null;
+	private ImageButton _floatStrategyButtonView = null;
 	private LinearLayout _floatStrategyLayout = null;
 	private WindowManager _wm = null;
 	private final LinkedHashMap<Integer, String> IdStringMap = new LinkedHashMap<Integer, String>() {
@@ -212,13 +212,14 @@ public class MainActivity extends Activity {
 
 	private void createFStrategyButton() {
 		Display display = getWindowManager().getDefaultDisplay();
-		_floatStrategyButtonView = new Button(getApplicationContext());
+		_floatStrategyButtonView = new ImageButton(getApplicationContext());
 		_wm = (WindowManager) getApplicationContext()
 				.getSystemService("window");
 		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(
 				0 + display.getWidth() / 8, display.getHeight() * 2 / 8);
 
-		_floatStrategyButtonView.setText("Strategy");
+        _floatStrategyButtonView.getBackground().setAlpha(0);
+        _floatStrategyButtonView.setImageBitmap(getBitmapByFilename(IdStringMap.get(ConfigData.StyleName) + "_Button"));
 		_floatStrategyButtonView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				if (_floatStrategyLayout == null) {
@@ -277,6 +278,7 @@ public class MainActivity extends Activity {
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				ConfigData.StyleName = view.getId();
+                _floatStrategyButtonView.setImageBitmap(getBitmapByFilename(IdStringMap.get(ConfigData.StyleName) + "_Button"));
 				_floatStrategyLayout.setVisibility(View.INVISIBLE);
 				_floatStartButtonView.setVisibility(View.VISIBLE);
 				_floatStrategyButtonView.setVisibility(View.VISIBLE);
