@@ -128,7 +128,6 @@ public class MainActivity extends Activity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		ConfigData.pasCDid = "";
 		Intent intent = new Intent(MainActivity.this, botService.class);
 		stopService(intent);
 	}
