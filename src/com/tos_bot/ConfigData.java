@@ -7,7 +7,6 @@ public class ConfigData {
 	public static int eightd = 0;
 	public static int deep;
 	public static int waitForStageChageTimeSec = 12;
-	public static String pasCDid = "";
 	public static String DeviceName = "";
 	public static Integer StyleName = R.id.Vary_color_Single;
 	public static String TempDir = "";

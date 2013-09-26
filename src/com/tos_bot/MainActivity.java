@@ -98,7 +98,6 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				ConfigData.pasCDid = "";
 				try {
 					if (_floatStartButtonView != null) {
 						_wm.removeView(_floatStartButtonView);
