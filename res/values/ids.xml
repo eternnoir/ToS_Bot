@@ -14,6 +14,12 @@
     <item type="id" name="Dark_Multi" />
     <item type="id" name="Recover_Single" />
     <item type="id" name="Recover_Multi" />
+    <item type="id" name="Water_Except" />
+    <item type="id" name="Fire_Except" />
+    <item type="id" name="Wood_Except" />
+    <item type="id" name="Light_Except" />
+    <item type="id" name="Dark_Except" />
+    <item type="id" name="Recover_Except" />
     <item type="id" name="Low_HP_Single" />
     <item type="id" name="Low_HP_Multi" />
 </resources>
