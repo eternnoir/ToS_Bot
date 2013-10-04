@@ -2,6 +2,8 @@
 
 A tower of saviors supporter
 
+![http://i.imgur.com/azNlWUJ.png](http://i.imgur.com/azNlWUJ.png)
+
 #How To Use
 1. Install to your Android Device
 1. Open ToS_Bot
