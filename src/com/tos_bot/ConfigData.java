@@ -11,6 +11,4 @@ public class ConfigData {
 	public static String TempDir = "";
 	public static Thread solverThread = null;
 	public static int maxBombo = 0;//0 is no limit
-	public static final String xmlid = "MH_CACHE_GAMEPLAY_DATA_ALL";
-	public static final String cdid = "MH_CACHE_GAMEPLAY_DATA_DECREASE_CD";
 }
