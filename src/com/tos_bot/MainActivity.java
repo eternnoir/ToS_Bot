@@ -230,7 +230,7 @@ public class MainActivity extends Activity {
 				_floatStartButtonView.setVisibility(View.INVISIBLE);
 			}
 		});
-		_wm.addView(_floatStrategyButtonView, wmParams); // ?遣View
+		_wm.addView(_floatStrategyButtonView, wmParams);
 	}
 
 	private void createFStrategyHorizontalScrollView() {
