@@ -15,10 +15,9 @@ public class FileLoader {
 		ctx = c;
 	}
 	
-	static public InputStream getFileByAsset(String path){
+	static public InputStream getFileStreamByAsset(String path){
 		assert(ctx!=null);
 		AssetManager am = ctx.getAssets();
-		String result = null;
 		try {
 			return am.open(path);
 		} catch (IOException e) {

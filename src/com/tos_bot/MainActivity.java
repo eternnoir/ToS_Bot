@@ -290,7 +290,7 @@ public class MainActivity extends Activity {
 
 	private Bitmap getBitmapByFilename(String filename) {
 		FileLoader.setContext(this);
-		InputStream imageInputStream = FileLoader.getFileByAsset("image/"
+		InputStream imageInputStream = FileLoader.getFileStreamByAsset("image/"
 				+ filename + ".png");
 		return BitmapFactory.decodeStream(imageInputStream);
 	}
