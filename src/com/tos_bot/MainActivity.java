@@ -73,12 +73,15 @@ public class MainActivity extends Activity {
 			public void onClick(View view) {
 				EditText serveret;
 				EditText deepet;
+				EditText maxcombo;
 				serveret = (EditText) findViewById(R.id.serverUrlText);
 				deepet = (EditText) findViewById(R.id.maxMoveText);
 				CheckBox edcheck = (CheckBox) findViewById(R.id.eightDircheck);
+				maxcombo = (EditText) findViewById(R.id.MaxComboText);
 				ConfigData.Serverurl = serveret.getText().toString();
 				ConfigData.deep = Integer.parseInt(deepet.getText().toString());
 				ConfigData.DeviceName = _deviceS.getSelectedItem().toString();
+				ConfigData.maxBombo = maxcombo.getText().toString();
 				if (edcheck.isChecked()) {
 					ConfigData.eightd = 1;
 				} else {

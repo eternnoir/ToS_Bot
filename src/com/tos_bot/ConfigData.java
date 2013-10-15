@@ -10,5 +10,5 @@ public class ConfigData {
 	public static Integer StyleName = R.id.Vary_color_Single;
 	public static String TempDir = "";
 	public static Thread solverThread = null;
-	public static int maxBombo = 0;		//0 is no limit
+	public static String maxBombo = "0";		//0 is no limit
 }
