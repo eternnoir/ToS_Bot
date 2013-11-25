@@ -1,10 +1,7 @@
 package com.tos_bot;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.tos_bot.puzzleslove.solution;

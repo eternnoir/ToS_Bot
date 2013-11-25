@@ -1,11 +1,8 @@
 package com.tos_bot;
 
 import java.io.IOException;
-import java.util.List;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -13,7 +10,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 public class httpService {
-	private String result;
 	public String httpServiceGet(String url,String value){
 		String _ret = new String();
 		HttpClient client = new DefaultHttpClient();
@@ -36,9 +32,5 @@ public class httpService {
 			return"";
 		};
 		return _ret;
-	}
-	
-	public String getResult(){
-		return result;
 	}
 }

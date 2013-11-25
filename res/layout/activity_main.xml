@@ -24,10 +24,6 @@
                 android:layout_width="165dp"
                 android:layout_height="wrap_content" />
 
-            <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/styleList"/>
         </LinearLayout>
 
         <LinearLayout
@@ -48,7 +44,7 @@
     android:layout_weight="1"
     android:ems="10"
     android:inputType="textEmailAddress"
-    android:text="http://tbserver.herokuapp.com/" />
+    android:text="http://tbserver.ap01.aws.af.cm/" />
 
         </LinearLayout>
 
@@ -70,12 +66,57 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="number"
-                android:text="8" >
+                android:text="70" >
 
                 <requestFocus />
             </EditText>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MaxCombo"
+                android:textSize="20sp" />
+            <EditText
+                android:id="@+id/MaxComboText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="number"
+                android:text="0" />
+        </LinearLayout>
+
+         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SleepTime"
+                android:textSize="20sp" />
+            <EditText
+                android:id="@+id/SleepTimeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="number"
+                android:text="10" />
+        </LinearLayout>
+        
+        <CheckBox
+            android:id="@+id/eightDircheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="8 Dir (Beta)"
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
