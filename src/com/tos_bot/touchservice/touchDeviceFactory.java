@@ -5,6 +5,7 @@ import com.tos_bot.touchservice.devices.AtecDevice;
 import com.tos_bot.touchservice.devices.Gen_nexus_one;
 import com.tos_bot.touchservice.devices.htc_new_one_m7;
 import com.tos_bot.touchservice.devices.htc_one_x;
+import com.tos_bot.touchservice.devices.sony_xperia_Z;
 
 import android.graphics.Bitmap;
 import net.atec.analyzer.Analizer;
@@ -13,7 +14,7 @@ import net.atec.sender.DeviceEvent;
 public class touchDeviceFactory {
 	public static String[] getDeviceList() {
 		return new String[] { "Auto", "htc_new_one_m7", "htc_one_x",
-				"Gen_nexus_one" };
+				"Gen_nexus_one", "Sony_Xperia_Z" };
 	}
 
 	public static AbstractTouchService getNewTouchService(String deviceName) {
@@ -24,6 +25,11 @@ public class touchDeviceFactory {
 		} else if (deviceName.equals("htc_one_x")) {
 			ret = new htc_one_x();
 			ret.setUp(180, 90, 890);
+		} else if (deviceName.equals("Sony_Xperia_Z")) {
+			// magicat
+			ret = new sony_xperia_Z();
+			ret.setUp(270, 135, 783);
+
 		} else if (deviceName.equals("Gen_nexus_one")) {
 			ret = new Gen_nexus_one();
 			ret.setUp(80, 40, 400);

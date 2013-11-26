@@ -16,6 +16,7 @@ import android.util.Log;
 
 public class imageProcesser {
 	static String _Path = "";
+
 	private imageProcesser() {
 
 	}
@@ -27,11 +28,13 @@ public class imageProcesser {
 		Bitmap sourceBitmap;
 		sourceBitmap = BitmapFactory.decodeFile(FilePath);
 		String deivceModel = Build.MODEL;
-        if (deivceModel.contains("C6602")||deivceModel.contains("LT29")||deivceModel.contains("C6802")) {
-            sourceBitmap = Bitmap.createBitmap(sourceBitmap, 0, 0,
-                           sourceBitmap.getWidth(), (int)(sourceBitmap.getWidth() / 0.6));
-            Log.i("Bot:", "Sony Device");
-        }
+		if (deivceModel.contains("C6602") || deivceModel.contains("C6603") || // deivceModel.contains("LT26")||
+				deivceModel.contains("LT29") || deivceModel.contains("C6802")) {
+			sourceBitmap = Bitmap.createBitmap(sourceBitmap, 0, 0,
+					sourceBitmap.getWidth(),
+					(int) (sourceBitmap.getWidth() / 0.6));
+			Log.i("Bot:", "Sony Device");
+		}
 		int screenhigh = sourceBitmap.getHeight();
 		int oneball = sourceBitmap.getWidth() / 6;
 		ballsize = oneball;
@@ -39,11 +42,12 @@ public class imageProcesser {
 		float wh = (float) sourceBitmap.getWidth()
 				/ (float) sourceBitmap.getHeight();
 		Bitmap cropped = null;
-		if (wh == 0.5625f || wh == 0.6f) {		//1080*1920 && 480*800
-			cropped = Bitmap.createBitmap(sourceBitmap, 0, (int)(screenhigh * 0.45),
-					  sourceBitmap.getWidth(), ballAreaHigh);
+		if (wh == 0.5625f || wh == 0.6f) { // 1080*1920 && 480*800
+			cropped = Bitmap.createBitmap(sourceBitmap, 0,
+					(int) (screenhigh * 0.45), sourceBitmap.getWidth(),
+					ballAreaHigh);
 		}
-		//savePng("tmp_ballA", cropped);
+		// savePng("tmp_ballA", cropped);
 		return cropped;
 
 	}
@@ -56,7 +60,7 @@ public class imageProcesser {
 				Bitmap cropped = Bitmap.createBitmap(sourceBitmap, w * ballsize
 						+ ballsize - ballsize / 4, h * ballsize + ballsize / 2,
 						ballsize / 16, ballsize / 16);
-				//savePng("tmp" + h + w, cropped);
+				// savePng("tmp" + h + w, cropped);
 				ret[h][w] = checkBallColor(cropped) + 1;
 			}
 		int error = 0;
@@ -100,7 +104,7 @@ public class imageProcesser {
 
 	public static void savePng(String Filename, Bitmap bm) {
 		try {
-			File file = new File(_Path + Filename+".png");
+			File file = new File(_Path + Filename + ".png");
 			file.createNewFile();
 			BufferedOutputStream out = new BufferedOutputStream(
 					new FileOutputStream(file));
