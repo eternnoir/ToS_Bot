@@ -28,7 +28,7 @@ public class touchDeviceFactory {
 		} else if (deviceName.equals("Sony_Xperia_Z")) {
 			// magicat
 			ret = new sony_xperia_Z();
-			ret.setUp(270, 135, 783);
+			ret.setUp(180, 90, 858);
 
 		} else if (deviceName.equals("Gen_nexus_one")) {
 			ret = new Gen_nexus_one();
