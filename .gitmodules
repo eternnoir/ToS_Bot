@@ -1,0 +1,3 @@
+[submodule "ATEC"]
+	path = ATEC
+	url = git@github.com:eternnoir/ATEC.git
