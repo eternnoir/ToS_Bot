@@ -28,6 +28,7 @@ public class imageProcesser {
 		Bitmap sourceBitmap;
 		sourceBitmap = BitmapFactory.decodeFile(FilePath);
 		String deivceModel = Build.MODEL;
+		// poor solution 
 		if (deivceModel.contains("C6602") || deivceModel.contains("C6603") || // deivceModel.contains("LT26")||
 				deivceModel.contains("LT29") || deivceModel.contains("C6802")) {
 			sourceBitmap = Bitmap.createBitmap(sourceBitmap, 0, 0,

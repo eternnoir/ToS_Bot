@@ -1,6 +1,5 @@
 package com.tos_bot;
 
-import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Vector;
@@ -10,11 +9,8 @@ import com.tos_bot.touchservice.touchDeviceFactory;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
@@ -66,17 +62,19 @@ public class botService extends Service {
 			String parameters = "board=" + board + "&deep=" + ConfigData.deep
 					+ "&weight="
 					+ weightMap.getInstance().getWeight(ConfigData.StyleName)
-					+ "&ed=" + ConfigData.eightd
-					+ "&combo=" + ConfigData.maxBombo;
+					+ "&ed=" + ConfigData.eightd + "&combo="
+					+ ConfigData.maxBombo;
 			Log.i("Bot:", "Url: " + serverUrl + "?" + parameters);
 			showMessage("Solving");
 			httpService hs = new httpService();
-			String solstr = hs.httpServiceGet(serverUrl, parameters);
-			if (solstr.equals("")) {
-				Log.i("Bot:", "NetWorkError");
+			String solstr="";
+			try {
+				solstr = hs.httpServiceGet(serverUrl, parameters);
+			} catch (Exception e) {
+				e.printStackTrace();
+				Log.i("Bot:", "NetworkError");
 				showMessage("Network Error");
-				Toast.makeText(getApplicationContext(), "Network Error",
-						Toast.LENGTH_SHORT).show();
+				SystemClock.sleep(3 * 1000);
 				return;
 			}
 			Log.i("Bot:", "ServerRet: " + solstr);
@@ -111,7 +109,7 @@ public class botService extends Service {
 			}
 			Log.i("Bot:", "Wait 12 Secs");
 			showMessage("Waiting");
-			SystemClock.sleep(ConfigData.waitForStageChageTimeSec*1000);
+			SystemClock.sleep(ConfigData.waitForStageChageTimeSec * 1000);
 		}
 
 		private boolean getScreenshot() {
@@ -141,6 +139,7 @@ public class botService extends Service {
 			Log.i("Bot:", "Take ScreenShot Done");
 			return true;
 		}
+
 		private String getBoardFromPic() {
 			Log.i("Bot:", "Use Data Frome Pic");
 			getScreenshot();
@@ -166,9 +165,10 @@ public class botService extends Service {
 
 		private void showMessage(final String msg) {
 			final Runnable mShowMessage = new Runnable() {
-			    public void run() {
-			        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-			    }
+				public void run() {
+					Toast.makeText(getApplicationContext(), msg,
+							Toast.LENGTH_SHORT).show();
+				}
 			};
 			mHandler.post(mShowMessage);
 		}
