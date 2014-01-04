@@ -18,6 +18,12 @@
         <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
+		<TextView
+			    android:id="@+id/serverUrlText"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textSize="20sp"
+			    android:text="Device:" />
 
             <Spinner
                 android:id="@+id/deviceList"
@@ -31,20 +37,15 @@
             android:layout_height="wrap_content" >
 
             <TextView
-                android:id="@+id/urlView"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="ServerUrl:"
-                android:textSize="20sp" />
-
-<EditText
-    android:id="@+id/serverUrlText"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:ems="10"
-    android:inputType="textEmailAddress"
-    android:text="http://tbserver.ap01.aws.af.cm/" />
+			    android:id="@+id/serverUrlText"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textSize="20sp"
+			    android:text="Use Server:" />
+            <Spinner
+                android:id="@+id/serverList"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -66,35 +67,10 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="number"
-                android:text="70" >
-
+                android:text="60" >
                 <requestFocus />
             </EditText>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="MaxCombo"
-                android:textSize="20sp" />
-            <EditText
-                android:id="@+id/MaxComboText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="number"
-                android:text="0" />
-        </LinearLayout>
-
-         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
@@ -111,12 +87,12 @@
                 android:text="10" />
         </LinearLayout>
         
-        <CheckBox
+<!--         <CheckBox
             android:id="@+id/eightDircheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="8 Dir (Beta)"
-            android:textSize="20sp" />
+            android:textSize="16sp" /> -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -124,16 +100,20 @@
 
             <Button
                 android:id="@+id/start_button"
-                android:layout_width="140dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start" />
+                android:textSize="40sp" 
+                android:text="@string/start_button" />
 
             <Button
                 android:id="@+id/stop_button"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Stop" />
+                android:textSize="40sp" 
+                android:text="@string/stop_button" />
+            
         </LinearLayout>
+
 
     </LinearLayout>
 

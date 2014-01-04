@@ -13,11 +13,12 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Toast;
 
 public class botService extends Service {
-	private Handler handler = new Handler();
-	final Handler mHandler = new Handler();
+	private Handler BOTHandler = new Handler();//BOT執行緒
+	final static Handler MessageHandler = new Handler();//訊息執行緒
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -27,27 +28,34 @@ public class botService extends Service {
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		//magicat  handler.postDelayed(BotGo, 1000);
-		handler.postDelayed(BotGo, 100);
+		//magicat  BOTHandler.postDelayed(BotGo, 1000);
+		BOTHandler.postDelayed(BotGo, 100);
 		super.onStart(intent, startId);
 	}
-
-	@Override
-	public void onDestroy() {
-		handler.removeCallbacks(BotGo);
-		super.onDestroy();
-	}
+	
 
 	public void showMessage(final String msg) {
 		Runnable mShowMessage = new Runnable() {
+			@Override
 			public void run() {
-				Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+				Toast debugMessage= Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
+				debugMessage.setGravity(Gravity.TOP, 0, 20);
+				debugMessage.show();
 			}
 		};
-		mHandler.post(mShowMessage);
+		MessageHandler.post(mShowMessage);
+	}
+	
+	
+	@Override
+	public void onDestroy() {
+		BOTHandler.removeCallbacks(BotGo);
+		this.MessageHandler.removeCallbacksAndMessages(MessageHandler);
+		super.onDestroy();
 	}
 
 	private Runnable BotGo = new Runnable() {
+		@Override
 		public void run() {
 			// check thread is alive?
 			if (ConfigData.solverThread == null) {
@@ -56,8 +64,8 @@ public class botService extends Service {
 			} else if (!ConfigData.solverThread.isAlive()) {
 				ConfigData.solverThread = null;
 			}
-			//magicat  handler.postDelayed(this, 2000);
-			handler.postDelayed(this, 200);
+			//magicat  BOTHandler.postDelayed(this, 2000);
+			BOTHandler.postDelayed(this, 200);
 		}
 	};
 
@@ -65,33 +73,36 @@ public class botService extends Service {
 		@Override
 		public void run() {
 			Log.i("Bot:", "Take Board");
+			
 			String board = getBoardFromPic();
 			if (board == null) {
 				return;
 			}
-			String serverUrl = ConfigData.Serverurl;
+			String serverUrl = "http://" + ConfigData.Serverurl + "/";
 			String parameters = "board=" + board + "&deep=" + ConfigData.deep
 					+ "&weight="
-					+ weightMap.getInstance().getWeight(ConfigData.StyleName)
+					+ WeightMapBall.getInstance().getWeight(ConfigData.StyleName)
 					+ "&ed=" + ConfigData.eightd
-					+ "&combo=" + ComboWeightMap.getInstance().getWeight(ConfigData.MaxComboName);
+					+ "&combo=" + WeightMapCombo.getInstance().getWeight(ConfigData.MaxComboName);
 			Log.i("Bot:", "Url: " + serverUrl + "?" + parameters);
-
 			//magicat
 			showMessage("Solving \nUrl: " + serverUrl + "?" + parameters);
 
 			httpService hs = new httpService();
-			String solstr = hs.httpServiceGet(serverUrl, parameters);
-			if (solstr.equals("")) {
-				Log.i("Bot:", "NetWorkError");
+			String solstr="";
+			try {
+				solstr = hs.httpServiceGet(serverUrl, parameters);
+			} catch (Exception e) {
+				e.printStackTrace();
+			    Log.i("Bot:", "NetworkError");
 				showMessage("Network Error");
-				Toast.makeText(getApplicationContext(), "Network Error",
-						Toast.LENGTH_SHORT).show();
+				SystemClock.sleep(3 * 1000);
 				return;
 			}
 			Log.i("Bot:", "ServerRet: " + solstr);
-
 			showMessage("ServerRet: " + solstr);//magicat
+			
+			FileLoader.LoadAndSave("auto",true);  //False:load  True:save  //轉珠之前  存檔先 BJ4			
 
 			String[] recvStr = solstr.split(";");
 			if (recvStr.length != 3) {
@@ -106,6 +117,7 @@ public class botService extends Service {
 			String path = recvStr[2];
 			Log.i("Bot:", "Path: " + path);
 			Log.i("Bot:", "Combo: " + recvStr[1]);
+			ConfigData.waitForStageChageTimeSec = Integer.valueOf(recvStr[1]) + 1;//magicat floating waiting time
 			String[] pathsetp = path.split(",");
 			if (!this.isInterrupted()) {
 				AbstractTouchService ts = touchDeviceFactory
@@ -129,15 +141,15 @@ public class botService extends Service {
 		}
 
 		private boolean getScreenshot() {
-			Log.i("Bot:", "Take ScreenShot");
+			Log.i("Bot:", "Take ScreenShot start");
+			showMessage("Taking Screenshot START!!\n" + ConfigData.TempDir + "/img.png");
 			Process sh;
 			try {
-
 				sh = Runtime.getRuntime().exec("su", null, null);
 				OutputStream os = sh.getOutputStream();
 				InputStream is = sh.getInputStream();
-				os.write(("/system/bin/screencap -p " + ConfigData.TempDir + "/img.png\n")
-						.getBytes("ASCII"));
+				Log.i("Bot:", "ConfigData.TempDir : " + ConfigData.TempDir);
+				os.write(("/system/bin/screencap -p " + ConfigData.TempDir + "/img.png\n").getBytes("ASCII"));
 				os.flush();
 				
 				String cmd = "echo -n 0\n";
@@ -145,13 +157,11 @@ public class botService extends Service {
 				os.flush();
 				is.read();
 
-				os.write(("chmod 777 " + ConfigData.TempDir + "/img.png\n")
-						.getBytes("ASCII"));
+				os.write(("chmod 777 " + ConfigData.TempDir + "/img.png\n").getBytes("ASCII"));
 				os.flush();
 				os.close();
 				
 
-				showMessage("Taking Screenshot \n" + ConfigData.TempDir + "/img.png");
 				//magicat timer for screen cap
 				//startTime = System.currentTimeMillis();
 				
@@ -175,7 +185,7 @@ public class botService extends Service {
 				orbArray = imageProcesser.getBallArray(imageProcesser
 						.cutBallReg(ConfigData.TempDir + "/img.png"));
 			} catch (NotInTosException e) {
-				Log.i("Bot:", "Can find bord Pic");
+				Log.i("Bot:", "Can't find bord Pic");
 				return null;
 			} catch (Exception e) {
 				Log.i("Bot:", "Can find bord from Pic error");
@@ -190,8 +200,6 @@ public class botService extends Service {
 			return board;
 		}
 
-
 	}
-
 
 }

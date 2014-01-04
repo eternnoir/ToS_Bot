@@ -1,9 +1,18 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/loadfile_auto01"
+          android:title="讀取自動存檔 一步前" />
+    <item android:id="@+id/loadfile_auto02"
+          android:title="讀取自動存檔 兩步前" />
+    <item android:id="@+id/loadfile_auto03"
+          android:title="讀取自動存檔 三步前" />
+    <item android:id="@+id/loadfile_start"
+          android:title="讀取自動存檔 Start時" />    
+    <item android:id="@+id/loadfile_user01"
+          android:title="讀取使用者存檔01" />
+    <item android:id="@+id/loadfile_user02"
+          android:title="讀取使用者存檔02" />
+    <item android:id="@+id/loadfile_user03"
+          android:title="讀取使用者存檔03" />       
+    <item android:id="@+id/loadfile_clear"
+          android:title="=清除全部存檔=" />             
 </menu>

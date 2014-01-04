@@ -3,6 +3,7 @@ package com.tos_bot.touchservice.devices;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Vector;
 
 import android.os.SystemClock;
@@ -53,10 +54,8 @@ public class AtecDevice extends AbstractTouchService {
 	public Vector<String> touchMove(int x1, int y1, final int x2, final int y2,
 			int gap) {
 		Vector<String> cl = new Vector<String>();
-		int x = x1;
-		int y = y1;
 		_id.SendTouchAbsCoord(x2, y2);
-		SystemClock.sleep(gap);
+		SystemClock.sleep(gap); //轉珠速度 ;
 		return cl;
 
 	}
@@ -65,8 +64,7 @@ public class AtecDevice extends AbstractTouchService {
 	public Vector<String> touchMoveX(int x1, int x2, int gap) {
 		Vector<String> cl = new Vector<String>();
 		_id.SendTouchAbsXCoord(x2);
-		SystemClock.sleep(gap);
-
+		SystemClock.sleep(gap);  //轉珠速度;
 		return cl;
 	}
 
@@ -74,7 +72,7 @@ public class AtecDevice extends AbstractTouchService {
 	public Vector<String> touchMoveY(int y1, int y2, int gap) {
 		Vector<String> cl = new Vector<String>();
 		_id.SendTouchAbsYCoord(y2);
-		SystemClock.sleep(gap);
+		SystemClock.sleep(gap);  //轉珠速度;
 		return cl;
 	}
 

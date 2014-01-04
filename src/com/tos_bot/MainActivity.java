@@ -8,16 +8,18 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.HorizontalScrollView;
@@ -32,12 +34,14 @@ public class MainActivity extends Activity {
 	private Button _startServiceButton;
 	private Button _stopServiceButton;
 	private Spinner _deviceS;
+	private Spinner _serverList;
 	private ImageButton _floatStartButtonView = null;
 	private ImageButton _floatStopButtonView = null;
 	private ImageButton _floatStrategyButtonView = null;
 	private ImageButton _floatComboButtonView = null;
 	private LinearLayout _floatStrategyLayout = null;
 	private LinearLayout _floatComboLayout = null;
+	private LinearLayout _floatSaveLayout = null;
 	private WindowManager _wm = null;
 	public LinkedHashMap<Integer, String> MaxComboMap = new LinkedHashMap<Integer, String>() {
 		{
@@ -78,45 +82,47 @@ public class MainActivity extends Activity {
 		}
 	};
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		this.initDeviceList(); // create device list
-
+		this.initServerList(); //create Server List
 		//magicat   Environment.getExternalStorageDirectory().getAbsolutePath()
 		ConfigData.TempDir = Environment.getExternalStorageDirectory().getAbsolutePath();
 		//ConfigData.TempDir = getCacheDir() + "";
 		_startServiceButton = (Button) findViewById(R.id.start_button);
 		_stopServiceButton = (Button) findViewById(R.id.stop_button);
 		_deviceS = (Spinner) findViewById(R.id.deviceList);
+		_serverList = (Spinner) findViewById(R.id.serverList);
+		
+		//按下開始的方框按鈕
 		_startServiceButton.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View view) {
-				EditText serveret;
 				EditText deepet;
 				//EditText maxcombo;
 				//magicat
-				EditText sleeptime;
-				serveret = (EditText) findViewById(R.id.serverUrlText);
+				EditText sleeptime;			
+			
 				deepet = (EditText) findViewById(R.id.maxMoveText);
-				CheckBox edcheck = (CheckBox) findViewById(R.id.eightDircheck);
+				//CheckBox edcheck = (CheckBox) findViewById(R.id.eightDircheck);
 				//maxcombo = (EditText) findViewById(R.id.MaxComboText);
 				//magicat
 				sleeptime = (EditText) findViewById(R.id.SleepTimeText);
 
-				ConfigData.Serverurl = serveret.getText().toString();
+				ConfigData.Serverurl = _serverList.getSelectedItem().toString();
 				ConfigData.deep = Integer.parseInt(deepet.getText().toString());
 				ConfigData.DeviceName = _deviceS.getSelectedItem().toString();
 				//ConfigData.MaxComboName = maxcombo.getText().toString();
 				//magicat
 				ConfigData.waitForStageChageTimeSec = Integer.parseInt(sleeptime.getText().toString());
 
-				if (edcheck.isChecked()) {
-					ConfigData.eightd = 1;
-				} else {
-					ConfigData.eightd = 0;
-				}
+//				if (edcheck.isChecked()) {
+//					ConfigData.eightd = 1;
+//				} else {
+//					ConfigData.eightd = 0;
+//				}
 				if (_floatStartButtonView == null) {
 					createFStartButton();
 				}
@@ -129,6 +135,7 @@ public class MainActivity extends Activity {
 			}
 		});
 
+		//按下結束的方框按鈕
 		_stopServiceButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -151,6 +158,9 @@ public class MainActivity extends Activity {
 					if (_floatComboLayout != null) {
 						_wm.removeView(_floatComboLayout);
 					}
+					if (_floatSaveLayout != null) {
+						_wm.removeView(_floatSaveLayout);
+					}
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
@@ -160,12 +170,17 @@ public class MainActivity extends Activity {
 				_floatStrategyLayout = null;
 				_floatComboButtonView = null;
 				_floatComboLayout = null;
+				_floatSaveLayout = null;
 				Intent intent = new Intent(MainActivity.this, botService.class);
 				stopService(intent);
+				//magicat
+				botService.MessageHandler.removeCallbacksAndMessages(botService.MessageHandler);
 			}
 		});
 
-	}
+	}//按鈕設定結束
+	
+
 
 	@Override
 	public void onStart() {
@@ -174,12 +189,79 @@ public class MainActivity extends Activity {
 		stopService(intent);
 	}
 
-	@Override
+	@Override //MENU 選單
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	public boolean onOptionsItemSelected(MenuItem item){
+		super.onOptionsItemSelected(item);
+		switch(item.getItemId())
+		{
+		case R.id.loadfile_auto01:
+			loadfileUI(FileLoader.SaveFileNameList[0]);
+			break;
+		case R.id.loadfile_auto02:
+			loadfileUI(FileLoader.SaveFileNameList[1]);
+			break;
+		case R.id.loadfile_auto03:
+			loadfileUI(FileLoader.SaveFileNameList[2]);
+			break;
+		case R.id.loadfile_start:
+			loadfileUI(FileLoader.SaveFileNameList[3]);
+			break;				
+		case R.id.loadfile_user01:
+			loadfileUI(FileLoader.SaveFileNameList[4]);
+			break;
+		case R.id.loadfile_user02:
+			loadfileUI(FileLoader.SaveFileNameList[5]);
+			break;
+		case R.id.loadfile_user03:
+			loadfileUI(FileLoader.SaveFileNameList[6]);
+			break;	
+		case R.id.loadfile_clear:
+			clearfileUI("clear");
+			break;				
+		}
+		return true;
+	}
+	
+	//讀檔UI
+	private void loadfileUI(final String filename){
+		new AlertDialog.Builder(this)
+		.setTitle("確定讀檔? 檔名: "+filename)
+		.setPositiveButton
+		(
+			"確定讀取存檔;   返回鍵跳出",
+			new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					FileLoader.LoadAndSave(filename,false);  //False:load  True:save
+				}
+			}
+		)
+		.show();
+	}
+	
+	//清除存檔UI
+	private void clearfileUI(final String filename){
+		new AlertDialog.Builder(this)
+		.setTitle("確定刪除全部存檔??!!")
+		.setPositiveButton
+		(
+			"按下確定清空存檔;   返回鍵跳出",
+			new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					FileLoader.LoadAndSave(filename,false); 
+				}
+			}
+		)
+		.show();
+	}
+	
+
 
 	private void initDeviceList() {
 		Spinner spinner = (Spinner) findViewById(R.id.deviceList);
@@ -190,6 +272,15 @@ public class MainActivity extends Activity {
 		spinner.setAdapter(adapter);
 	}
 
+	private void initServerList() {
+		Spinner spinner = (Spinner) findViewById(R.id.serverList);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item,
+				new String[]{"tbserver.ap01.aws.af.cm","tbdserver.ap01.aws.af.cm","tbserver.herokuapp.com"});
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(adapter);
+	}
+	
 	private void createFStartButton() {
 		Display display = getWindowManager().getDefaultDisplay();
 		_floatStartButtonView = new ImageButton(getApplicationContext());
@@ -200,7 +291,8 @@ public class MainActivity extends Activity {
 		_floatStartButtonView.getBackground().setAlpha(0);
 		_floatStartButtonView.setImageBitmap(getBitmapByFilename("start"));
 		_floatStartButtonView.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
+			@Override
+			public void onClick(View view) {//按下浮動開始按鈕的動作
 				_floatStartButtonView.setVisibility(View.INVISIBLE);
 				//_floatStrategyButtonView.setVisibility(View.INVISIBLE);
 				//_floatComboButtonView.setVisibility(View.INVISIBLE);
@@ -211,6 +303,7 @@ public class MainActivity extends Activity {
 				
 				Intent intent = new Intent(MainActivity.this, botService.class);
 				startService(intent);
+				FileLoader.LoadAndSave("start",true);  //False:load  True:save  //開始執行時  存檔先 BJ4
 			}
 		});
 		_wm.addView(_floatStartButtonView, wmParams); // ?遣View
@@ -227,6 +320,7 @@ public class MainActivity extends Activity {
 		_floatStopButtonView.getBackground().setAlpha(0);
 		_floatStopButtonView.setImageBitmap(getBitmapByFilename("stop"));
 		_floatStopButtonView.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View view) {
 				_floatStopButtonView.setVisibility(View.INVISIBLE);
 				if (_floatStartButtonView == null) {
@@ -245,13 +339,15 @@ public class MainActivity extends Activity {
 					_floatComboButtonView.setVisibility(View.VISIBLE);
 				}
 
-
 				if (ConfigData.solverThread != null) {
 					Thread moribund = ConfigData.solverThread;
 					ConfigData.solverThread = null;
 					moribund.interrupt();
 				}
 				Intent intent = new Intent(MainActivity.this, botService.class);
+				//magicat
+				botService.MessageHandler.removeCallbacksAndMessages(botService.MessageHandler);
+				
 				stopService(intent);
 			}
 		});
@@ -263,19 +359,23 @@ public class MainActivity extends Activity {
 		Display display = getWindowManager().getDefaultDisplay();
 		_floatStrategyButtonView = new ImageButton(getApplicationContext());
 		_wm = (WindowManager) getApplicationContext().getSystemService("window");
-		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(0 + display.getWidth() * 1 / 8, display.getHeight() * 2 / 8);
+		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(0 + display.getWidth() / 8, display.getHeight() / 4 - 50);
 
 		_floatStrategyButtonView.getBackground().setAlpha(0);
 		_floatStrategyButtonView.setImageBitmap(getBitmapByFilename(IdStringMap.get(ConfigData.StyleName) + "_Button"));
 		
 		_floatStrategyButtonView.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View view) {
 				if (_floatStrategyLayout == null) {
 					createFStrategyHorizontalScrollView();
 				} else {
 					_floatStrategyLayout.setVisibility(View.VISIBLE);
+					_floatComboLayout.setVisibility(View.VISIBLE);
+					_floatSaveLayout.setVisibility(View.VISIBLE);
 				}
 				_floatComboButtonView.setVisibility(View.INVISIBLE);
+				_floatStartButtonView.setVisibility(View.INVISIBLE);
 				_floatStrategyButtonView.setVisibility(View.INVISIBLE);
 				//_floatStartButtonView.setVisibility(View.INVISIBLE);
 			}
@@ -289,19 +389,23 @@ public class MainActivity extends Activity {
 		_floatComboButtonView = new ImageButton(getApplicationContext());
 		_wm = (WindowManager) getApplicationContext().getSystemService("window");
 		//放在策略按鈕右邊100 pixel
-		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(100 + display.getWidth() * 1 / 8 , display.getHeight() * 2 / 8);
+		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(100 + display.getWidth() / 8 , display.getHeight() / 4 - 50);
 
 		_floatComboButtonView.getBackground().setAlpha(0);
 		_floatComboButtonView.setImageBitmap(getBitmapByFilename(MaxComboMap.get(ConfigData.MaxComboName) + "_Button"));
 		
 		_floatComboButtonView.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View view) {
 				if (_floatComboLayout == null) {
-					createComboHorizontalScrollView();
+					createFStrategyHorizontalScrollView();
 				} else {
+					_floatStrategyLayout.setVisibility(View.VISIBLE);
 					_floatComboLayout.setVisibility(View.VISIBLE);
+					_floatSaveLayout.setVisibility(View.VISIBLE);
 				}
 				_floatStrategyButtonView.setVisibility(View.INVISIBLE);
+				_floatStartButtonView.setVisibility(View.INVISIBLE);
 				_floatComboButtonView.setVisibility(View.INVISIBLE);
 				//_floatStartButtonView.setVisibility(View.INVISIBLE);
 			}
@@ -309,8 +413,9 @@ public class MainActivity extends Activity {
 		_wm.addView(_floatComboButtonView, wmParams);
 	}
 
-	//建立策略 頂部選單
+	//建立頂部選單
 	private void createFStrategyHorizontalScrollView() {
+		//建立頂部選單-Strategy		
 		_floatStrategyLayout = new LinearLayout(getApplicationContext());
 		_wm = (WindowManager) getApplicationContext().getSystemService("window");
 		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(0, 0);
@@ -318,18 +423,26 @@ public class MainActivity extends Activity {
 		StrategyScrollView.addView(getStrategyLinearLayout());
 		_floatStrategyLayout.addView(StrategyScrollView);
 		_wm.addView(_floatStrategyLayout, wmParams);
-	}
-	//建立COMBO 頂部選單
-	private void createComboHorizontalScrollView() {
-		_floatComboLayout = new LinearLayout(getApplicationContext());
-		_wm = (WindowManager) getApplicationContext().getSystemService("window");
-		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(0, 0);
-		HorizontalScrollView ComboScrollView = new HorizontalScrollView(this);
-		ComboScrollView.addView(getComboLinearLayout());
 		
+		//建立頂部選單-COMBO 
+		_floatComboLayout = new LinearLayout(getApplicationContext());
+		//_wm = (WindowManager) getApplicationContext().getSystemService("window");
+		WindowManager.LayoutParams wmComboParams = getFloatingLayoutParams(0, 70);
+		HorizontalScrollView ComboScrollView = new HorizontalScrollView(this);
+		ComboScrollView.addView(getComboLinearLayout());		
 		_floatComboLayout.addView(ComboScrollView);
-		_wm.addView(_floatComboLayout, wmParams);
-	}
+		_wm.addView(_floatComboLayout, wmComboParams);
+		
+		//建立頂部選單-SAVE
+		_floatSaveLayout = new LinearLayout(getApplicationContext());
+		//_wm = (WindowManager) getApplicationContext().getSystemService("window");
+		WindowManager.LayoutParams wmSaveParams = getFloatingLayoutParams(0, 130);
+		HorizontalScrollView SaveScrollView = new HorizontalScrollView(this);
+		SaveScrollView.addView(getSaveLinearLayout());		
+		_floatSaveLayout.addView(SaveScrollView);
+		_wm.addView(_floatSaveLayout, wmSaveParams);
+	}//建立頂部選單-結束
+
 
 	private WindowManager.LayoutParams getFloatingLayoutParams(int x, int y) {
 		WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
@@ -339,56 +452,69 @@ public class MainActivity extends Activity {
 		wmParams.type = 2002;
 		wmParams.format = 1;
 		wmParams.flags = 40;
-		wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-		wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+		wmParams.width = LayoutParams.WRAP_CONTENT;
+		wmParams.height = LayoutParams.WRAP_CONTENT;
 		return wmParams;
 	}
 
+	//建立頂部選單圖案-Strategy
 	private LinearLayout getStrategyLinearLayout() {
 		LinearLayout layout = new LinearLayout(this);
-		Integer[] styleList = weightMap.getInstance().getStyleList();
-
+		Integer[] styleList = WeightMapBall.getInstance().getStyleList();
 		for (int i = 0; i < styleList.length; i++) {
 			layout.addView(getStrategyImageButton(styleList[i]));
 		}
 		return layout;
 	}
-	
+	//建立頂部選單圖案-Combo
 	private LinearLayout getComboLinearLayout() {
 		LinearLayout layout = new LinearLayout(this);
-		Integer[] ComboList = ComboWeightMap.getInstance().getStyleList();
-
+		Integer[] ComboList = WeightMapCombo.getInstance().getStyleList();
 		for (int i = 0; i < ComboList.length; i++) {
 			layout.addView(getComboImageButton(ComboList[i]));
 		}
-		
+		return layout;
+	}
+	//建立頂部選單圖案-Save
+	private LinearLayout getSaveLinearLayout() {
+		LinearLayout layout = new LinearLayout(this);
+		for (int i = 4; i < FileLoader.SaveFileNameList.length; i++) {
+			layout.addView(getSaveImageButton(FileLoader.SaveFileNameList[i]));
+		}
 		return layout;
 	}
 
-	//頂部策略按鈕觸發反應
+	//頂部按鈕觸發反應-Strategy
 	private ImageButton getStrategyImageButton(Integer styleName) {
 		ImageButton button = new ImageButton(this);
 		button.getBackground().setAlpha(0);
 		button.setId(styleName);
 		button.setImageBitmap(getBitmapByFilename(IdStringMap.get(styleName)));
 		button.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View view) {
 				ConfigData.StyleName = view.getId();	
 				_floatStrategyButtonView
 				.setImageBitmap(getBitmapByFilename(IdStringMap.get(ConfigData.StyleName) + "_Button"));
 				_floatStrategyLayout.setVisibility(View.INVISIBLE);
+				_floatComboLayout.setVisibility(View.INVISIBLE);
+				_floatSaveLayout.setVisibility(View.INVISIBLE);
 				//_floatStartButtonView.setVisibility(View.VISIBLE);
 				_floatStrategyButtonView.setVisibility(View.VISIBLE);
 				_floatComboButtonView.setVisibility(View.VISIBLE);
-				Toast.makeText(getApplicationContext(),
+
+					_floatStartButtonView.setVisibility(View.VISIBLE);
+				Toast message = Toast.makeText(getApplicationContext(),
 						"Weight Strategy : " + IdStringMap.get(ConfigData.StyleName),
-						Toast.LENGTH_SHORT).show(); 
+						Toast.LENGTH_SHORT); 
+				message.setGravity(Gravity.TOP, 0, 50);
+				message.show();
 			}
 		});
 		return button;
 	}
 	
-	//頂部COMBO按鈕觸發反應
+	//頂部按鈕觸發反應-COMBO
 	private ImageButton getComboImageButton(Integer ComboName) {
 		ImageButton button = new ImageButton(this);
 		button.getBackground().setAlpha(0);
@@ -396,37 +522,65 @@ public class MainActivity extends Activity {
 		button.setImageBitmap(getBitmapByFilename(MaxComboMap.get(ComboName) + "_Button"));
 		
 		button.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View view) {
 				ConfigData.MaxComboName = view.getId();					
 				_floatComboButtonView
 				.setImageBitmap(getBitmapByFilename(MaxComboMap.get(ConfigData.MaxComboName) + "_Button"));
 				_floatComboLayout.setVisibility(View.INVISIBLE);
+				_floatStrategyLayout.setVisibility(View.INVISIBLE);
+				_floatSaveLayout.setVisibility(View.INVISIBLE);
 				//_floatStartButtonView.setVisibility(View.VISIBLE);
 				_floatStrategyButtonView.setVisibility(View.VISIBLE);
 				_floatComboButtonView.setVisibility(View.VISIBLE);
+
+					_floatStartButtonView.setVisibility(View.VISIBLE);
 				//magicat show Weight Strategy message
-				Toast.makeText(getApplicationContext(),
-						"MaxComboName Strategy : " + MaxComboMap.get(ConfigData.MaxComboName)
-						//"\n getAbsolutePath : " + Environment.getExternalStorageDirectory().getAbsolutePath() +
-						//"\n Build.MODEL : " + Build.MODEL +
-						//"\n ConfigData.TempDir  : " + ConfigData.TempDir + "/img.png\n" +
-						//"\n getCacheDir() : " + getCacheDir(),
-						
-						//"\n getCacheDir() : " + getCacheDir(),
-						//"\n getCacheDir() : " + getCacheDir(),
-						//"\n view.getId() : " + view.getId(),					
-						,Toast.LENGTH_SHORT).show(); 
+				Toast message = Toast.makeText(getApplicationContext(),
+						"MaxCombo:" + MaxComboMap.get(ConfigData.MaxComboName)
+						,Toast.LENGTH_SHORT);
+				message.setGravity(Gravity.TOP, 0, 50);
+				message.show();
+
+			}
+		});
+		return button;
+	}
+	
+	//頂部按鈕觸發反應-Save
+	private ImageButton getSaveImageButton(final String SaveFileName) {
+		ImageButton button = new ImageButton(this);
+		button.getBackground().setAlpha(0);
+		button.setImageBitmap(getBitmapByFilename("0_Save_"+SaveFileName));
+		
+		button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				FileLoader.LoadAndSave(SaveFileName,true);			
+				_floatStrategyLayout.setVisibility(View.INVISIBLE);
+				_floatComboLayout.setVisibility(View.INVISIBLE);
+				_floatSaveLayout.setVisibility(View.INVISIBLE);
+				//_floatStartButtonView.setVisibility(View.VISIBLE);
+				_floatStrategyButtonView.setVisibility(View.VISIBLE);
+				_floatComboButtonView.setVisibility(View.VISIBLE);
+
+					_floatStartButtonView.setVisibility(View.VISIBLE);
+				//magicat show Weight Strategy message
+				Toast message = Toast.makeText(getApplicationContext(),
+						"Save to :" + SaveFileName
+						,Toast.LENGTH_SHORT);
+				message.setGravity(Gravity.TOP, 0, 250);
+				message.show();
+
 			}
 		});
 		return button;
 	}
 
 	private Bitmap getBitmapByFilename(String filename) {
-		Log.e("getBitmapByFilename(String filename)",filename);
-		
+		//Log.e("getBitmapByFilename(String filename)","image/"+ filename + ".png");
 		FileLoader.setContext(this);
-		InputStream imageInputStream = FileLoader.getFileStreamByAsset("image/"
-				+ filename + ".png");
+		InputStream imageInputStream = FileLoader.getFileStreamByAsset("image/" + filename + ".png");
 		return BitmapFactory.decodeStream(imageInputStream);
 	}
 

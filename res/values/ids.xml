@@ -22,4 +22,23 @@
     <item type="id" name="Recover_Except" />
     <item type="id" name="Low_HP_Single" />
     <item type="id" name="Low_HP_Multi" />
+    
+    <item type="MaxCombo" name="Combo_0" />
+    <item type="MaxCombo" name="Combo_1" />
+    <item type="MaxCombo" name="Combo_2" />
+    <item type="MaxCombo" name="Combo_3" />
+    <item type="MaxCombo" name="Combo_4" />
+    <item type="MaxCombo" name="Combo_5" />
+    <item type="MaxCombo" name="Combo_6" />
+    
+    <item type="SaveFileName" name="auto01" />
+    <item type="SaveFileName" name="auto02" />
+    <item type="SaveFileName" name="auto03" />
+    <item type="SaveFileName" name="start" />    
+	<item type="SaveFileName" name="user01" />
+	<item type="SaveFileName" name="user02" />
+	<item type="SaveFileName" name="user03" />
+	<item type="SaveFileName" name="clear" />
+
+
 </resources>

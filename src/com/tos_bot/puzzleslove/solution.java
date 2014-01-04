@@ -29,7 +29,8 @@ public class solution implements Comparator<solution> {
 	public solution(){
 		
 	}
-    public int compare(solution a, solution b) {
+    @Override
+	public int compare(solution a, solution b) {
         return Integer.signum(a.matches.size() - b.matches.size());
     }
     public void setCB(int[][] b){
