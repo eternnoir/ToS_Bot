@@ -1,6 +1,7 @@
 package com.tos_bot;
 
 import com.tos_bot.touchservice.touchDeviceFactory;
+import com.tos_bot.utility.FileLoader;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
@@ -27,7 +28,7 @@ import java.util.LinkedHashMap;
 public class MainActivity extends Activity {
 	private Button _startServiceButton;
 	private Button _stopServiceButton;
-	private Spinner _deviceS;
+	private Button _settingMenuButton;
 	private ImageButton _floatStartButtonView = null;
 	private ImageButton _floatStopButtonView = null;
 	private ImageButton _floatStrategyButtonView = null;
@@ -67,26 +68,8 @@ public class MainActivity extends Activity {
 		this.initDeviceList(); // create device list
 		ConfigData.TempDir = getCacheDir() + "";
 		_startServiceButton = (Button) findViewById(R.id.start_button);
-		_stopServiceButton = (Button) findViewById(R.id.stop_button);
-		_deviceS = (Spinner) findViewById(R.id.deviceList);
 		_startServiceButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				EditText serveret;
-				EditText deepet;
-				EditText maxcombo;
-				serveret = (EditText) findViewById(R.id.serverUrlText);
-				deepet = (EditText) findViewById(R.id.maxMoveText);
-				CheckBox edcheck = (CheckBox) findViewById(R.id.eightDircheck);
-				maxcombo = (EditText) findViewById(R.id.MaxComboText);
-				ConfigData.Serverurl = serveret.getText().toString();
-				ConfigData.deep = Integer.parseInt(deepet.getText().toString());
-				ConfigData.DeviceName = _deviceS.getSelectedItem().toString();
-				ConfigData.maxBombo = maxcombo.getText().toString();
-				if (edcheck.isChecked()) {
-					ConfigData.eightd = 1;
-				} else {
-					ConfigData.eightd = 0;
-				}
 				if (_floatStartButtonView == null) {
 					createFStartButton();
 				}
@@ -97,8 +80,19 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		_stopServiceButton.setOnClickListener(new View.OnClickListener() {
+		_settingMenuButton = (Button) findViewById(R.id.setting_button);
+		_settingMenuButton.setOnClickListener(new View.OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent setMenu = new Intent();
+				setMenu.setClass(MainActivity.this, SettingMenuActivity.class);
+				startActivity(setMenu);
+			}
+		});
+
+		_stopServiceButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				try {
@@ -143,12 +137,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void initDeviceList() {
-		Spinner spinner = (Spinner) findViewById(R.id.deviceList);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item,
-				touchDeviceFactory.getDeviceList());
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinner.setAdapter(adapter);
+
 	}
 
 	private void createFStartButton() {
