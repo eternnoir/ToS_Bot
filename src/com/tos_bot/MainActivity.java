@@ -85,13 +85,11 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent setMenu = new Intent();
-				setMenu.setClass(MainActivity.this, SettingMenuActivity.class);
+				Intent setMenu = new Intent(MainActivity.this, SettingMenuActivity.class);
 				startActivity(setMenu);
 			}
 		});
-
+		_stopServiceButton=(Button) findViewById(R.id.stopButton);
 		_stopServiceButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
