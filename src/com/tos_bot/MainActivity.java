@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
@@ -66,6 +67,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		this.initDeviceList(); // create device list
+		this.setConfig();
 		ConfigData.TempDir = getCacheDir() + "";
 		_startServiceButton = (Button) findViewById(R.id.start_button);
 		_startServiceButton.setOnClickListener(new View.OnClickListener() {
@@ -284,5 +286,11 @@ public class MainActivity extends Activity {
 				+ filename + ".png");
 		return BitmapFactory.decodeStream(imageInputStream);
 	}
-
+	
+	private void setConfig(){
+		SharedPreferences settings = getSharedPreferences("Config", 0);
+		ConfigData.Serverurl = settings.getString("Serverurl", "http://tbserver.ap01.aws.af.cm");
+		ConfigData.deep = settings.getInt("deep", 30);
+		ConfigData.DeviceName =  settings.getString("DeviceName","Auto");
+	}
 }

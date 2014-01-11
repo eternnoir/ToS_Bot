@@ -16,7 +16,11 @@ public class touchDeviceFactory {
 		return new String[] { "Auto", "htc_new_one_m7", "htc_one_x",
 				"Gen_nexus_one", "Sony_Xperia_Z" };
 	}
-
+	public static AbstractTouchService getNewTouchService(){
+	
+		return null;
+	}
+/*
 	public static AbstractTouchService getNewTouchService(String deviceName) {
 		AbstractTouchService ret = null;
 		if (deviceName.equals("htc_new_one_m7")) {
@@ -53,4 +57,5 @@ public class touchDeviceFactory {
 		}
 		return ret;
 	}
+	*/
 }
