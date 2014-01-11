@@ -12,13 +12,17 @@ import net.atec.analyzer.Analizer;
 import net.atec.sender.DeviceEvent;
 
 public class touchDeviceFactory {
-	public static String[] getDeviceList() {
-		return new String[] { "Auto", "htc_new_one_m7", "htc_one_x",
-				"Gen_nexus_one", "Sony_Xperia_Z" };
-	}
 	public static AbstractTouchService getNewTouchService(){
-	
-		return null;
+		AbstractTouchService ret = null;
+		// DeviceEvent(String e,String px,String py,String Tid,String pre, String xM,String yM,String tiM,String pM)
+		DeviceEvent de = new DeviceEvent(ConfigData.touchEventNum, 
+				ConfigData.posXId, ConfigData.posYId, ConfigData.trackingId, ConfigData.pressureId,
+				ConfigData.posXMax, ConfigData.posYMax, ConfigData.trackingMax, ConfigData.pressureMax);
+		ret = new AtecDevice(de);
+		ret.setUp(Integer.parseInt(ConfigData.oneBallMove), 
+				Integer.parseInt(ConfigData.startPosX),
+				Integer.parseInt(ConfigData.startPosY));
+		return ret;
 	}
 /*
 	public static AbstractTouchService getNewTouchService(String deviceName) {

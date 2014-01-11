@@ -25,11 +25,19 @@ public class EventSettingActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setevent);
 		Button auto = (Button) findViewById(R.id.Autoana);
+		Button save = (Button) findViewById(R.id.SaveButton);
 		auto.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				autoAna();
+			}
+		});
+		save.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				saveSetting();
 			}
 		});
 	}
@@ -75,6 +83,18 @@ public class EventSettingActivity extends Activity {
 	}
 	private void saveSetting(){
 		SharedPreferences settings = getSharedPreferences("Config", 0);
-		settings.edit().putString("touchEventNum", ((EditText)findViewById(R.id.deviceNameEditText)).getText().toString());
+		settings.edit().putString("DeviceName", ((EditText)findViewById(R.id.deviceNameEditText)).getText().toString()).commit();
+		settings.edit().putString("touchEventNum", ((EditText)findViewById(R.id.TouchEventID)).getText().toString()).commit();
+		settings.edit().putString("posXId", ((EditText)findViewById(R.id.PosXId)).getText().toString()).commit();
+		settings.edit().putString("posYId", ((EditText)findViewById(R.id.PosYId)).getText().toString()).commit();
+		settings.edit().putString("posXMax", ((EditText)findViewById(R.id.PosXMax)).getText().toString()).commit();
+		settings.edit().putString("posYMax", ((EditText)findViewById(R.id.PosYMax)).getText().toString()).commit();
+		settings.edit().putString("trackingId", ((EditText)findViewById(R.id.TrackingID)).getText().toString()).commit();
+		settings.edit().putString("pressureId", ((EditText)findViewById(R.id.PressureID)).getText().toString()).commit();
+		settings.edit().putString("trackingMax", ((EditText)findViewById(R.id.TrackingMax)).getText().toString()).commit();
+		settings.edit().putString("pressureMax", ((EditText)findViewById(R.id.PressureMax)).getText().toString()).commit();
+		settings.edit().putString("oneBallMove", ((EditText)findViewById(R.id.OneBallMove)).getText().toString()).commit();
+		settings.edit().putString("startPosX", ((EditText)findViewById(R.id.StartPosX)).getText().toString()).commit();
+		settings.edit().putString("startPosY", ((EditText)findViewById(R.id.StartPosY)).getText().toString()).commit();
 	}
 }
