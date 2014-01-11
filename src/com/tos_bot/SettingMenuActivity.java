@@ -26,13 +26,15 @@ public class SettingMenuActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 					long arg3) {
+				Intent setMenu = new Intent();
 				switch(pos){
 					case 0:
+						setMenu.setClass(SettingMenuActivity.this, GeneralSettingActivity.class);
+						startActivity(setMenu);
 						break;
 					case 1:
 						break;
 					case 2:
-						Intent setMenu = new Intent();
 						setMenu.setClass(SettingMenuActivity.this, EventSettingActivity.class);
 						startActivity(setMenu);
 						break;

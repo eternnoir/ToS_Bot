@@ -26,6 +26,8 @@
         </activity>
         <activity android:name="SettingMenuActivity">
         </activity>
+        <activity android:name="GeneralSettingActivity">
+        </activity>
         <service android:name=".botService" />
     </application>
 

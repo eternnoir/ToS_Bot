@@ -25,7 +25,7 @@ public class EventSettingActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setevent);
 		Button auto = (Button) findViewById(R.id.Autoana);
-		Button save = (Button) findViewById(R.id.SaveButton);
+		Button save = (Button) findViewById(R.id.SaveBtn);
 		auto.setOnClickListener(new View.OnClickListener() {
 
 			@Override
