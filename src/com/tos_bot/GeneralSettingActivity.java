@@ -13,17 +13,24 @@ public class GeneralSettingActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_generalsetting);
+		EditText su = (EditText) findViewById(R.id.ServerUrl);
+		EditText deep = (EditText) findViewById(R.id.Deep);
+		EditText maxcombo = (EditText) findViewById(R.id.MaxCombo);
+		SharedPreferences settings = getSharedPreferences("Config", 0);
+		su.setText(settings.getString("Serverurl", "http://tbserver.ap01.aws.af.cm/"));
+		deep.setText(settings.getInt("deep", 30)+"");
+		maxcombo.setText(settings.getString("maxBombo", "0"));
+		
+		Button save = (Button) findViewById(R.id.SaveBtn);
+		save.setOnClickListener(new View.OnClickListener() {
 
-	
-	Button save = (Button) findViewById(R.id.SaveBtn);
-	save.setOnClickListener(new View.OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-			saveSetting();
-		}
-	});
+			@Override
+			public void onClick(View v) {
+				saveSetting();
+			}
+		});
 	}
+
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -35,11 +42,21 @@ public class GeneralSettingActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	private void saveSetting(){
+
+	private void saveSetting() {
 		SharedPreferences settings = getSharedPreferences("Config", 0);
-		settings.edit().putString("Serverurl", ((EditText)findViewById(R.id.ServerUrl)).getText().toString()).commit();
-		settings.edit().putInt("deep",Integer.parseInt( ((EditText)findViewById(R.id.Deep)).getText().toString())).commit();
-		settings.edit().putString("maxBombo", ((EditText)findViewById(R.id.MaxCombo)).getText().toString()).commit();
+		settings.edit().putString("Serverurl",
+						((EditText) findViewById(R.id.ServerUrl)).getText()
+								.toString()).commit();
+		settings.edit()
+				.putInt("deep",
+						Integer.parseInt(((EditText) findViewById(R.id.Deep))
+								.getText().toString())).commit();
+		settings.edit()
+				.putString(
+						"maxBombo",
+						((EditText) findViewById(R.id.MaxCombo)).getText()
+								.toString()).commit();
 
 	}
 }

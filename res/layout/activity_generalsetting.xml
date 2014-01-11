@@ -22,8 +22,7 @@
             <EditText
                 android:id="@+id/ServerUrl"
                 android:layout_width="207dp"
-                android:layout_height="wrap_content"
-                android:text="http://tbserver.ap01.aws.af.cm/" >
+                android:layout_height="wrap_content" >
 
                 <requestFocus />
             </EditText>
@@ -44,8 +43,7 @@
                 android:id="@+id/Deep"
                 android:layout_width="207dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="30" />
+                android:layout_weight="1" />
 
         </LinearLayout>
 
@@ -64,8 +62,7 @@
                 android:id="@+id/MaxCombo"
                 android:layout_width="207dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="0" />
+                android:layout_weight="1" />
 
         </LinearLayout>
 
