@@ -292,6 +292,7 @@ public class MainActivity extends Activity {
 		SharedPreferences settings = getSharedPreferences("Config", 0);
 		ConfigData.Serverurl = settings.getString("Serverurl", "http://tbserver.ap01.aws.af.cm/");
 		ConfigData.deep = settings.getInt("deep", 30);
+		ConfigData.maxBombo = settings.getString("maxBombo", "0");
 		ConfigData.DeviceName =  settings.getString("DeviceName","Auto");
 		ConfigData.touchEventNum = settings.getString("touchEventNum","");
 		ConfigData.posXId = settings.getString("posXId","");
