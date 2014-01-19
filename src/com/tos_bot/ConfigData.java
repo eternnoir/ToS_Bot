@@ -11,6 +11,7 @@ public class ConfigData {
 	public static String TempDir = "";
 	public static Thread solverThread = null;
 	public static String maxBombo = "0";		//0 is no limit
+	public static String gap;			//the sleep time between two touch command
 	//For TouchEvent
 	public static String touchEventNum;
 	public static String posXId;

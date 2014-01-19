@@ -16,10 +16,12 @@ public class GeneralSettingActivity extends Activity {
 		EditText su = (EditText) findViewById(R.id.ServerUrl);
 		EditText deep = (EditText) findViewById(R.id.Deep);
 		EditText maxcombo = (EditText) findViewById(R.id.MaxCombo);
+		EditText gap = (EditText) findViewById(R.id.GapText);
 		SharedPreferences settings = getSharedPreferences("Config", 0);
 		su.setText(settings.getString("Serverurl", "http://tbserver.ap01.aws.af.cm/"));
 		deep.setText(settings.getInt("deep", 30)+"");
 		maxcombo.setText(settings.getString("maxBombo", "0"));
+		gap.setText(settings.getString("maxBombo", "70"));
 		
 		Button save = (Button) findViewById(R.id.SaveBtn);
 		save.setOnClickListener(new View.OnClickListener() {
@@ -48,15 +50,17 @@ public class GeneralSettingActivity extends Activity {
 		settings.edit().putString("Serverurl",
 						((EditText) findViewById(R.id.ServerUrl)).getText()
 								.toString()).commit();
-		settings.edit()
-				.putInt("deep",
+		settings.edit().putInt("deep",
 						Integer.parseInt(((EditText) findViewById(R.id.Deep))
 								.getText().toString())).commit();
-		settings.edit()
-				.putString(
+		settings.edit().putString(
 						"maxBombo",
 						((EditText) findViewById(R.id.MaxCombo)).getText()
 								.toString()).commit();
+		settings.edit().putString(
+				"gap",
+				((EditText) findViewById(R.id.GapText)).getText()
+						.toString()).commit();
 
 	}
 }

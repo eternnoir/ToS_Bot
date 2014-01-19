@@ -293,6 +293,7 @@ public class MainActivity extends Activity {
 		ConfigData.Serverurl = settings.getString("Serverurl", "http://tbserver.ap01.aws.af.cm/");
 		ConfigData.deep = settings.getInt("deep", 30);
 		ConfigData.maxBombo = settings.getString("maxBombo", "0");
+		ConfigData.gap = settings.getString("gap","");
 		ConfigData.DeviceName =  settings.getString("DeviceName","Auto");
 		ConfigData.touchEventNum = settings.getString("touchEventNum","");
 		ConfigData.posXId = settings.getString("posXId","");

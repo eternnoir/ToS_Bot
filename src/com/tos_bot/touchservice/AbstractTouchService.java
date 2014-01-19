@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import android.os.SystemClock;
 
+import com.tos_bot.ConfigData;
 import com.tos_bot.puzzleslove.solution;
 
 
@@ -78,7 +79,7 @@ public abstract class AbstractTouchService {
 		int nowx = inix;
 		int nowy = iniy;
 		// step 2. add path
-		int gap = 70;
+		int gap = Integer.parseInt(ConfigData.gap);
 		for (String p : pathsetp) {
 			int pp = Integer.parseInt(p);
 			touchpos pos = changePathToPos(pp);
