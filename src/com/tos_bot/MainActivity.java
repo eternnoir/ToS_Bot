@@ -299,7 +299,7 @@ public class MainActivity extends Activity {
 	}
 	
 	/**
-	 * 
+	 * get config data from SharedPreferences
 	 */
 	private void setConfig(){
 		SharedPreferences settings = getSharedPreferences("Config", 0);
