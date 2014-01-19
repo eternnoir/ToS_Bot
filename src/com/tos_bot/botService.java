@@ -25,6 +25,7 @@ public class botService extends Service {
 		return null;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onStart(Intent intent, int startId) {
 		handler.postDelayed(BotGo, 1000);

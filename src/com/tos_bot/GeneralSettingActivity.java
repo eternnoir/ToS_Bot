@@ -21,8 +21,7 @@ public class GeneralSettingActivity extends Activity {
 		su.setText(settings.getString("Serverurl", "http://tbserver.ap01.aws.af.cm/"));
 		deep.setText(settings.getInt("deep", 30)+"");
 		maxcombo.setText(settings.getString("maxBombo", "0"));
-		gap.setText(settings.getString("maxBombo", "70"));
-		
+		gap.setText(settings.getString("gap", "70"));
 		Button save = (Button) findViewById(R.id.SaveBtn);
 		save.setOnClickListener(new View.OnClickListener() {
 

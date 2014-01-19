@@ -1,6 +1,5 @@
 package com.tos_bot;
 
-import com.tos_bot.touchservice.touchDeviceFactory;
 import com.tos_bot.utility.FileLoader;
 
 import android.graphics.BitmapFactory;
@@ -14,11 +13,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ImageButton;
@@ -26,6 +21,10 @@ import android.widget.ImageButton;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
 
+/**
+ * @author frankwang
+ *
+ */
 public class MainActivity extends Activity {
 	private Button _startServiceButton;
 	private Button _stopServiceButton;
@@ -62,6 +61,9 @@ public class MainActivity extends Activity {
 		}
 	};
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -141,6 +143,9 @@ public class MainActivity extends Activity {
 
 	}
 
+	/**
+	 * 
+	 */
 	private void createFStartButton() {
 		Display display = getWindowManager().getDefaultDisplay();
 		_floatStartButtonView = new ImageButton(getApplicationContext());
@@ -238,6 +243,11 @@ public class MainActivity extends Activity {
 		_wm.addView(_floatStrategyLayout, wmParams);
 	}
 
+	/**
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private WindowManager.LayoutParams getFloatingLayoutParams(int x, int y) {
 		WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
 		wmParams.gravity = Gravity.TOP | Gravity.LEFT;
@@ -288,6 +298,9 @@ public class MainActivity extends Activity {
 		return BitmapFactory.decodeStream(imageInputStream);
 	}
 	
+	/**
+	 * 
+	 */
 	private void setConfig(){
 		SharedPreferences settings = getSharedPreferences("Config", 0);
 		ConfigData.Serverurl = settings.getString("Serverurl", "http://tbserver.ap01.aws.af.cm/");
