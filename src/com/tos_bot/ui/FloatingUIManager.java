@@ -1,7 +1,6 @@
 package com.tos_bot.ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -11,11 +10,7 @@ import android.widget.LinearLayout;
 
 import com.tos_bot.ConfigData;
 import com.tos_bot.Constants;
-import com.tos_bot.R;
-import com.tos_bot.botService;
 import com.tos_bot.weightMap;
-
-import java.util.LinkedHashMap;
 
 /**
  * Created by Sean.
@@ -28,10 +23,13 @@ public class FloatingUIManager {
     private Context _context;
     private Observer _observer;
     private double imageButtonRatio = 1;
+    private boolean isSetting = false;
 
     private FloatingImageButton _floatStartButton = null;
     private FloatingImageButton _floatStopButton = null;
     private FloatingImageButton _floatStrategyButton = null;
+    private FloatingImageButton _floatSettingButton = null;
+    private FloatingImageButton _floatVariableButton = null;
     private FloatingLinearLayout _floatStrategyLayout = null;
     //private View _view;
 
@@ -49,29 +47,39 @@ public class FloatingUIManager {
         CreateStopButton();
         CreateStrategyButton();
         CreateStrategyHorizontalScrollView();
+        CreateSettingButton();
+        CreateVariableButton();
     }
 
     private void CreateStartButton(){
-        _floatStartButton = CreateButton(_display.getWidth() / 8, _display.getHeight() / 8, "start");
+        int side = getStartButtonPosition();
+        _floatStartButton = CreateButton(side, side, "start");
         _floatStartButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 _floatStartButton.setVisibility(View.INVISIBLE);
                 _floatStrategyButton.setVisibility(View.INVISIBLE);
+                _floatSettingButton.setVisibility(View.INVISIBLE);
+                _floatVariableButton.setVisibility(View.INVISIBLE);
                 _floatStopButton.setVisibility(View.VISIBLE);
+                isSetting = false;
                 _observer.NotifyStart();
             }
         });
         _floatStartButton.setVisibility(View.INVISIBLE);
     }
 
+    private int getStartButtonPosition(){
+        int side = _display.getHeight() / 5;
+        side /= Math.sqrt(2);
+        return side;
+    }
+
     private void CreateStopButton(){
-        _floatStopButton = CreateButton(_display.getWidth() / 2 + _display.getWidth() / 8,
-                _display.getHeight() / 8, "stop");
+        _floatStopButton = CreateButton(0, 0, "stop");
         _floatStopButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 _floatStopButton.setVisibility(View.INVISIBLE);
-                _floatStartButton.setVisibility(View.VISIBLE);
-                _floatStrategyButton.setVisibility(View.VISIBLE);
+                _floatSettingButton.setVisibility(View.VISIBLE);
                 if (ConfigData.solverThread != null) {
                     Thread moribund = ConfigData.solverThread;
                     ConfigData.solverThread = null;
@@ -84,13 +92,15 @@ public class FloatingUIManager {
     }
 
     private void CreateStrategyButton(){
-        _floatStrategyButton = CreateButton(_display.getWidth() / 8, _display.getHeight() * 2 / 8,
+        _floatStrategyButton = CreateButton(_display.getHeight() / 5, 0,
                 Constants.IdStringMap.get(ConfigData.StyleName) + "_Button");
         _floatStrategyButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 _floatStrategyLayout.setVisibility(View.VISIBLE);
                 _floatStrategyButton.setVisibility(View.INVISIBLE);
                 _floatStartButton.setVisibility(View.INVISIBLE);
+                _floatSettingButton.setVisibility(View.INVISIBLE);
+                _floatVariableButton.setVisibility(View.INVISIBLE);
             }
         });
         _floatStrategyButton.setVisibility(View.INVISIBLE);
@@ -131,9 +141,40 @@ public class FloatingUIManager {
                 _floatStrategyLayout.setVisibility(View.INVISIBLE);
                 _floatStartButton.setVisibility(View.VISIBLE);
                 _floatStrategyButton.setVisibility(View.VISIBLE);
+                _floatSettingButton.setVisibility(View.VISIBLE);
+                _floatVariableButton.setVisibility(View.VISIBLE);
             }
         });
         return button;
+    }
+
+    private void CreateSettingButton(){
+        _floatSettingButton = CreateButton(0, 0, "setting");
+        _floatSettingButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (!isSetting){
+                    _floatVariableButton.setVisibility(View.VISIBLE);
+                    _floatStrategyButton.setVisibility(View.VISIBLE);
+                    _floatStartButton.setVisibility(View.VISIBLE);
+                }else{
+                    _floatVariableButton.setVisibility(View.INVISIBLE);
+                    _floatStrategyButton.setVisibility(View.INVISIBLE);
+                    _floatStartButton.setVisibility(View.INVISIBLE);
+                }
+                isSetting = !isSetting;
+            }
+        });
+        _floatSettingButton.setVisibility(View.INVISIBLE);
+    }
+
+    private void CreateVariableButton(){
+        _floatVariableButton = CreateButton(0, _display.getHeight() / 5, "variable");
+        _floatVariableButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+
+            }
+        });
+        _floatVariableButton.setVisibility(View.INVISIBLE);
     }
 
     private double CalcRatio(){
@@ -146,10 +187,7 @@ public class FloatingUIManager {
     }
 
     public void StartFloatingUI(){
-        _floatStartButton.setVisibility(View.VISIBLE);
-        _floatStrategyButton.setVisibility(View.VISIBLE);
-        _floatStrategyLayout.setVisibility(View.INVISIBLE);
-        _floatStopButton.setVisibility(View.INVISIBLE);
+        _floatSettingButton.setVisibility(View.VISIBLE);
     }
 
     public void StopFloatingUI(){
@@ -157,6 +195,8 @@ public class FloatingUIManager {
         _floatStrategyButton.setVisibility(View.INVISIBLE);
         _floatStrategyLayout.setVisibility(View.INVISIBLE);
         _floatStopButton.setVisibility(View.INVISIBLE);
+        _floatSettingButton.setVisibility(View.INVISIBLE);
+        _floatVariableButton.setVisibility(View.INVISIBLE);
     }
 
     private FloatingImageButton CreateButton(int x, int y, String filename){
