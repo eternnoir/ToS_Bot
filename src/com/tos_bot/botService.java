@@ -94,7 +94,7 @@ public class botService extends Service {
 			String[] pathsetp = path.split(",");
 			if (!this.isInterrupted()) {
 				AbstractTouchService ts = touchDeviceFactory
-						.getNewTouchService(ConfigData.DeviceName);
+						.getNewTouchService();
 				if (ts == null) {
 					Log.i("Bot:", "Touch Event Not Found");
 					showMessage("Touch Event Not Found, Check Your Device");

@@ -1,4 +1,4 @@
-package com.tos_bot;
+package com.tos_bot.utility;
 
 import java.io.IOException;
 import java.io.InputStream;

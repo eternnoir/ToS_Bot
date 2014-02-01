@@ -1,4 +1,4 @@
-package com.tos_bot;
+package com.tos_bot.utility;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -9,7 +9,14 @@ import org.json.JSONObject;
 
 import com.tos_bot.puzzleslove.solution;
 
-
+/**
+ * 原本puzzle server會回傳一組json裡面包含所有solution
+ * 為了節省流量將puzzle server只回傳最高分數的那組,所以這
+ * 個class沒有使用了.
+ * 
+ * @author frankwang
+ *
+ */
 public class jsonToSolution {
 	public static boolean cmdDone;
 

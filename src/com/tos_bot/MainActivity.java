@@ -1,12 +1,14 @@
 package com.tos_bot;
 
 import com.tos_bot.touchservice.touchDeviceFactory;
+import com.tos_bot.utility.FileLoader;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
@@ -27,7 +29,7 @@ import java.util.LinkedHashMap;
 public class MainActivity extends Activity {
 	private Button _startServiceButton;
 	private Button _stopServiceButton;
-	private Spinner _deviceS;
+	private Button _settingMenuButton;
 	private ImageButton _floatStartButtonView = null;
 	private ImageButton _floatStopButtonView = null;
 	private ImageButton _floatStrategyButtonView = null;
@@ -65,28 +67,12 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		this.initDeviceList(); // create device list
+
 		ConfigData.TempDir = getCacheDir() + "";
 		_startServiceButton = (Button) findViewById(R.id.start_button);
-		_stopServiceButton = (Button) findViewById(R.id.stop_button);
-		_deviceS = (Spinner) findViewById(R.id.deviceList);
 		_startServiceButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				EditText serveret;
-				EditText deepet;
-				EditText maxcombo;
-				serveret = (EditText) findViewById(R.id.serverUrlText);
-				deepet = (EditText) findViewById(R.id.maxMoveText);
-				CheckBox edcheck = (CheckBox) findViewById(R.id.eightDircheck);
-				maxcombo = (EditText) findViewById(R.id.MaxComboText);
-				ConfigData.Serverurl = serveret.getText().toString();
-				ConfigData.deep = Integer.parseInt(deepet.getText().toString());
-				ConfigData.DeviceName = _deviceS.getSelectedItem().toString();
-				ConfigData.maxBombo = maxcombo.getText().toString();
-				if (edcheck.isChecked()) {
-					ConfigData.eightd = 1;
-				} else {
-					ConfigData.eightd = 0;
-				}
+				setConfig();
 				if (_floatStartButtonView == null) {
 					createFStartButton();
 				}
@@ -97,8 +83,17 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		_stopServiceButton.setOnClickListener(new View.OnClickListener() {
+		_settingMenuButton = (Button) findViewById(R.id.setting_button);
+		_settingMenuButton.setOnClickListener(new View.OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				Intent setMenu = new Intent(MainActivity.this, SettingMenuActivity.class);
+				startActivity(setMenu);
+			}
+		});
+		_stopServiceButton=(Button) findViewById(R.id.stopButton);
+		_stopServiceButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				try {
@@ -143,12 +138,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void initDeviceList() {
-		Spinner spinner = (Spinner) findViewById(R.id.deviceList);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item,
-				touchDeviceFactory.getDeviceList());
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinner.setAdapter(adapter);
+
 	}
 
 	private void createFStartButton() {
@@ -297,5 +287,23 @@ public class MainActivity extends Activity {
 				+ filename + ".png");
 		return BitmapFactory.decodeStream(imageInputStream);
 	}
-
+	
+	private void setConfig(){
+		SharedPreferences settings = getSharedPreferences("Config", 0);
+		ConfigData.Serverurl = settings.getString("Serverurl", "http://tbserver.ap01.aws.af.cm/");
+		ConfigData.deep = settings.getInt("deep", 30);
+		ConfigData.DeviceName =  settings.getString("DeviceName","Auto");
+		ConfigData.touchEventNum = settings.getString("touchEventNum","");
+		ConfigData.posXId = settings.getString("posXId","");
+		ConfigData.posYId = settings.getString("posYId","");
+		ConfigData.posXMax = settings.getString("posXMax","");
+		ConfigData.posYMax = settings.getString("posYMax","");
+		ConfigData.trackingId = settings.getString("trackingId","");
+		ConfigData.pressureId = settings.getString("pressureId","");
+		ConfigData.trackingMax = settings.getString("trackingMax","");
+		ConfigData.pressureMax = settings.getString("pressureMax","");
+		ConfigData.oneBallMove = settings.getString("oneBallMove","");
+		ConfigData.startPosX = settings.getString("startPosX","");
+		ConfigData.startPosY = settings.getString("startPosY","");
+	}
 }
