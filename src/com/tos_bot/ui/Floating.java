@@ -1,17 +1,10 @@
 package com.tos_bot.ui;
 
-import android.view.Display;
 import android.view.Gravity;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 
-public class BaseFloatView {
-	private Display _display;
-	private WindowManager _wm;
-	private View _view;
-	
-	
+public class Floating implements IFloating {
+
 	/**
 	 * This class can get view layout by x,y position.
 	 * 
@@ -19,7 +12,7 @@ public class BaseFloatView {
 	 * @param y
 	 * @return
 	 */
-	private WindowManager.LayoutParams getLayoutParams(int x, int y) {
+	public WindowManager.LayoutParams getLayoutParams(int x, int y) {
 		WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
 		wmParams.gravity = Gravity.TOP | Gravity.LEFT;
 		wmParams.x = x;

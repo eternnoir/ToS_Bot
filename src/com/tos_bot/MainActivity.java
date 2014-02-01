@@ -1,5 +1,7 @@
 package com.tos_bot;
 
+import com.tos_bot.ui.FloatingUIManager;
+import com.tos_bot.ui.Observer;
 import com.tos_bot.utility.FileLoader;
 
 import android.graphics.BitmapFactory;
@@ -34,6 +36,8 @@ public class MainActivity extends Activity {
 	private ImageButton _floatStrategyButtonView = null;
 	private LinearLayout _floatStrategyLayout = null;
 	private WindowManager _wm = null;
+    public Observer _observer = new Observer(this);
+    private FloatingUIManager floatingUI;
 	private final LinkedHashMap<Integer, String> IdStringMap = new LinkedHashMap<Integer, String>() {
 		{
 			put(R.id.Vary_color_Single, "Vary_color_Single");
@@ -56,8 +60,8 @@ public class MainActivity extends Activity {
 			put(R.id.Light_Except, "Light_Except");
 			put(R.id.Dark_Except, "Dark_Except");
 			put(R.id.Recover_Except, "Recover_Except");
-			put(R.id.Low_HP_Single, "Low_HP_Single");
-			put(R.id.Low_HP_Multi, "Low_HP_Multi");
+			/*put(R.id.Low_HP_Single, "Low_HP_Single");
+			put(R.id.Low_HP_Multi, "Low_HP_Multi");*/
 		}
 	};
 
@@ -71,17 +75,15 @@ public class MainActivity extends Activity {
 		this.initDeviceList(); // create device list
 
 		ConfigData.TempDir = getCacheDir() + "";
+        floatingUI = new FloatingUIManager(
+                this.getApplicationContext(),
+                this.getWindowManager().getDefaultDisplay(),
+                _observer);
 		_startServiceButton = (Button) findViewById(R.id.start_button);
 		_startServiceButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				setConfig();
-				if (_floatStartButtonView == null) {
-					createFStartButton();
-				}
-
-				if (_floatStrategyButtonView == null) {
-					createFStrategyButton();
-				}
+                floatingUI.StartFloatingUI();
 			}
 		});
 
@@ -98,28 +100,8 @@ public class MainActivity extends Activity {
 		_stopServiceButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				try {
-					if (_floatStartButtonView != null) {
-						_wm.removeView(_floatStartButtonView);
-					}
-					if (_floatStopButtonView != null) {
-						_wm.removeView(_floatStopButtonView);
-					}
-					if (_floatStrategyButtonView != null) {
-						_wm.removeView(_floatStrategyButtonView);
-					}
-					if (_floatStrategyLayout != null) {
-						_wm.removeView(_floatStrategyLayout);
-					}
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
-				_floatStartButtonView = null;
-				_floatStopButtonView = null;
-				_floatStrategyButtonView = null;
-				_floatStrategyLayout = null;
-				Intent intent = new Intent(MainActivity.this, botService.class);
-				stopService(intent);
+                floatingUI.StopFloatingUI();
+                StopService();
 			}
 		});
 
@@ -144,159 +126,18 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * 
+	 *
 	 */
-	private void createFStartButton() {
-		Display display = getWindowManager().getDefaultDisplay();
-		_floatStartButtonView = new ImageButton(getApplicationContext());
-		_wm = (WindowManager) getApplicationContext()
-				.getSystemService("window");
-		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(
-				0 + display.getWidth() / 8, display.getHeight() / 8);
-		_floatStartButtonView.getBackground().setAlpha(0);
-		_floatStartButtonView.setImageBitmap(getBitmapByFilename("start"));
-		_floatStartButtonView.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
-				_floatStartButtonView.setVisibility(View.INVISIBLE);
-				_floatStrategyButtonView.setVisibility(View.INVISIBLE);
-				if (_floatStopButtonView == null)
-					createFStopButton();
-				else
-					_floatStopButtonView.setVisibility(View.VISIBLE);
-				Intent intent = new Intent(MainActivity.this, botService.class);
-				startService(intent);
-			}
-		});
-		_wm.addView(_floatStartButtonView, wmParams); // ?遣View
-	}
 
-	private void createFStopButton() {
-		Display display = getWindowManager().getDefaultDisplay();
-		_floatStopButtonView = new ImageButton(getApplicationContext());
-		_wm = (WindowManager) getApplicationContext()
-				.getSystemService("window");
-		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(
-				display.getWidth() / 2 + display.getWidth() / 8,
-				display.getHeight() / 8);
-		_floatStopButtonView.getBackground().setAlpha(0);
-		_floatStopButtonView.setImageBitmap(getBitmapByFilename("stop"));
-		_floatStopButtonView.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
-				_floatStopButtonView.setVisibility(View.INVISIBLE);
-				if (_floatStartButtonView == null) {
-					createFStartButton();
-				} else {
-					_floatStartButtonView.setVisibility(View.VISIBLE);
-				}
-				if (_floatStrategyButtonView == null) {
-					createFStrategyButton();
-				} else {
-					_floatStrategyButtonView.setVisibility(View.VISIBLE);
-				}
+    public void StartService(){
+        Intent intent = new Intent(MainActivity.this, botService.class);
+        startService(intent);
+    }
 
-				if (ConfigData.solverThread != null) {
-					Thread moribund = ConfigData.solverThread;
-					ConfigData.solverThread = null;
-					moribund.interrupt();
-				}
-				Intent intent = new Intent(MainActivity.this, botService.class);
-				stopService(intent);
-			}
-		});
-		_wm.addView(_floatStopButtonView, wmParams);
-	}
-
-	private void createFStrategyButton() {
-		Display display = getWindowManager().getDefaultDisplay();
-		_floatStrategyButtonView = new ImageButton(getApplicationContext());
-		_wm = (WindowManager) getApplicationContext()
-				.getSystemService("window");
-		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(
-				0 + display.getWidth() / 8, display.getHeight() * 2 / 8);
-
-		_floatStrategyButtonView.getBackground().setAlpha(0);
-		_floatStrategyButtonView.setImageBitmap(getBitmapByFilename(IdStringMap
-				.get(ConfigData.StyleName) + "_Button"));
-		_floatStrategyButtonView.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
-				if (_floatStrategyLayout == null) {
-					createFStrategyHorizontalScrollView();
-				} else {
-					_floatStrategyLayout.setVisibility(View.VISIBLE);
-				}
-				_floatStrategyButtonView.setVisibility(View.INVISIBLE);
-				_floatStartButtonView.setVisibility(View.INVISIBLE);
-			}
-		});
-		_wm.addView(_floatStrategyButtonView, wmParams);
-	}
-
-	private void createFStrategyHorizontalScrollView() {
-		_floatStrategyLayout = new LinearLayout(getApplicationContext());
-		_wm = (WindowManager) getApplicationContext()
-				.getSystemService("window");
-		WindowManager.LayoutParams wmParams = getFloatingLayoutParams(0, 0);
-
-		HorizontalScrollView scrollView = new HorizontalScrollView(this);
-		scrollView.addView(getStrategyLinearLayout());
-		_floatStrategyLayout.addView(scrollView);
-		_wm.addView(_floatStrategyLayout, wmParams);
-	}
-
-	/**
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	private WindowManager.LayoutParams getFloatingLayoutParams(int x, int y) {
-		WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
-		wmParams.gravity = Gravity.TOP | Gravity.LEFT;
-		wmParams.x = x;
-		wmParams.y = y;
-		wmParams.type = 2002;
-		wmParams.format = 1;
-		wmParams.flags = 40;
-		wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-		wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-		return wmParams;
-	}
-
-	private LinearLayout getStrategyLinearLayout() {
-		LinearLayout layout = new LinearLayout(this);
-		Integer[] styleList = weightMap.getInstance().getStyleList();
-
-		for (int i = 0; i < styleList.length; i++) {
-			layout.addView(getImageButton(styleList[i]));
-		}
-
-		return layout;
-	}
-
-	private ImageButton getImageButton(Integer styleName) {
-		ImageButton button = new ImageButton(this);
-		button.getBackground().setAlpha(0);
-		button.setId(styleName);
-		button.setImageBitmap(getBitmapByFilename(IdStringMap.get(styleName)));
-		button.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
-				ConfigData.StyleName = view.getId();
-				_floatStrategyButtonView
-						.setImageBitmap(getBitmapByFilename(IdStringMap
-								.get(ConfigData.StyleName) + "_Button"));
-				_floatStrategyLayout.setVisibility(View.INVISIBLE);
-				_floatStartButtonView.setVisibility(View.VISIBLE);
-				_floatStrategyButtonView.setVisibility(View.VISIBLE);
-			}
-		});
-		return button;
-	}
-
-	private Bitmap getBitmapByFilename(String filename) {
-		FileLoader.setContext(this);
-		InputStream imageInputStream = FileLoader.getFileStreamByAsset("image/"
-				+ filename + ".png");
-		return BitmapFactory.decodeStream(imageInputStream);
-	}
+    public void StopService(){
+        Intent intent = new Intent(MainActivity.this, botService.class);
+        stopService(intent);
+    }
 	
 	/**
 	 * get config data from SharedPreferences
