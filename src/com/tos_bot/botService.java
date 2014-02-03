@@ -64,7 +64,7 @@ public class botService extends Service {
 					+ "&weight="
 					+ weightMap.getInstance().getWeight(ConfigData.StyleName)
 					+ "&ed=" + ConfigData.eightd + "&combo="
-					+ ConfigData.maxBombo;
+					+ ConfigData.maxCombo;
 			Log.i("Bot:", "Url: " + serverUrl + "?" + parameters);
 			showMessage("Solving");
 			httpService hs = new httpService();
