@@ -2,26 +2,14 @@ package com.tos_bot;
 
 import com.tos_bot.ui.FloatingUIManager;
 import com.tos_bot.ui.Observer;
-import com.tos_bot.utility.FileLoader;
 
-import android.graphics.BitmapFactory;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
-import android.widget.ImageButton;
-
-import java.io.InputStream;
-import java.util.LinkedHashMap;
 
 /**
  * @author frankwang
@@ -31,39 +19,8 @@ public class MainActivity extends Activity {
 	private Button _startServiceButton;
 	private Button _stopServiceButton;
 	private Button _settingMenuButton;
-	private ImageButton _floatStartButtonView = null;
-	private ImageButton _floatStopButtonView = null;
-	private ImageButton _floatStrategyButtonView = null;
-	private LinearLayout _floatStrategyLayout = null;
-	private WindowManager _wm = null;
     public Observer _observer = new Observer(this);
     private FloatingUIManager floatingUI;
-	private final LinkedHashMap<Integer, String> IdStringMap = new LinkedHashMap<Integer, String>() {
-		{
-			put(R.id.Vary_color_Single, "Vary_color_Single");
-			put(R.id.Vary_color_Multi, "Vary_color_Multi");
-			put(R.id.Water_Single, "Water_Single");
-			put(R.id.Water_Multi, "Water_Multi");
-			put(R.id.Fire_Single, "Fire_Single");
-			put(R.id.Fire_Multi, "Fire_Multi");
-			put(R.id.Wood_Single, "Wood_Single");
-			put(R.id.Wood_Multi, "Wood_Multi");
-			put(R.id.Light_Single, "Light_Single");
-			put(R.id.Light_Multi, "Light_Multi");
-			put(R.id.Dark_Single, "Dark_Single");
-			put(R.id.Dark_Multi, "Dark_Multi");
-			put(R.id.Recover_Single, "Recover_Single");
-			put(R.id.Recover_Multi, "Recover_Multi");
-			put(R.id.Water_Except, "Water_Except");
-			put(R.id.Fire_Except, "Fire_Except");
-			put(R.id.Wood_Except, "Wood_Except");
-			put(R.id.Light_Except, "Light_Except");
-			put(R.id.Dark_Except, "Dark_Except");
-			put(R.id.Recover_Except, "Recover_Except");
-			/*put(R.id.Low_HP_Single, "Low_HP_Single");
-			put(R.id.Low_HP_Multi, "Low_HP_Multi");*/
-		}
-	};
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -146,7 +103,7 @@ public class MainActivity extends Activity {
 		SharedPreferences settings = getSharedPreferences("Config", 0);
 		ConfigData.Serverurl = settings.getString("Serverurl", "http://tbserver.ap01.aws.af.cm/");
 		ConfigData.deep = settings.getInt("deep", 30);
-		ConfigData.maxBombo = settings.getString("maxBombo", "0");
+		ConfigData.maxCombo = settings.getString("maxCombo", "0");
 		ConfigData.gap = settings.getString("gap","");
 		ConfigData.DeviceName =  settings.getString("DeviceName","Auto");
 		ConfigData.touchEventNum = settings.getString("touchEventNum","");
