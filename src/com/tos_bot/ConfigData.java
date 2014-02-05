@@ -12,6 +12,7 @@ public class ConfigData {
 	public static Thread solverThread = null;
 	public static String maxCombo = "0";		//0 is no limit
 	public static String gap;			//the sleep time between two touch command
+	public static int timeOut = 10;
 	//For TouchEvent
 	public static String touchEventNum;
 	public static String posXId;
