@@ -43,7 +43,8 @@
                 android:id="@+id/Deep"
                 android:layout_width="207dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:inputType="number" />
 
         </LinearLayout>
 
@@ -62,7 +63,8 @@
                 android:id="@+id/MaxCombo"
                 android:layout_width="207dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:inputType="number" />
 
         </LinearLayout>
 
@@ -81,7 +83,8 @@
                 android:id="@+id/GapText"
                 android:layout_width="207dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -107,7 +110,8 @@
                 android:id="@+id/TimeOut"
                 android:layout_width="207dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/TextView04"
