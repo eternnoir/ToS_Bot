@@ -12,10 +12,10 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 
-public class imageProcesser {
+public class boardManager {
 	static String _Path = "";
 
-	private imageProcesser() {
+	private boardManager() {
 
 	}
 
