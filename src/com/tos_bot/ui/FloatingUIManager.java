@@ -12,7 +12,16 @@ import android.widget.SeekBar;
 
 import com.tos_bot.ConfigData;
 import com.tos_bot.Constants;
+import com.tos_bot.ui.state.State;
 import com.tos_bot.weightMap;
+import com.tos_bot.ui.state.InitPage;
+import com.tos_bot.ui.state.SettingPage;
+import com.tos_bot.ui.state.StartServicePage;
+import com.tos_bot.ui.state.VariablePage;
+import com.tos_bot.ui.state.StrategyPage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Sean.
@@ -25,20 +34,105 @@ public class FloatingUIManager {
     private Context _context;
     private Observer _observer;
     private double imageButtonRatio = 1;
-    private boolean isSetting = false;
+    private State current;
+    private ArrayList<View> _views = new ArrayList<View>();
+    private InitPage initPage;
+    private SettingPage settingPage;
+    private StartServicePage startServicePage;
+    private VariablePage variablePage;
+    private StrategyPage strategyPage;
 
-    private FloatingImageButton _floatStartButton;
-    private FloatingImageButton _floatStopButton;
     private FloatingImageButton _floatStrategyButton;
     private FloatingImageButton _floatSettingButton;
-    private FloatingImageButton _floatVariableButton;
-    private FloatingImageButton _floatReturnButton;
-    private FloatingLinearLayout _floatStrategyLayout;
-    private FloatingSeekBar _floatStepSeekBar;
-    private FloatingSeekBar _floatComboSeekBar;
-    private FloatingTextView _floatStepTextView;
-    private FloatingTextView _floatComboTextView;
     //private View _view;
+
+    public void Init(){
+        current = initPage;
+        current.Init();
+    }
+
+    public void Setting() {
+        current = settingPage;
+        current.Setting();
+    }
+
+    public void Variable() {
+        current = variablePage;
+        current.Variable();
+    }
+
+    public void Strategy() {
+        current = strategyPage;
+        current.Strategy();
+    }
+
+    public void StartService() {
+        current = startServicePage;
+        current.StartService();
+    }
+
+    public ArrayList<View> RegisterWidget(InitPage page){
+        final FloatingImageButton button = CreateSettingButton();
+        _floatSettingButton = button;
+        _views.add(button);
+        return new ArrayList<View>(){{
+            add(button);
+        }};
+    }
+
+    public ArrayList<View> RegisterWidget(SettingPage page){
+        final FloatingImageButton button1 = CreateStartButton();
+        final FloatingImageButton button2 = CreateStrategyButton();
+        final FloatingImageButton button3 = CreateVariableButton();
+        _floatStrategyButton = button2;
+        _views.add(button1);
+        _views.add(button2);
+        _views.add(button3);
+        return new ArrayList<View>(){{
+            add(button1);
+            add(button2);
+            add(button3);
+            add(_floatSettingButton);
+        }};
+    }
+
+    public ArrayList<View> RegisterWidget(StartServicePage page){
+        final FloatingImageButton button = CreateStopButton();
+        _views.add(button);
+        return new ArrayList<View>(){{
+            add(button);
+        }};
+    }
+
+    public ArrayList<View> RegisterWidget(VariablePage page){
+        final FloatingSeekBar seekBar1;
+        final FloatingSeekBar seekBar2;
+        final FloatingTextView text1 = CreateStepTextView();
+        final FloatingTextView text2 = CreateComboTextView();
+        final FloatingImageButton button = CreateReturnButton();
+        seekBar1 = CreateStepSeekBar(text1);
+        seekBar2 = CreateComboSeekBar(text2);
+        _views.add(seekBar1);
+        _views.add(seekBar2);
+        _views.add(text1);
+        _views.add(text2);
+        _views.add(button);
+        return new ArrayList<View>(){{
+            add(seekBar1);
+            add(seekBar2);
+            add(text1);
+            add(text2);
+            add(button);
+        }};
+    }
+
+    public ArrayList<View> RegisterWidget(StrategyPage page){
+        final FloatingLinearLayout layout = CreateStrategyHorizontalScrollView();
+        _views.add(layout);
+        return new ArrayList<View>(){{
+            add(layout);
+        }};
+    }
 
     public FloatingUIManager(Context context, Display display, Observer observer){
         WIDTH = display.getWidth();
@@ -48,49 +142,37 @@ public class FloatingUIManager {
         _context = context;
         _wm = (WindowManager) context.getSystemService("window");
         _observer = observer;
-        CreateFloatingUI();
+        initPage = new InitPage(this);
+        settingPage = new SettingPage(this);
+        startServicePage = new StartServicePage(this);
+        variablePage = new VariablePage(this);
+        strategyPage = new StrategyPage(this);
+        current = initPage;
     }
 
-    private void CreateFloatingUI(){
-        CreateStartButton();
-        CreateStopButton();
-        CreateStrategyButton();
-        CreateStrategyHorizontalScrollView();
-        CreateSettingButton();
-        CreateVariableButton();
-        CreateStepSeekBar();
-        CreateComboSeekBar();
-        CreateReturnButton();
-    }
-
-    private void CreateStartButton(){
+    private FloatingImageButton CreateStartButton(){
         int side = getStartButtonPosition();
-        _floatStartButton = CreateButton(side, side, "start");
-        _floatStartButton.setOnClickListener(new View.OnClickListener() {
+        FloatingImageButton button = CreateButton(side, side, "start");
+        button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                _floatStartButton.setVisibility(View.INVISIBLE);
-                _floatStrategyButton.setVisibility(View.INVISIBLE);
-                _floatSettingButton.setVisibility(View.INVISIBLE);
-                _floatVariableButton.setVisibility(View.INVISIBLE);
-                _floatStopButton.setVisibility(View.VISIBLE);
-                isSetting = false;
+                current.StartService();
                 _observer.NotifyStart();
             }
         });
+        return button;
     }
 
     private int getStartButtonPosition(){
         return (int)(RADIUS / Math.sqrt(2));
     }
 
-    private void CreateStopButton(){
-        _floatStopButton = CreateButton(
+    private FloatingImageButton CreateStopButton(){
+        FloatingImageButton button = CreateButton(
                 (int)(WIDTH * Constants.LEFT_TOP_WIDGET_X),
                 (int)(HEIGHT * Constants.LEFT_TOP_WIDGET_Y), "stop");
-        _floatStopButton.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                _floatStopButton.setVisibility(View.INVISIBLE);
-                _floatSettingButton.setVisibility(View.VISIBLE);
+                current.Init();
                 if (ConfigData.solverThread != null) {
                     Thread moribund = ConfigData.solverThread;
                     ConfigData.solverThread = null;
@@ -99,34 +181,33 @@ public class FloatingUIManager {
                 _observer.NotifyStop();
             }
         });
+        return button;
     }
 
-    private void CreateStrategyButton(){
-        _floatStrategyButton = CreateButton(
+    private FloatingImageButton CreateStrategyButton(){
+        FloatingImageButton button = CreateButton(
                 RADIUS, 0,
                 Constants.IdStringMap.get(ConfigData.StyleName) + "_Button");
-        _floatStrategyButton.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                _floatStrategyLayout.setVisibility(View.VISIBLE);
-                _floatStrategyButton.setVisibility(View.INVISIBLE);
-                _floatStartButton.setVisibility(View.INVISIBLE);
-                _floatSettingButton.setVisibility(View.INVISIBLE);
-                _floatVariableButton.setVisibility(View.INVISIBLE);
+                current.Strategy();
             }
         });
+        return button;
     }
 
-    private void CreateStrategyHorizontalScrollView(){
-        _floatStrategyLayout = new FloatingLinearLayout(_context);
-        WindowManager.LayoutParams wmParams = _floatStrategyLayout.getLayoutParams(
+    private FloatingLinearLayout CreateStrategyHorizontalScrollView(){
+        FloatingLinearLayout layout = new FloatingLinearLayout(_context);
+        WindowManager.LayoutParams wmParams = layout.getLayoutParams(
                 (int)Constants.LEFT_TOP_WIDGET_X,
                 (int)Constants.LEFT_TOP_WIDGET_Y);
 
         HorizontalScrollView scrollView = new HorizontalScrollView(_context);
         scrollView.addView(getStrategyLinearLayout());
-        _floatStrategyLayout.addView(scrollView);
-        _wm.addView(_floatStrategyLayout, wmParams);
-        _floatStrategyLayout.setVisibility(View.INVISIBLE);
+        layout.addView(scrollView);
+        _wm.addView(layout, wmParams);
+        layout.setVisibility(View.INVISIBLE);
+        return layout;
     }
 
     private LinearLayout getStrategyLinearLayout() {
@@ -150,60 +231,45 @@ public class FloatingUIManager {
                 _floatStrategyButton.setUpImage(
                         Constants.IdStringMap.get(ConfigData.StyleName) + "_Button",
                         imageButtonRatio);
-                _floatStrategyLayout.setVisibility(View.INVISIBLE);
-                _floatStartButton.setVisibility(View.VISIBLE);
-                _floatStrategyButton.setVisibility(View.VISIBLE);
-                _floatSettingButton.setVisibility(View.VISIBLE);
-                _floatVariableButton.setVisibility(View.VISIBLE);
+                current.Setting();
             }
         });
         return button;
     }
 
-    private void CreateSettingButton(){
-        _floatSettingButton = CreateButton(
+    private FloatingImageButton CreateSettingButton(){
+        FloatingImageButton button = CreateButton(
                 (int)Constants.LEFT_TOP_WIDGET_X,
                 (int)Constants.LEFT_TOP_WIDGET_Y, "setting");
-        _floatSettingButton.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (!isSetting) {
-                    _floatVariableButton.setVisibility(View.VISIBLE);
-                    _floatStrategyButton.setVisibility(View.VISIBLE);
-                    _floatStartButton.setVisibility(View.VISIBLE);
-                } else {
-                    _floatVariableButton.setVisibility(View.INVISIBLE);
-                    _floatStrategyButton.setVisibility(View.INVISIBLE);
-                    _floatStartButton.setVisibility(View.INVISIBLE);
+                if (current == initPage){
+                    current.Setting();
+                }else{
+                    current.Init();
                 }
-                isSetting = !isSetting;
             }
         });
+        return button;
     }
 
-    private void CreateVariableButton(){
-        _floatVariableButton = CreateButton((int)Constants.LEFT_TOP_WIDGET_X, RADIUS, "variable");
-        _floatVariableButton.setOnClickListener(new View.OnClickListener() {
+    private FloatingImageButton CreateVariableButton(){
+        FloatingImageButton button = CreateButton((int)Constants.LEFT_TOP_WIDGET_X, RADIUS, "variable");
+        button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                _floatStartButton.setVisibility(View.INVISIBLE);
-                _floatStrategyButton.setVisibility(View.INVISIBLE);
-                _floatVariableButton.setVisibility(View.INVISIBLE);
-                _floatSettingButton.setVisibility(View.INVISIBLE);
-                _floatStepSeekBar.setVisibility(View.VISIBLE);
-                _floatComboSeekBar.setVisibility(View.VISIBLE);
-                _floatStepTextView.setVisibility(View.VISIBLE);
-                _floatComboTextView.setVisibility(View.VISIBLE);
-                _floatReturnButton.setVisibility(View.VISIBLE);
+                current.Variable();
             }
         });
+        return button;
     }
 
-    private void CreateStepSeekBar(){
-        _floatStepSeekBar = CreateSeekBar(
+    private FloatingSeekBar CreateStepSeekBar(final FloatingTextView text){
+        final FloatingSeekBar seekBar = CreateSeekBar(
                 (int)(WIDTH * Constants.STEP_SEEK_BAR_X),
                 (int)(HEIGHT * Constants.STEP_SEEK_BAR_Y));
-        _floatStepSeekBar.setMax(Constants.STEP_SEEK_BAR_MAX);
-        _floatStepSeekBar.setProgress(ConfigData.deep);
-        _floatStepSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        seekBar.setMax(Constants.STEP_SEEK_BAR_MAX);
+        seekBar.setProgress(ConfigData.deep);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar arg0) {
             }
@@ -212,22 +278,28 @@ public class FloatingUIManager {
             }
             @Override
             public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
-                _floatStepTextView.setText(String.valueOf(_floatStepSeekBar.getProgress()));
+                text.setText(String.valueOf(seekBar.getProgress()));
+                ConfigData.deep = seekBar.getProgress();
             }
         });
-        _floatStepTextView = CreateTextView(
+        return seekBar;
+    }
+
+    private FloatingTextView CreateStepTextView(){
+        FloatingTextView text = CreateTextView(
                 (int)(WIDTH * Constants.SEEK_BAR_TEXT_X),
                 (int)(HEIGHT * Constants.STEP_SEEK_BAR_Y));
-        _floatStepTextView.setText(String.valueOf(_floatStepSeekBar.getProgress()));
+        text.setText(String.valueOf(ConfigData.deep));
+        return text;
     }
 
-    private void CreateComboSeekBar(){
-        _floatComboSeekBar = CreateSeekBar(
+    private FloatingSeekBar CreateComboSeekBar(final FloatingTextView text){
+        final FloatingSeekBar seekBar = CreateSeekBar(
                 (int)(WIDTH * Constants.COMBO_SEEK_BAR_X),
                 (int)(HEIGHT * Constants.COMBO_SEEK_BAR_Y));
-        _floatComboSeekBar.setMax(Constants.COMBO_SEEK_BAR_MAX);
-        _floatComboSeekBar.setProgress(Integer.parseInt(ConfigData.maxCombo));
-        _floatComboSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        seekBar.setMax(Constants.COMBO_SEEK_BAR_MAX);
+        seekBar.setProgress(Integer.parseInt(ConfigData.maxCombo));
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar arg0) {
             }
@@ -236,34 +308,31 @@ public class FloatingUIManager {
             }
             @Override
             public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
-                _floatComboTextView.setText(String.valueOf(_floatComboSeekBar.getProgress()));
+                text.setText(String.valueOf(seekBar.getProgress()));
+                ConfigData.maxCombo = String.valueOf(seekBar.getProgress());
             }
         });
-        _floatComboTextView = CreateTextView(
-                (int)(WIDTH * Constants.SEEK_BAR_TEXT_X),
-                (int)(HEIGHT * Constants.COMBO_SEEK_BAR_Y));
-        _floatComboTextView.setText(String.valueOf(_floatComboSeekBar.getProgress()));
+        return seekBar;
     }
 
-    private void CreateReturnButton(){
-        _floatReturnButton = CreateButton(
+    private FloatingTextView CreateComboTextView(){
+        FloatingTextView text = CreateTextView(
+                (int)(WIDTH * Constants.SEEK_BAR_TEXT_X),
+                (int)(HEIGHT * Constants.COMBO_SEEK_BAR_Y));
+        text.setText(ConfigData.maxCombo);
+        return text;
+    }
+
+    private FloatingImageButton CreateReturnButton(){
+        FloatingImageButton button = CreateButton(
                 (int)Constants.LEFT_TOP_WIDGET_X,
                 (int)Constants.LEFT_TOP_WIDGET_Y, "return");
-        _floatReturnButton.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                ConfigData.deep = _floatStepSeekBar.getProgress();
-                ConfigData.maxCombo = String.valueOf(_floatComboSeekBar.getProgress());
-                _floatStartButton.setVisibility(View.VISIBLE);
-                _floatStrategyButton.setVisibility(View.VISIBLE);
-                _floatVariableButton.setVisibility(View.VISIBLE);
-                _floatSettingButton.setVisibility(View.VISIBLE);
-                _floatStepSeekBar.setVisibility(View.INVISIBLE);
-                _floatComboSeekBar.setVisibility(View.INVISIBLE);
-                _floatStepTextView.setVisibility(View.INVISIBLE);
-                _floatComboTextView.setVisibility(View.INVISIBLE);
-                _floatReturnButton.setVisibility(View.INVISIBLE);
+                current.Setting();
             }
         });
+        return button;
     }
 
     private double CalcRatio(){
@@ -276,21 +345,14 @@ public class FloatingUIManager {
     }
 
     public void StartFloatingUI(){
-        _floatSettingButton.setVisibility(View.VISIBLE);
+        current.Init();
     }
 
     public void StopFloatingUI(){
-        _floatStartButton.setVisibility(View.INVISIBLE);
-        _floatStrategyButton.setVisibility(View.INVISIBLE);
-        _floatStrategyLayout.setVisibility(View.INVISIBLE);
-        _floatStopButton.setVisibility(View.INVISIBLE);
-        _floatSettingButton.setVisibility(View.INVISIBLE);
-        _floatVariableButton.setVisibility(View.INVISIBLE);
-        _floatStepSeekBar.setVisibility(View.INVISIBLE);
-        _floatComboSeekBar.setVisibility(View.INVISIBLE);
-        _floatStepTextView.setVisibility(View.INVISIBLE);
-        _floatComboTextView.setVisibility(View.INVISIBLE);
-        _floatReturnButton.setVisibility(View.INVISIBLE);
+        for(View v : _views) {
+            v.setVisibility(View.INVISIBLE);
+        }
+        current = initPage;
     }
 
     private FloatingSeekBar CreateSeekBar(int x, int y){

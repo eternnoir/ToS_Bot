@@ -21,7 +21,7 @@ public class GeneralSettingActivity extends Activity {
 		SharedPreferences settings = getSharedPreferences("Config", 0);
 		su.setText(settings.getString("Serverurl", "http://tbserver.ap01.aws.af.cm/"));
 		deep.setText(settings.getInt("deep", 30)+"");
-		maxcombo.setText(settings.getString("maxBombo", "0"));
+		maxcombo.setText(settings.getString("maxCombo", "0"));
 		gap.setText(settings.getString("gap", "70"));
 		timeOut.setText(settings.getInt("timeOut", 10)+"");
 		Button save = (Button) findViewById(R.id.SaveBtn);
@@ -55,7 +55,7 @@ public class GeneralSettingActivity extends Activity {
 						Integer.parseInt(((EditText) findViewById(R.id.Deep))
 								.getText().toString())).commit();
 		settings.edit().putString(
-						"maxBombo",
+						"maxCombo",
 						((EditText) findViewById(R.id.MaxCombo)).getText()
 								.toString()).commit();
 		settings.edit().putString(
