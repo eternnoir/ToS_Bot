@@ -148,8 +148,7 @@ public class botService extends Service {
 			getScreenshot();
 			int[][] orbArray;
 			try {
-				orbArray = boardManager.getBallArray(boardManager
-						.cutBallReg(ConfigData.TempDir + "/img.png"));
+				orbArray = boardManager.getBallArray();
 			} catch (NotInTosException e) {
 				Log.i("Bot:", "Can find bord Pic");
 				return null;
