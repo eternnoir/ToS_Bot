@@ -1,10 +1,14 @@
-package com.tos_bot;
+package com.tos_bot.board;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import com.tos_bot.NotInTosException;
+
+
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
