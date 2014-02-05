@@ -40,7 +40,7 @@ public class Constants {
     public static final double SEEK_BAR_WIDTH = 2D / 3D;
     public static final double STEP_SEEK_BAR_X = 1D / 5D;
     public static final double STEP_SEEK_BAR_Y = 0;
-    public static final int STEP_SEEK_BAR_MAX = 50;
+    public static final int STEP_SEEK_BAR_MAX = 100;
     public static final double COMBO_SEEK_BAR_X = STEP_SEEK_BAR_X;
     public static final double COMBO_SEEK_BAR_Y = 1D / 12D;
     public static final int COMBO_SEEK_BAR_MAX = 8;
