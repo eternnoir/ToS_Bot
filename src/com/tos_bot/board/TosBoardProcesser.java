@@ -48,7 +48,8 @@ public class TosBoardProcesser implements IBoardProcesser {
 		return cropped;
 	}
 
-	public int[][] getBallArray() throws NotInTosException {
+	@Override
+	public int[][] getBoardOrbArrary() throws NotInTosException {
 		Bitmap c = this.cutBallReg(ConfigData.TempDir + "/img.png");
 		int[][] ret = new int[5][6];
 		Bitmap sourceBitmap = c;
@@ -157,10 +158,7 @@ public class TosBoardProcesser implements IBoardProcesser {
 		return ret;
 	}
 
-	@Override
-	public int[][] getBoardOrbArrary() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
+
 
 }
