@@ -72,7 +72,7 @@ public class botService extends Service {
 			httpService hs = new httpService();
 			String solstr="";
 			try {
-				solstr = hs.httpServiceGet(serverUrl, parameters);
+				solstr = hs.httpServiceGet(serverUrl, parameters,ConfigData.timeOut);
 			} catch (Exception e) {
 				e.printStackTrace();
 				Log.i("Bot:", "NetworkError");

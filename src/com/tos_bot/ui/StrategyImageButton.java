@@ -7,7 +7,7 @@ import com.tos_bot.Constants;
 /**
  * Created by Sean.
  */
-public class StrategyImageButton extends TosImageButton{
+public class StrategyImageButton extends TosImageButton {
 
     public StrategyImageButton(Context context){
         super(context);
