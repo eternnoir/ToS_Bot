@@ -56,6 +56,10 @@ public class botService extends Service {
 	public class ServerSlove extends Thread {
 		@Override
 		public void run() {
+			if(ConfigData.baseOrbHash == null){
+				Log.i("Bot:", "Create Base Orb Hash Info");
+				BoardManager.setOrbHash();
+			}
 			Log.i("Bot:", "Take Board");
 			String board = getBoardFromPic();
 			if (board == null) {
@@ -148,7 +152,7 @@ public class botService extends Service {
 			getScreenshot();
 			int[][] orbArray;
 			try {
-				orbArray = boardManager.getBallArray();
+				orbArray = BoardManager.getBallArray();
 			} catch (NotInTosException e) {
 				Log.i("Bot:", "Can find bord Pic");
 				return null;

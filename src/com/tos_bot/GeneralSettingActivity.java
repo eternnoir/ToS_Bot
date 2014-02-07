@@ -1,5 +1,7 @@
 package com.tos_bot;
 
+import com.tos_bot.board.BoardManager;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -30,6 +32,12 @@ public class GeneralSettingActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				saveSetting();
+				try {
+					BoardManager.getBallArray();
+				} catch (NotInTosException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 	}

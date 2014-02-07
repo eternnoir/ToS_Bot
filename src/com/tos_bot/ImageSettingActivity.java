@@ -1,5 +1,7 @@
 package com.tos_bot;
 
+import com.tos_bot.board.BoardManager;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;

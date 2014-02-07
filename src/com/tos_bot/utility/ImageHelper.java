@@ -58,8 +58,9 @@ public  class ImageHelper {
 	    return resizedBitmap;
 	}
 	
-	public static int[] BitmaptoGrayscale(Bitmap bmpOriginal)
-	{        
+	public static int[] BitmaptoGrayscale(Bitmap bmSrc)
+	{     
+		/*
 		int color[] = new int[6]; // RGBDLH
 		int picw = bmpOriginal.getWidth();
 		int pich = bmpOriginal.getHeight();
@@ -74,6 +75,27 @@ public  class ImageHelper {
 			ret[i]=(int) (0.3 * _red + 0.59 * _green + 0.11 * _blue);
 
 		}
+		*/
+		int width = bmSrc.getWidth();  
+        int height = bmSrc.getHeight();  
+        // 创建目标灰度图像  
+        Bitmap bmpGray = null;  
+        bmpGray = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);  
+        // 创建画布  
+        Canvas c = new Canvas(bmpGray);  
+        Paint paint = new Paint();  
+        ColorMatrix cm = new ColorMatrix();  
+        cm.setSaturation(0);  
+        ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);  
+        paint.setColorFilter(f);  
+        c.drawBitmap(bmSrc, 0, 0, paint); 
+        int[] pix = new int[width * height];
+        int i =0;
+        for(int h =0;h<height;h++)
+        	for(int w=0;w<width;w++){
+        		 pix[i] = bmpGray.getPixel(w,h);
+        		 i++;
+        	}
 	    return pix;
 	}
 	
