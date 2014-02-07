@@ -1,5 +1,7 @@
 package com.tos_bot;
 
+import java.util.LinkedHashMap;
+
 import android.content.SharedPreferences;
 
 
@@ -33,6 +35,10 @@ public class ConfigData {
 	public static int boardStartX=0;
 	public static int boardStartY=0;
 	
+	
+	public static int MaxOrbType=6;
+	public static LinkedHashMap<String, String> baseOrbHash = null;
+	
 	/**
 	 * get config data from SharedPreferences
 	 */
@@ -56,11 +62,11 @@ public class ConfigData {
 		ConfigData.startPosY = settings.getString("startPosY","");
 		
 		//For Image
-		
 		ConfigData.oneOrbWitdh = settings.getInt("oneOrbWitdh", 0);
 		ConfigData.boardStartX = settings.getInt("boardStartX", 0);
 		ConfigData.boardStartY = settings.getInt("boardStartY", 0);
 		
+
 	}
 	
 }
