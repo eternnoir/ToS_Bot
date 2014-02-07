@@ -15,7 +15,7 @@ public class StrategyImageButton extends TosImageButton {
     }
 
     public void setUpImage(Integer styleName, double ratio){
-        Bitmap srcImage = getBitmapByFilename(Constants.IdStringMap.get(styleName));
-        this.setImageBitmap(resizeImage(srcImage, ratio));
+        Bitmap srcImage = getBitmapByFilename(Constants.IdStringMap.get(styleName),ratio);
+        this.setImageBitmap(srcImage);
     }
 }

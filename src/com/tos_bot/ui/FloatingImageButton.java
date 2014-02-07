@@ -20,7 +20,7 @@ public class FloatingImageButton extends TosImageButton implements IFloating{
     }
 
     public void setUpImage(String filename, double ratio){
-        Bitmap srcImage = getBitmapByFilename(filename);
-        this.setImageBitmap(resizeImage(srcImage, ratio));
+        Bitmap srcImage = getBitmapByFilename(filename,ratio);
+        this.setImageBitmap(srcImage);
     }
 }
