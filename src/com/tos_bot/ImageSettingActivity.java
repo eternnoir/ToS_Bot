@@ -27,6 +27,7 @@ public class ImageSettingActivity extends Activity {
 				saveSetting();
 			}
 		});
+		loadSetting();
 	}
 
 	@Override
@@ -43,9 +44,9 @@ public class ImageSettingActivity extends Activity {
 
 	private void loadSetting() {
 		SharedPreferences settings = getSharedPreferences("Config", 0);
-		oneOrbWitdh.setText(settings.getInt("oneOrbWitdh", 0));
-		posX.setText(settings.getInt("boardStartX", 0));
-		posY.setText(settings.getInt("boardStartY", 0));
+		oneOrbWitdh.setText(settings.getInt("oneOrbWitdh", 0)+"");
+		posX.setText(settings.getInt("boardStartX", 0)+"");
+		posY.setText(settings.getInt("boardStartY", 0)+"");
 
 	}
 
