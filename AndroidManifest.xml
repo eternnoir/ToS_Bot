@@ -28,6 +28,8 @@
         </activity>
         <activity android:name="GeneralSettingActivity">
         </activity>
+        <activity android:name="ImageSettingActivity">
+        </activity>
         <service android:name=".botService" />
     </application>
 
