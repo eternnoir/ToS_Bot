@@ -26,4 +26,9 @@ public class ConfigData {
 	public static String oneBallMove;
 	public static String startPosX;
 	public static String startPosY;
+	//For Image Setting
+	public static int oneOrbWitdh=0;
+	public static int boardStartX=0;
+	public static int boardStartY=0;
+	
 }
