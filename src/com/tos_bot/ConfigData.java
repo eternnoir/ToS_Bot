@@ -1,5 +1,7 @@
 package com.tos_bot;
 
+import android.content.SharedPreferences;
+
 
 public class ConfigData {
 	public static String Serverurl;
@@ -26,4 +28,39 @@ public class ConfigData {
 	public static String oneBallMove;
 	public static String startPosX;
 	public static String startPosY;
+	//For Image Setting
+	public static int oneOrbWitdh=0;
+	public static int boardStartX=0;
+	public static int boardStartY=0;
+	
+	/**
+	 * get config data from SharedPreferences
+	 */
+	static public void setConfig(SharedPreferences settings ){
+		ConfigData.Serverurl = settings.getString("Serverurl", "http://tbserver.ap01.aws.af.cm/");
+		ConfigData.deep = settings.getInt("deep", 30);
+		ConfigData.maxCombo = settings.getString("maxCombo", "0");
+		ConfigData.gap = settings.getString("gap","");
+		ConfigData.DeviceName =  settings.getString("DeviceName","Auto");
+		ConfigData.touchEventNum = settings.getString("touchEventNum","");
+		ConfigData.posXId = settings.getString("posXId","");
+		ConfigData.posYId = settings.getString("posYId","");
+		ConfigData.posXMax = settings.getString("posXMax","");
+		ConfigData.posYMax = settings.getString("posYMax","");
+		ConfigData.trackingId = settings.getString("trackingId","");
+		ConfigData.pressureId = settings.getString("pressureId","");
+		ConfigData.trackingMax = settings.getString("trackingMax","");
+		ConfigData.pressureMax = settings.getString("pressureMax","");
+		ConfigData.oneBallMove = settings.getString("oneBallMove","");
+		ConfigData.startPosX = settings.getString("startPosX","");
+		ConfigData.startPosY = settings.getString("startPosY","");
+		
+		//For Image
+		
+		ConfigData.oneOrbWitdh = settings.getInt("oneOrbWitdh", 0);
+		ConfigData.boardStartX = settings.getInt("boardStartX", 0);
+		ConfigData.boardStartY = settings.getInt("boardStartY", 0);
+		
+	}
+	
 }

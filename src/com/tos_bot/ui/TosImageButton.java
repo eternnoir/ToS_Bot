@@ -16,11 +16,14 @@ public abstract class TosImageButton extends ImageButton{
     }
 
     protected Bitmap resizeImage(Bitmap srcImage, double ratio){
-        return Bitmap.createScaledBitmap(
+       return srcImage;
+    	/*
+    	return Bitmap.createScaledBitmap(
                 srcImage,
                 (int) (srcImage.getWidth() * ratio),
                 (int) (srcImage.getHeight() * ratio),
                 false);
+                */
     }
 
     protected Bitmap getBitmapByFilename(String filename) {
