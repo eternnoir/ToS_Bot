@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
 		_startServiceButton = (Button) findViewById(R.id.start_button);
 		_startServiceButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				setConfig();
+				ConfigData.setConfig(getSharedPreferences("Config", 0));
                 floatingUI.StartFloatingUI();
 			}
 		});
@@ -96,27 +96,4 @@ public class MainActivity extends Activity {
         stopService(intent);
     }
 	
-	/**
-	 * get config data from SharedPreferences
-	 */
-	private void setConfig(){
-		SharedPreferences settings = getSharedPreferences("Config", 0);
-		ConfigData.Serverurl = settings.getString("Serverurl", "http://tbserver.ap01.aws.af.cm/");
-		ConfigData.deep = settings.getInt("deep", 30);
-		ConfigData.maxCombo = settings.getString("maxCombo", "0");
-		ConfigData.gap = settings.getString("gap","");
-		ConfigData.DeviceName =  settings.getString("DeviceName","Auto");
-		ConfigData.touchEventNum = settings.getString("touchEventNum","");
-		ConfigData.posXId = settings.getString("posXId","");
-		ConfigData.posYId = settings.getString("posYId","");
-		ConfigData.posXMax = settings.getString("posXMax","");
-		ConfigData.posYMax = settings.getString("posYMax","");
-		ConfigData.trackingId = settings.getString("trackingId","");
-		ConfigData.pressureId = settings.getString("pressureId","");
-		ConfigData.trackingMax = settings.getString("trackingMax","");
-		ConfigData.pressureMax = settings.getString("pressureMax","");
-		ConfigData.oneBallMove = settings.getString("oneBallMove","");
-		ConfigData.startPosX = settings.getString("startPosX","");
-		ConfigData.startPosY = settings.getString("startPosY","");
-	}
 }
