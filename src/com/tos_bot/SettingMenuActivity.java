@@ -33,6 +33,8 @@ public class SettingMenuActivity extends Activity {
 						startActivity(setMenu);
 						break;
 					case 1:
+						setMenu.setClass(SettingMenuActivity.this, ImageSettingActivity.class);
+						startActivity(setMenu);
 						break;
 					case 2:
 						setMenu.setClass(SettingMenuActivity.this, EventSettingActivity.class);

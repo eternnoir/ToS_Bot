@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
@@ -26,26 +27,14 @@ public class imageProcesser {
 		Bitmap sourceBitmap;
 		sourceBitmap = BitmapFactory.decodeFile(FilePath);
 		String deivceModel = Build.MODEL;
-		// poor solution 
-		if (deivceModel.contains("C6602") || deivceModel.contains("C6603") || // deivceModel.contains("LT26")||
-				deivceModel.contains("LT29") || deivceModel.contains("C6802")) {
-			sourceBitmap = Bitmap.createBitmap(sourceBitmap, 0, 0,
-					sourceBitmap.getWidth(),
-					(int) (sourceBitmap.getWidth() / 0.6));
-			Log.i("Bot:", "Sony Device");
-		}
-		int screenhigh = sourceBitmap.getHeight();
-		int oneball = sourceBitmap.getWidth() / 6;
-		ballsize = oneball;
-		int ballAreaHigh = oneball * 5;
+		ballsize = ConfigData.oneOrbWitdh;
+		int ballAreaHigh = ballsize * 5;
 		float wh = (float) sourceBitmap.getWidth()
 				/ (float) sourceBitmap.getHeight();
 		Bitmap cropped = null;
-		if (wh == 0.5625f || wh == 0.6f) { // 1080*1920 && 480*800
-			cropped = Bitmap.createBitmap(sourceBitmap, 0,
-					(int) (screenhigh * 0.45), sourceBitmap.getWidth(),
+			cropped = Bitmap.createBitmap(sourceBitmap, ConfigData.boardStartX,
+					ConfigData.boardStartY, ballsize*6,
 					ballAreaHigh);
-		}
 		// savePng("tmp_ballA", cropped);
 		return cropped;
 
