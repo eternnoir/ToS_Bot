@@ -336,8 +336,8 @@ public class FloatingUIManager {
     }
 
     private double CalcRatio(){
-        double ratioX = WIDTH / Constants.STANDARD_X;
-        double ratioY = HEIGHT / Constants.STANDARD_Y;
+        double ratioX = (double)WIDTH / (double)Constants.STANDARD_X;
+        double ratioY = (double)HEIGHT / (double)Constants.STANDARD_Y;
         if (ratioX > ratioY)
             return ratioY;
         else
