@@ -43,7 +43,8 @@ public class TosBoardProcesser implements IBoardProcesser {
 		for (int h = 0; h < 5; h++)
 			for (int w = 0; w < 6; w++) {
 				if (result[h][w] < 0) {
-					throw new NotInTosException();
+					result[h][w] = 0;
+					//throw new NotInTosException();
 				}
 			}
 		System.gc();
@@ -56,7 +57,7 @@ public class TosBoardProcesser implements IBoardProcesser {
 				if (result[h][w] < 0) {
 					int hd = SimilarImageSearch.hammingDistance(basehash,
 							hash[h][w]);
-					if (hd < 20) {
+					if (hd < 5) {
 						result[h][w] = Integer.parseInt(i);
 					}
 				}
@@ -75,10 +76,10 @@ public class TosBoardProcesser implements IBoardProcesser {
 
 		int height = option.outHeight;
 		File f = new File(_Path);
-		sourceBitmap = decodeFile(f, width / 2, height / 2);
-		ballsize= ConfigData.oneOrbWitdh/2;
-		startX =ConfigData.boardStartX/2;
-		startY = ConfigData.boardStartY/2;
+		sourceBitmap = decodeFile(f, width, height );
+		ballsize= ConfigData.oneOrbWitdh;
+		startX =ConfigData.boardStartX;
+		startY = ConfigData.boardStartY;
 		int ballAreaHigh = ballsize * 5;
 		Bitmap cropped = null;
 		cropped = Bitmap.createBitmap(sourceBitmap, startX,
@@ -139,9 +140,9 @@ public class TosBoardProcesser implements IBoardProcesser {
 	public Bitmap[] getBaseOrbBitmaps() {
 		Bitmap[] ret = new Bitmap[ConfigData.MaxOrbType * 2];
 		for (int i = 0; i < ConfigData.MaxOrbType; i++) {
-			InputStream orbNI = FileLoader.getFileStreamByAsset("OrbBase/"
+			InputStream orbNI = FileLoader.getFileStreamByAsset("OrbBasePD/"
 					+ (i + 1) + "0.png");
-			InputStream orbPI = FileLoader.getFileStreamByAsset("OrbBase/"
+			InputStream orbPI = FileLoader.getFileStreamByAsset("OrbBasePD/"
 					+ (i + 1) + "1.png");
 			Bitmap orbN = BitmapFactory.decodeStream(orbNI);
 			Bitmap orbP = BitmapFactory.decodeStream(orbPI);
