@@ -32,12 +32,6 @@ public class GeneralSettingActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				saveSetting();
-				try {
-					BoardManager.getBallArray();
-				} catch (NotInTosException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
 		});
 	}
