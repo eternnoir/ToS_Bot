@@ -40,10 +40,16 @@ public class TosBoardProcesser implements IBoardProcesser {
 			String baseHash = ConfigData.baseOrbHash.get(key);
 			setBallType(baseHash, orbsHash, key.charAt(0) + "");
 		}
+		int count=0;
 		for (int h = 0; h < 5; h++)
 			for (int w = 0; w < 6; w++) {
 				if (result[h][w] < 0) {
+					if(count<3){
+						count++;
+						result[h][w]=0;
+					}else{
 					throw new NotInTosException();
+					}
 				}
 			}
 		System.gc();
@@ -56,7 +62,7 @@ public class TosBoardProcesser implements IBoardProcesser {
 				if (result[h][w] < 0) {
 					int hd = SimilarImageSearch.hammingDistance(basehash,
 							hash[h][w]);
-					if (hd < 20) {
+					if (hd < 25) {
 						result[h][w] = Integer.parseInt(i);
 					}
 				}
