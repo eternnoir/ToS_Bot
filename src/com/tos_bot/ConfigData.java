@@ -15,7 +15,7 @@ public class ConfigData {
 	public static String TempDir = "";
 	public static Thread solverThread = null;
 	public static String maxCombo = "0";		//0 is no limit
-	public static String gap;			//the sleep time between two touch command
+	public static String gap = "70";			//the sleep time between two touch command
 	public static int timeOut = 10;
 	//For TouchEvent
 	public static String touchEventNum;
@@ -46,7 +46,7 @@ public class ConfigData {
 		ConfigData.Serverurl = settings.getString("Serverurl", "http://tbserver.ap01.aws.af.cm/");
 		ConfigData.deep = settings.getInt("deep", 30);
 		ConfigData.maxCombo = settings.getString("maxCombo", "0");
-		ConfigData.gap = settings.getString("gap","");
+		ConfigData.gap = settings.getString("gap","70");
 		ConfigData.DeviceName =  settings.getString("DeviceName","Auto");
 		ConfigData.touchEventNum = settings.getString("touchEventNum","");
 		ConfigData.posXId = settings.getString("posXId","");
