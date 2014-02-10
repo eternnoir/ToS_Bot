@@ -56,7 +56,7 @@ public class TosBoardProcesser implements IBoardProcesser {
 				if (result[h][w] < 0) {
 					int hd = SimilarImageSearch.hammingDistance(basehash,
 							hash[h][w]);
-					if (hd < 20) {
+					if (hd < 5) {
 						result[h][w] = Integer.parseInt(i);
 					}
 				}
