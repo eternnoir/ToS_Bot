@@ -56,7 +56,7 @@ public class TosBoardProcesser implements IBoardProcesser {
 				if (result[h][w] < 0) {
 					int hd = SimilarImageSearch.hammingDistance(basehash,
 							hash[h][w]);
-					if (hd < 5) {
+					if (hd < 20) {
 						result[h][w] = Integer.parseInt(i);
 					}
 				}
@@ -140,13 +140,13 @@ public class TosBoardProcesser implements IBoardProcesser {
 		Bitmap[] ret = new Bitmap[ConfigData.MaxOrbType * 2];
 		for (int i = 0; i < ConfigData.MaxOrbType; i++) {
 			InputStream orbNI = FileLoader.getFileStreamByAsset("OrbBase/"
-					+ (i + 1) + "0.png");
+					+ (i) + "0.png");
 			InputStream orbPI = FileLoader.getFileStreamByAsset("OrbBase/"
-					+ (i + 1) + "1.png");
+					+ (i) + "1.png");
 			Bitmap orbN = BitmapFactory.decodeStream(orbNI);
 			Bitmap orbP = BitmapFactory.decodeStream(orbPI);
-			ret[i * 2] = orbN;
-			ret[i * 2 + 1] = orbP;
+			ret[i*2 ] = orbN;
+			ret[i*2 + 1] = orbP;
 		}
 		return ret;
 	}
@@ -155,11 +155,11 @@ public class TosBoardProcesser implements IBoardProcesser {
 		LinkedHashMap<String, String> ret = new LinkedHashMap<String, String>();
 		Bitmap[] baseOrb = getBaseOrbBitmaps();
 		for (int i = 0; i < ConfigData.MaxOrbType; i++) {
-			String fpN = SimilarImageSearch.produceFingerPrint(baseOrb[i * 2]);
-			ret.put((i + 1) + "0", fpN);
+			String fpN = SimilarImageSearch.produceFingerPrint(baseOrb[i*2]);
+			ret.put((i) + "0", fpN);
 			String fpP = SimilarImageSearch
-					.produceFingerPrint(baseOrb[i * 2 + 1]);
-			ret.put((i + 1) + "1", fpP);
+					.produceFingerPrint(baseOrb[i*2 + 1]);
+			ret.put((i) + "1", fpP);
 		}
 		return ret;
 	}

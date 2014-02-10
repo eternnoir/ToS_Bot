@@ -36,7 +36,7 @@ public class ConfigData {
 	public static int boardStartY=0;
 	
 	
-	public static int MaxOrbType=6;
+	public static int MaxOrbType=7;
 	public static LinkedHashMap<String, String> baseOrbHash = null;
 	
 	/**

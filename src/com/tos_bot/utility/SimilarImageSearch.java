@@ -4,12 +4,12 @@ import android.graphics.Bitmap;
 
 public class SimilarImageSearch {
 	public static String produceFingerPrint(Bitmap bm) {
-		int owidth = 16;
-		int oheight = 16;
+		int owidth = 32;
+		int oheight = 32;
 		Bitmap sImg = ImageHelper.resize(bm, owidth, oheight);
-		int width = 8;
-		int height = 8;
-		sImg = Bitmap.createBitmap(sImg, 4,4, width, height);
+		int width = 16;
+		int height = 16;
+		sImg = Bitmap.createBitmap(sImg, 8,8, width, height);
 		
 		int[] pixels = ImageHelper.BitmaptoGrayscale(sImg);
 		sImg = null;
