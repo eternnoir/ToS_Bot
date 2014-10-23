@@ -22,3 +22,9 @@ local.properties
 .idea/
 .directory
 .gradle/
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
