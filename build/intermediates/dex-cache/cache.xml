@@ -2,10 +2,40 @@
 <pre-dex-items>
 
     <item
-        dex="/home/frank/src/ToS_Bot/app/build/intermediates/pre-dexed/debug/atec-f02a0d4977b1f5bae1ffc2b695503b815b07ccef.jar"
-        jar="/home/frank/src/ToS_Bot/atec/build/libs/atec.jar"
+        dex="/home/frank/src/ToS_Bot/app/build/intermediates/pre-dexed/debug/classes-708ac9376a332f8aa7df1d2d4cbc122875b17fd5.jar"
+        jar="/home/frank/src/ToS_Bot/app/build/intermediates/exploded-aar/ToS_Bot/atec/unspecified/classes.jar"
         jumboMode="false"
         revision="20.0.0"
-        sha1="1bd6a5b85378e3d2ff332e773c10804b13dc75d1"/>
+        sha1="fe97a058ea267f70e9d969a5742ac0460f6306fe"/>
+    <item
+        dex="/home/frank/src/ToS_Bot/app/build/intermediates/pre-dexed/debug/picasso-2.3.2-a03ae6ed996113514949fadb78381ec6aab13415.jar"
+        jar="/home/frank/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.3.2/d6b7f0093cec6c9faf65dbfd6a6a345d0ed25e27/picasso-2.3.2.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="d6b7f0093cec6c9faf65dbfd6a6a345d0ed25e27"/>
+    <item
+        dex="/home/frank/src/ToS_Bot/app/build/intermediates/pre-dexed/debug/classes-67f2fca9f98fbf9231e9502b35b2387946ce7583.jar"
+        jar="/home/frank/src/ToS_Bot/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="f21927d22fe31889ecce94dd697a2e75b137e0ef"/>
+    <item
+        dex="/home/frank/src/ToS_Bot/app/build/intermediates/pre-dexed/debug/classes-b11b4991763b5fc6029a647a684cf9f1e1b88dbd.jar"
+        jar="/home/frank/src/ToS_Bot/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0"/>
+    <item
+        dex="/home/frank/src/ToS_Bot/app/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-02cedba0d47e65cebb13d2afd1fb18ada342e120.jar"
+        jar="/home/frank/src/ToS_Bot/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d"/>
+    <item
+        dex="/home/frank/src/ToS_Bot/app/build/intermediates/pre-dexed/debug/support-annotations-20.0.0-34c0a796320c58ec4f1d839272db3d3f4a2fb8a4.jar"
+        jar="/home/frank/Application/android-studio/sdk/extras/android/m2repository/com/android/support/support-annotations/20.0.0/support-annotations-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="9d9013e9ff35fc3756411e62873c363c70c638fa"/>
 
 </pre-dex-items>
