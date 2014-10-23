@@ -1,0 +1,3 @@
+[submodule "atec/src/main/java"]
+	path = atec/src/main/java
+	url = https://github.com/eternnoir/ATEC.git
