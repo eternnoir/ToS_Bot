@@ -1,4 +1,4 @@
-#ToS_Bot
+#ToS_Bot  [![Build Status on Travis:](https://travis-ci.org/eternnoir/ToS_Bot.svg?branch=develop)](https://travis-ci.org/eternnoir/ToS_Bot/)
 
 A tower of saviors supporter
 
