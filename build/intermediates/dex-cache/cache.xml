@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/home/frank/src/ToS_Bot/app/build/intermediates/pre-dexed/debug/atec-f02a0d4977b1f5bae1ffc2b695503b815b07ccef.jar"
+        jar="/home/frank/src/ToS_Bot/atec/build/libs/atec.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="1bd6a5b85378e3d2ff332e773c10804b13dc75d1"/>
+
+</pre-dex-items>
